@@ -1,98 +1,318 @@
-const IMG='./img/';
-const promptEl=document.getElementById('prompt');
-const gridEl=document.getElementById('grid');
-const statusEl=document.getElementById('status');
-const appEl=document.getElementById('app');
-const challengeEl=document.getElementById('challenge');
-const resetBtn=document.getElementById('resetBtn');
-const verifyBtn=document.getElementById('verifyBtn');
-const actionsEl=document.getElementById('actions');
-const finishEl=document.getElementById('finish');
-const headText=document.getElementById('headText');
+(() => {
+  "use strict";
 
-const N=[1,2,3,4,5,6,7,8,9].map(n=>`noise-${String(n).padStart(2,'0')}.webp`);
-const S=[1,2,3,4].map(n=>`signal-${String(n).padStart(2,'0')}.webp`);
-const B=[1,2,3,4].map(n=>`bike-${String(n).padStart(2,'0')}.webp`);
-const H=[1,2,3].map(n=>`house-${String(n).padStart(2,'0')}.webp`);
-const F=[1,2,3,4].map(n=>`family-${String(n).padStart(2,'0')}.webp`);
-const K=[1,2,3,4,5,6,7,8,9].map(n=>`kuga-${String(n).padStart(2,'0')}.webp`);
+  const $ = (selector) => document.querySelector(selector);
 
-const steps=[
-  {prompt:'信号機が写っている画像をすべて選択してください', images:[S[0],N[0],S[1],N[1],N[2],S[2],N[3],S[3],N[4]], correct:[0,2,5,7]},
-  {prompt:'自転車が写っている画像をすべて選択してください', images:[N[5],B[0],N[0],B[1],N[1],N[2],B[2],N[3],B[3]], correct:[1,3,6,8]},
-  {prompt:'家が写っている画像をすべて選択してください', images:[N[4],H[0],N[5],N[6],H[1],N[7],H[2],N[8],N[0]], correct:[1,4,6]},
-  {prompt:'家族が写っている画像をすべて選択してください', images:[F[0],N[1],F[1],N[2],F[2],N[3],N[4],F[3],N[5]], correct:[0,2,4,7]},
-  {prompt:'針が写っている画像を選択してください', images:[N[6],N[7],'needle-01.webp',N[8],N[0],N[1],N[2],N[3],N[4]], correct:[2]},
-  {prompt:'糸が写っている画像を選択してください', images:[N[5],N[6],N[7],N[8],'thread-01.webp',N[0],N[1],N[2],N[3]], correct:[4]},
-  {prompt:'久我あきらが写っている画像をすべて選択してください', images:[S[0],B[0],H[0],F[0],'needle-01.webp','thread-01.webp',N[0],N[2],N[4]], correct:[], trap:true},
-  {prompt:'久我あきらが写っている画像をすべて選択してください', images:K, correct:[0,1,2,3,4,5,6,7,8], final:true}
-];
+  const promptEl = $("#prompt");
+  const gridEl = $("#grid");
+  const statusEl = $("#status");
+  const challengeEl = $("#challenge");
+  const verifyBtn = $("#verifyBtn");
+  const resetBtn = $("#resetBtn");
+  const headText = document.querySelector(".head p");
+  const appEl = $("#app");
 
-let stepIndex=0;
-let selected=new Set();
-let trapTriggered=false;
+  if (!promptEl || !gridEl || !statusEl || !verifyBtn || !resetBtn) {
+    console.error("CASE 001: required DOM elements were not found.");
+    return;
+  }
 
-function render(){
-  const step=steps[stepIndex];
-  promptEl.textContent=step.prompt;
-  gridEl.innerHTML='';
-  statusEl.textContent='';
-  selected.clear();
-  step.images.forEach((src,i)=>{
-    const btn=document.createElement('button');
-    btn.type='button';
-    btn.className='tile';
-    btn.setAttribute('aria-label',`画像 ${i+1}`);
-    const img=document.createElement('img');
-    img.src=IMG+src;
-    img.alt='';
-    btn.appendChild(img);
-    btn.addEventListener('click',()=>{
-      if(selected.has(i)){selected.delete(i);btn.classList.remove('selected')}
-      else{selected.add(i);btn.classList.add('selected')}
+  /*
+    CASE 001 正式フロー
+
+    信号機
+    → 自転車
+    → 家
+    → 家族
+    → 針
+    → 糸
+    → 「久我あきらが写っている画像をすべて選択してください」
+
+    最終の久我画面には久我本人は1枚も出さない。
+    ・0枚選択 → 不正解。その場から進めない
+    ・1枚以上選択 → 正解扱い。そのまま本人認証へ進む
+    ・「久我9枚」の追加画面は存在しない
+
+    認証完了後:
+    ls_case_001_complete = true
+    → 7秒
+    → LAST SEARCH TOP
+    → TOP右上「ログイン中」
+  */
+
+  const IMG = {
+    signal1: "./img/signal-01.webp",
+    signal2: "./img/signal-02.webp",
+    signal3: "./img/signal-03.webp",
+    signal4: "./img/signal-04.webp",
+
+    bike1: "./img/bike-01.webp",
+    bike2: "./img/bike-02.webp",
+    bike3: "./img/bike-03.webp",
+    bike4: "./img/bike-04.webp",
+
+    house1: "./img/house-01.webp",
+    house2: "./img/house-02.webp",
+    house3: "./img/house-03.webp",
+
+    family1: "./img/family-01.webp",
+    family2: "./img/family-02.webp",
+    family3: "./img/family-03.webp",
+    family4: "./img/family-04.webp",
+
+    needle1: "./img/needle-01.webp",
+    thread1: "./img/thread-01.webp"
+  };
+
+  /*
+    正解画像の位置は従来仕様を維持。
+    ダミーには他カテゴリーの実在画像を再利用する。
+    これにより noise-* のファイル名に依存しない。
+  */
+  const steps = [
+    {
+      prompt: "信号機が写っている画像をすべて選択してください",
+      images: [
+        IMG.signal1, IMG.family1, IMG.signal2,
+        IMG.house1,  IMG.bike1,   IMG.signal3,
+        IMG.thread1, IMG.signal4, IMG.family2
+      ],
+      correct: [0, 2, 5, 7]
+    },
+    {
+      prompt: "自転車が写っている画像をすべて選択してください",
+      images: [
+        IMG.house2, IMG.bike1,   IMG.family3,
+        IMG.bike2,  IMG.signal1, IMG.needle1,
+        IMG.bike3,  IMG.house3,  IMG.bike4
+      ],
+      correct: [1, 3, 6, 8]
+    },
+    {
+      prompt: "家が写っている画像をすべて選択してください",
+      images: [
+        IMG.family1, IMG.house1, IMG.signal2,
+        IMG.bike2,   IMG.house2, IMG.family4,
+        IMG.house3,  IMG.thread1, IMG.signal3
+      ],
+      correct: [1, 4, 6]
+    },
+    {
+      prompt: "家族が写っている画像をすべて選択してください",
+      images: [
+        IMG.family1, IMG.bike1,   IMG.family2,
+        IMG.house1,  IMG.family3, IMG.signal1,
+        IMG.needle1, IMG.family4, IMG.thread1
+      ],
+      correct: [0, 2, 4, 7]
+    },
+    {
+      prompt: "針が写っている画像を選択してください",
+      images: [
+        IMG.house2,  IMG.family2, IMG.needle1,
+        IMG.signal4, IMG.bike3,   IMG.thread1,
+        IMG.house1,  IMG.family3, IMG.signal2
+      ],
+      correct: [2]
+    },
+    {
+      prompt: "糸が写っている画像を選択してください",
+      images: [
+        IMG.bike2,   IMG.house3,  IMG.family1,
+        IMG.signal3, IMG.thread1, IMG.needle1,
+        IMG.family4, IMG.house1,  IMG.bike4
+      ],
+      correct: [4]
+    },
+    {
+      prompt: "久我あきらが写っている画像をすべて選択してください",
+      images: [
+        IMG.family1, IMG.house2,  IMG.signal1,
+        IMG.bike3,   IMG.family4, IMG.needle1,
+        IMG.house1,  IMG.thread1, IMG.signal4
+      ],
+      kugaGate: true
+    }
+  ];
+
+  let stepIndex = 0;
+  let selected = new Set();
+  let locked = false;
+
+  function render() {
+    locked = false;
+    selected.clear();
+
+    const step = steps[stepIndex];
+
+    promptEl.textContent = step.prompt;
+    statusEl.textContent = "";
+    gridEl.innerHTML = "";
+
+    step.images.forEach((src, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "tile";
+      button.setAttribute("aria-label", `画像 ${index + 1}`);
+
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = "";
+      img.draggable = false;
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "cover";
+      img.style.display = "block";
+
+      button.appendChild(img);
+
+      button.addEventListener("click", () => {
+        if (locked) return;
+
+        if (selected.has(index)) {
+          selected.delete(index);
+          button.classList.remove("selected");
+          button.setAttribute("aria-pressed", "false");
+        } else {
+          selected.add(index);
+          button.classList.add("selected");
+          button.setAttribute("aria-pressed", "true");
+        }
+
+        if (step.kugaGate && selected.size > 0) {
+          statusEl.textContent = "";
+        }
+      });
+
+      button.setAttribute("aria-pressed", "false");
+      gridEl.appendChild(button);
     });
-    gridEl.appendChild(btn);
+
+    if (challengeEl) {
+      challengeEl.classList.remove("fade");
+      void challengeEl.offsetWidth;
+      challengeEl.classList.add("fade");
+    }
+
+    verifyBtn.disabled = false;
+    resetBtn.disabled = false;
+  }
+
+  function sameSet(actual, expected) {
+    if (actual.size !== expected.length) return false;
+    return expected.every((value) => actual.has(value));
+  }
+
+  function showIncorrect() {
+    statusEl.textContent = "不正解です。もう一度お試しください。";
+
+    if (appEl) {
+      appEl.classList.add("glitch");
+      setTimeout(() => appEl.classList.remove("glitch"), 650);
+    }
+  }
+
+  function saveCaseComplete() {
+    /*
+      既存 storage.js がある場合はそれを優先。
+      TOP側は localStorage の "true" も読めるため、念のため直接保存も行う。
+    */
+    try {
+      if (window.LSStorage && typeof window.LSStorage.set === "function") {
+        window.LSStorage.set("ls_case_001_complete", true);
+      }
+    } catch (error) {
+      console.warn("CASE 001: LSStorage save failed.", error);
+    }
+
+    localStorage.setItem("ls_case_001_complete", "true");
+
+    try {
+      const seen = JSON.parse(localStorage.getItem("ls_seen_cases") || "[]");
+      if (Array.isArray(seen) && !seen.includes("001")) {
+        seen.push("001");
+        localStorage.setItem("ls_seen_cases", JSON.stringify(seen));
+      }
+    } catch {
+      localStorage.setItem("ls_seen_cases", JSON.stringify(["001"]));
+    }
+  }
+
+  function startAuthentication() {
+    if (locked) return;
+    locked = true;
+
+    verifyBtn.disabled = true;
+    resetBtn.disabled = true;
+
+    gridEl.innerHTML = "";
+    statusEl.textContent = "";
+
+    promptEl.textContent = "本人認証を開始します";
+    if (headText) {
+      headText.textContent = "認証情報を確認しています。";
+    }
+
+    if (appEl) {
+      appEl.classList.add("glitch");
+      setTimeout(() => appEl.classList.remove("glitch"), 650);
+    }
+
+    setTimeout(() => {
+      promptEl.textContent = "本人認証が完了しました。";
+      if (headText) {
+        headText.textContent = "認証情報を保存しています。";
+      }
+
+      saveCaseComplete();
+
+      /*
+        完了文言を7秒間維持。
+        カウントダウンは表示しない。
+      */
+      setTimeout(() => {
+        window.location.href = "../../";
+      }, 7000);
+    }, 1600);
+  }
+
+  function verify() {
+    if (locked) return;
+
+    const step = steps[stepIndex];
+
+    /*
+      最終「久我あきら」画面。
+      久我本人は一枚も存在しない。
+
+      0枚 → 不正解
+      1枚以上 → 正解扱い → 即、本人認証開始
+    */
+    if (step.kugaGate) {
+      if (selected.size === 0) {
+        showIncorrect();
+        return;
+      }
+
+      startAuthentication();
+      return;
+    }
+
+    if (!sameSet(selected, step.correct)) {
+      showIncorrect();
+      return;
+    }
+
+    stepIndex += 1;
+    render();
+  }
+
+  verifyBtn.addEventListener("click", verify);
+
+  resetBtn.addEventListener("click", () => {
+    if (locked) return;
+    render();
   });
-  challengeEl.classList.remove('fade');
-  void challengeEl.offsetWidth;
-  challengeEl.classList.add('fade');
-}
-function sameSet(){
-  const correct=steps[stepIndex].correct;
-  return selected.size===correct.length && correct.every(i=>selected.has(i));
-}
-function glitch(){
-  appEl.classList.add('glitch');
-  setTimeout(()=>appEl.classList.remove('glitch'),650);
-}
-function verify(){
-  const step=steps[stepIndex];
-  if(step.trap && !trapTriggered){
-    statusEl.textContent='不正解です。もう一度お試しください。';
-    trapTriggered=true;
-    glitch();
-    setTimeout(()=>{stepIndex++;render()},1050);
-    return;
-  }
-  if(!sameSet()){
-    statusEl.textContent='不正解です。もう一度お試しください。';
-    glitch();
-    return;
-  }
-  if(step.final){finish();return;}
-  stepIndex++;
+
   render();
-}
-function finish(){
-  LSStorage.markCase('001');
-  challengeEl.style.display='none';
-  statusEl.textContent='';
-  actionsEl.style.display='none';
-  headText.textContent='認証情報を保存しています。';
-  finishEl.style.display='block';
-  glitch();
-  setTimeout(()=>location.href='../../index.html?from=case001',7000);
-}
-verifyBtn.addEventListener('click',verify);
-resetBtn.addEventListener('click',render);
-render();
+})();
