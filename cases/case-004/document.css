@@ -1,0 +1,20 @@
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#f1efe8;color:#181715}
+body{font-family:"Yu Mincho","Hiragino Mincho ProN",Georgia,serif;line-height:2}
+.document{
+  width:min(720px,calc(100% - 28px));margin:36px auto 90px;padding:40px 44px;
+  background:#faf8f1;border:1px solid #d4cec1
+}
+.archive{font:11px Arial,sans-serif;color:#888;letter-spacing:.14em;border-bottom:1px solid #ddd5c7;padding-bottom:12px}
+h1{font-size:24px;font-weight:normal;margin:30px 0}
+p{margin:24px 0}
+.emphasis{margin-top:44px;font-weight:bold}
+dl{margin-top:30px}
+dt{margin-top:18px;color:#777;font-size:12px}
+dd{margin:2px 0 0}
+.error{font-weight:bold}
+.back{margin-top:60px;padding-top:18px;border-top:1px solid #ddd5c7}
+a{color:#27365e}
+@media(max-width:600px){
+  .document{width:calc(100% - 16px);margin:10px auto 60px;padding:28px 22px}
+}

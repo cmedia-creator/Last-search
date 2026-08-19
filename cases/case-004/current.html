@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f4f4f1">
+  <title>久我あきらについて</title>
+  <link rel="stylesheet" href="./current.css">
+  <script>
+  (() => {
+    const active = sessionStorage.getItem("ls_case_004_active") === "true";
+    const ready = ["profile","stop","delete"].every(
+      key => localStorage.getItem(`ls_case_004_${key}`) === "true"
+    );
+    if (!active || !ready) location.replace("../case-003/");
+  })();
+  </script>
+</head>
+<body>
+<main class="current">
+  <div class="logo">LAST SEARCH</div>
+  <h1>久我あきら</h1>
+
+  <div class="rows" id="rows">
+    <div><span>状態</span><strong>ログイン中</strong></div>
+    <div><span>最終アクセス</span><strong>現在</strong></div>
+  </div>
+
+  <div id="finalLines" class="final-lines" aria-live="polite"></div>
+</main>
+<script>
+(() => {
+  const box = document.getElementById("finalLines");
+
+  function line(text) {
+    const p = document.createElement("p");
+    p.textContent = text;
+    box.appendChild(p);
+  }
+
+  setTimeout(() => line("検索者：久我あきら"), 2300);
+  setTimeout(() => line("検索対象：久我あきら"), 4600);
+  setTimeout(() => line("一致しました。"), 6900);
+
+  setTimeout(() => {
+    localStorage.setItem("ls_case_004_complete", "true");
+    localStorage.setItem("ls_case_004_flash_name", String(Date.now()));
+
+    try {
+      const seen = JSON.parse(localStorage.getItem("ls_seen_cases") || "[]");
+      const list = Array.isArray(seen) ? seen : [];
+      if (!list.includes("004")) list.push("004");
+      localStorage.setItem("ls_seen_cases", JSON.stringify(list));
+    } catch {
+      localStorage.setItem("ls_seen_cases", JSON.stringify(["004"]));
+    }
+
+    const end = document.createElement("p");
+    end.className = "end";
+    end.textContent = "検索を終了します。";
+    box.appendChild(end);
+
+    setTimeout(() => {
+      sessionStorage.removeItem("ls_case_004_active");
+      sessionStorage.removeItem("ls_entry_case");
+      location.href = "../../";
+    }, 3000);
+  }, 11900);
+})();
+</script>
+</body>
+</html>

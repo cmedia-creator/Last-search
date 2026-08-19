@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>削除依頼</title>
+  <link rel="stylesheet" href="./document.css">
+  <script>
+  (() => {
+    if (sessionStorage.getItem("ls_case_004_active") !== "true") {
+      location.replace("../case-003/");
+    }
+  })();
+  </script>
+</head>
+<body>
+<main class="document">
+  <div class="archive">PRESERVED REQUEST</div>
+  <h1>削除依頼</h1>
+
+  <dl>
+    <dt>削除対象</dt><dd>久我あきら</dd>
+    <dt>理由</dt><dd>本人からの申請</dd>
+    <dt>申請日時</dt><dd>────年──月──日</dd>
+    <dt>本人確認</dt><dd>完了</dd>
+    <dt>処理状態</dt><dd class="error">削除できません</dd>
+  </dl>
+
+  <p class="back"><a href="./index.html">← 検索結果へ戻る</a></p>
+</main>
+<script>localStorage.setItem("ls_case_004_delete","true");</script>
+</body>
+</html>
