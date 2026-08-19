@@ -92,10 +92,12 @@
       { id:"001", path:"./cases/case-001/", weight:100, enabled:true, minSearchCount:1 },
       { id:"002", path:"./cases/case-002/", weight:100, enabled:true, minSearchCount:1 },
       { id:"005", path:"./cases/case-005/", weight:100, enabled:true, minSearchCount:1 },
-      { id:"006", path:"./cases/case-006/", weight:100, enabled:true, minSearchCount:1 }
+      { id:"006", path:"./cases/case-006/", weight:100, enabled:true, minSearchCount:1 },
+      { id:"007", path:"./cases/case-007/", weight:100, enabled:true, minSearchCount:1 }
     ];
 
     const CASE004_PATH = "./cases/case-004/";
+    const CASE007_PATH = "./cases/case-007/";
 
     function normalizeQuery(value){
       return value
@@ -168,6 +170,18 @@
       const query=searchInput.value.trim();
       if(!query){ searchInput.focus(); return; }
 
+      // CASE006が残した検索語はCASE007へ直結。
+      if(normalizeQuery(query) === normalizeQuery("久我あきら　2009年9月17日")){
+        localStorage.setItem("ls_last_query",query);
+        localStorage.setItem("ls_search_count",String(readNumber("ls_search_count")+1));
+        sessionStorage.setItem("ls_entry_case","007");
+
+        showStatus("検索しています");
+        setTimeout(()=>veil.classList.add("on"),420);
+        setTimeout(()=>{ window.location.href=CASE007_PATH; },900);
+        return;
+      }
+
       // 「久我あきら」はランダム抽選より優先してCASE004へ。
       if(isKugaQuery(query)){
         localStorage.setItem("ls_last_query",query);
@@ -205,6 +219,7 @@
       sessionStorage.removeItem("ls_case_004_active");
       sessionStorage.removeItem("ls_case_005_active");
       sessionStorage.removeItem("ls_case_006_active");
+      sessionStorage.removeItem("ls_case_007_active");
       sessionStorage.removeItem("ls_entry_case");
 
       updateLoginStatus();
