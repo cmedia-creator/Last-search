@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f4f4f1">
+  <title>2009年9月17日　地域記録</title>
+  <link rel="stylesheet" href="./record.css">
+  <script>
+  (() => {
+    if (sessionStorage.getItem("ls_case_005_active") !== "true") {
+      location.replace("../case-003/");
+    }
+  })();
+  </script>
+</head>
+<body>
+<main class="record">
+  <div class="archive">REGIONAL ARCHIVE / 2009-09-17</div>
+  <h1 id="title">2009年9月17日　地域記録</h1>
+
+  <table id="dataTable">
+    <tbody>
+      <tr><th>地区</th><td>小形高</td></tr>
+      <tr><th>世帯数</th><td>142</td></tr>
+      <tr><th>人口</th><td id="population">391</td></tr>
+      <tr><th>転出</th><td id="transfer">4名</td></tr>
+      <tr><th>転入</th><td>1名</td></tr>
+    </tbody>
+  </table>
+
+  <p id="summary">2009年9月17日、小形高地区では4名の転出が記録されています。</p>
+
+  <section id="correctionBox" class="correction-box">
+    <button id="correctionBtn" type="button">この情報には訂正があります。</button>
+    <div id="reason" class="reason"></div>
+  </section>
+
+  <section id="gone" class="gone" hidden>
+    <p>記録は存在しません。</p>
+    <p id="never" hidden>最初から存在しませんでした。</p>
+  </section>
+
+  <p class="back"><a href="./index.html">← 検索結果へ戻る</a></p>
+</main>
+
+<script>
+(() => {
+  const btn = document.getElementById("correctionBtn");
+  const reason = document.getElementById("reason");
+  const transfer = document.getElementById("transfer");
+  const population = document.getElementById("population");
+  const summary = document.getElementById("summary");
+  const table = document.getElementById("dataTable");
+  const title = document.getElementById("title");
+  const correctionBox = document.getElementById("correctionBox");
+  const gone = document.getElementById("gone");
+  const never = document.getElementById("never");
+
+  let stage = Number(localStorage.getItem("ls_case_005_stage") || 0);
+
+  const states = [
+    { transfer:"4名", population:"391", summary:"2009年9月17日、小形高地区では4名の転出が記録されています。", reason:"" },
+    { transfer:"3名", population:"391", summary:"2009年9月17日、小形高地区では3名の転出が記録されています。", reason:"訂正理由：重複登録" },
+    { transfer:"2名", population:"390", summary:"2009年9月17日、小形高地区では2名の転出が記録されています。", reason:"訂正理由：重複登録" },
+    { transfer:"1名", population:"389", summary:"2009年9月17日、小形高地区では1名の転出が記録されています。", reason:"訂正理由：本人確認が取れなかったため" },
+    { transfer:"0名", population:"388", summary:"2009年9月17日、小形高地区における転出記録はありません。", reason:"訂正理由：記録不備" }
+  ];
+
+  function render(){
+    if(stage < states.length){
+      const s = states[stage];
+      transfer.textContent = s.transfer;
+      population.textContent = s.population;
+      summary.textContent = s.summary;
+      reason.textContent = s.reason;
+      return;
+    }
+
+    title.textContent = "2009年9月17日　該当記録なし";
+    table.hidden = true;
+    summary.hidden = true;
+    correctionBox.hidden = true;
+    gone.hidden = false;
+
+    setTimeout(() => {
+      never.hidden = false;
+    }, 7000);
+
+    setTimeout(() => {
+      localStorage.setItem("ls_case_005_record_erased","true");
+      localStorage.setItem("ls_case_005_complete","true");
+      localStorage.setItem("ls_pending_query","小形高　存在しない");
+
+      try {
+        const seen = JSON.parse(localStorage.getItem("ls_seen_cases") || "[]");
+        const list = Array.isArray(seen) ? seen : [];
+        if(!list.includes("005")) list.push("005");
+        localStorage.setItem("ls_seen_cases", JSON.stringify(list));
+      } catch {
+        localStorage.setItem("ls_seen_cases", JSON.stringify(["005"]));
+      }
+    }, 7000);
+  }
+
+  btn.addEventListener("click", () => {
+    stage += 1;
+    localStorage.setItem("ls_case_005_stage", String(stage));
+
+    // 派手なグリッチは使わず、同じページの一部だけ静かに書き換える。
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
