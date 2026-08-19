@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>LAST SEARCH - CASE 001 | 本人確認</title>
+<link rel="stylesheet" href="../../assets/css/last-search.css">
+<link rel="stylesheet" href="./case.css">
+</head>
+<body class="case-body">
+<main class="case-wrap" id="app">
+  <header class="case-brand">
+    <div class="ls-logo">LAST SEARCH</div>
+    <small>CASE 001</small>
+  </header>
+  <section class="ls-panel case-panel">
+    <div class="case-head">
+      <h1>画像認証</h1>
+      <p id="headText">続行するには、人間であることを確認してください。</p>
+    </div>
+    <div id="challenge" class="challenge">
+      <div class="prompt" id="prompt"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+    <div class="case-status" id="status" aria-live="polite"></div>
+    <div class="case-actions" id="actions">
+      <button class="ls-secondary" id="resetBtn" type="button">やり直す</button>
+      <button class="ls-primary" id="verifyBtn" type="button">確認</button>
+    </div>
+    <div class="finish" id="finish">
+      <strong>本人確認が完了しました。</strong>
+      <span>認証情報を保存しています。</span>
+    </div>
+  </section>
+</main>
+<script src="../../assets/js/storage.js"></script>
+<script src="./case.js"></script>
+</body>
+</html>
