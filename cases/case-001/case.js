@@ -10,21 +10,21 @@ const actionsEl=document.getElementById('actions');
 const finishEl=document.getElementById('finish');
 const headText=document.getElementById('headText');
 
-const N=[1,2,3,4,5,6,7,8,9].map(n=>`noise-${String(n).padStart(2,'0')}.png`);
-const S=[1,2,3,4].map(n=>`signal-${String(n).padStart(2,'0')}.png`);
-const B=[1,2,3,4].map(n=>`bike-${String(n).padStart(2,'0')}.png`);
-const H=[1,2,3].map(n=>`house-${String(n).padStart(2,'0')}.png`);
-const F=[1,2,3,4].map(n=>`family-${String(n).padStart(2,'0')}.png`);
-const K=[1,2,3,4,5,6,7,8,9].map(n=>`kuga-${String(n).padStart(2,'0')}.png`);
+const N=[1,2,3,4,5,6,7,8,9].map(n=>`noise-${String(n).padStart(2,'0')}.webp`);
+const S=[1,2,3,4].map(n=>`signal-${String(n).padStart(2,'0')}.webp`);
+const B=[1,2,3,4].map(n=>`bike-${String(n).padStart(2,'0')}.webp`);
+const H=[1,2,3].map(n=>`house-${String(n).padStart(2,'0')}.webp`);
+const F=[1,2,3,4].map(n=>`family-${String(n).padStart(2,'0')}.webp`);
+const K=[1,2,3,4,5,6,7,8,9].map(n=>`kuga-${String(n).padStart(2,'0')}.webp`);
 
 const steps=[
   {prompt:'信号機が写っている画像をすべて選択してください', images:[S[0],N[0],S[1],N[1],N[2],S[2],N[3],S[3],N[4]], correct:[0,2,5,7]},
   {prompt:'自転車が写っている画像をすべて選択してください', images:[N[5],B[0],N[0],B[1],N[1],N[2],B[2],N[3],B[3]], correct:[1,3,6,8]},
   {prompt:'家が写っている画像をすべて選択してください', images:[N[4],H[0],N[5],N[6],H[1],N[7],H[2],N[8],N[0]], correct:[1,4,6]},
   {prompt:'家族が写っている画像をすべて選択してください', images:[F[0],N[1],F[1],N[2],F[2],N[3],N[4],F[3],N[5]], correct:[0,2,4,7]},
-  {prompt:'針が写っている画像を選択してください', images:[N[6],N[7],'needle-01.png',N[8],N[0],N[1],N[2],N[3],N[4]], correct:[2]},
-  {prompt:'糸が写っている画像を選択してください', images:[N[5],N[6],N[7],N[8],'thread-01.png',N[0],N[1],N[2],N[3]], correct:[4]},
-  {prompt:'久我あきらが写っている画像をすべて選択してください', images:[S[0],B[0],H[0],F[0],'needle-01.png','thread-01.png',N[0],N[2],N[4]], correct:[], trap:true},
+  {prompt:'針が写っている画像を選択してください', images:[N[6],N[7],'needle-01.webp',N[8],N[0],N[1],N[2],N[3],N[4]], correct:[2]},
+  {prompt:'糸が写っている画像を選択してください', images:[N[5],N[6],N[7],N[8],'thread-01.webp',N[0],N[1],N[2],N[3]], correct:[4]},
+  {prompt:'久我あきらが写っている画像をすべて選択してください', images:[S[0],B[0],H[0],F[0],'needle-01.webp','thread-01.webp',N[0],N[2],N[4]], correct:[], trap:true},
   {prompt:'久我あきらが写っている画像をすべて選択してください', images:K, correct:[0,1,2,3,4,5,6,7,8], final:true}
 ];
 
