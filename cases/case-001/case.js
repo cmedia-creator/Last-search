@@ -20,6 +20,42 @@
     return;
   }
 
+  // 完了済みCASEへの再侵入
+  // 正規ルート・履歴戻り等で再度CASE001へ来た場合は、
+  // 認証を再実行せず、完了済みメッセージを表示してTOPへ戻す。
+  if (localStorage.getItem("ls_case_001_complete") === "true") {
+    document.addEventListener("DOMContentLoaded", () => {
+      const body = document.body;
+      body.innerHTML = `
+        <main style="
+          min-height:100dvh;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          padding:24px;
+          background:#f4f4f1;
+          color:#111;
+          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Yu Gothic',Meiryo,sans-serif;
+        ">
+          <div style="text-align:center;max-width:640px;">
+            <div style="font-size:13px;color:#747474;margin-bottom:16px;letter-spacing:.08em;">
+              LAST SEARCH
+            </div>
+            <div style="font-size:22px;line-height:1.7;">
+              本人確認はすでに完了しています。
+            </div>
+          </div>
+        </main>
+      `;
+      sessionStorage.removeItem("ls_case_001_active");
+      sessionStorage.removeItem("ls_entry_case");
+      setTimeout(() => {
+        window.location.replace("../../");
+      }, 3000);
+    });
+    return;
+  }
+
   const $ = (selector) => document.querySelector(selector);
 
   const promptEl = $("#prompt");
