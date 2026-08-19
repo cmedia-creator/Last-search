@@ -1,6 +1,25 @@
 (() => {
   "use strict";
 
+  // 正規ルート確認
+  // TOPからCASE 001へ遷移する直前に sessionStorage の
+  // ls_entry_case = "001" が設定されていることを前提とする。
+  // 一度正規入場した同一タブでのリロードは許可する。
+  const CASE_ID = "001";
+  const ENTRY_KEY = "ls_entry_case";
+  const ACTIVE_KEY = "ls_case_001_active";
+
+  const entryCase = sessionStorage.getItem(ENTRY_KEY);
+  const alreadyActive = sessionStorage.getItem(ACTIVE_KEY) === "true";
+
+  if (entryCase === CASE_ID) {
+    sessionStorage.removeItem(ENTRY_KEY);
+    sessionStorage.setItem(ACTIVE_KEY, "true");
+  } else if (!alreadyActive) {
+    window.location.replace("../case-003/");
+    return;
+  }
+
   const $ = (selector) => document.querySelector(selector);
 
   const promptEl = $("#prompt");
@@ -281,6 +300,8 @@
         カウントダウンは表示しない。
       */
       setTimeout(() => {
+        sessionStorage.removeItem(ACTIVE_KEY);
+        sessionStorage.removeItem(ENTRY_KEY);
         window.location.href = "../../";
       }, 7000);
     }, 1600);
