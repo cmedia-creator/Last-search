@@ -20,6 +20,42 @@
     return;
   }
 
+  // 完了済みCASEへの再侵入
+  // CASE002完了後に履歴やURLから再度入った場合は、
+  // 怪文書・未来履歴を再実行せず、同期済みメッセージだけ表示する。
+  if (localStorage.getItem("ls_case_002_complete") === "true") {
+    document.addEventListener("DOMContentLoaded", () => {
+      const body = document.body;
+      body.innerHTML = `
+        <main style="
+          min-height:100dvh;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          padding:24px;
+          background:#f3f1ea;
+          color:#171717;
+          font-family:Georgia,'Yu Mincho','Hiragino Mincho ProN',serif;
+        ">
+          <div style="text-align:center;max-width:640px;">
+            <div style="font-size:13px;color:#77736c;margin-bottom:16px;letter-spacing:.08em;">
+              LAST SEARCH
+            </div>
+            <div style="font-size:22px;line-height:1.7;">
+              検索履歴はすでに同期されています。
+            </div>
+          </div>
+        </main>
+      `;
+      sessionStorage.removeItem("ls_case_002_active");
+      sessionStorage.removeItem("ls_entry_case");
+      setTimeout(() => {
+        window.location.replace("../../");
+      }, 3000);
+    });
+    return;
+  }
+
   const $ = (s) => document.querySelector(s);
   const input = $("#searchInput");
   const form = $("#searchForm");
