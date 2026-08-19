@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f4f1">
+<title>LAST SEARCH</title>
+<link rel="stylesheet" href="./case.css">
+</head>
+<body>
+<main class="page">
+  <header class="header">
+    <div class="logo">LAST SEARCH</div>
+    <div class="crumb">保存データ / 検索履歴</div>
+  </header>
+
+  <section id="intro" class="intro">
+    <div class="notice">保存された検索履歴が1件見つかりました。</div>
+    <dl>
+      <div><dt>対象ユーザー</dt><dd>久我あきら</dd></div>
+      <div><dt>保存日</dt><dd>2009年9月17日</dd></div>
+    </dl>
+    <button id="openBtn" type="button">検索履歴を開く</button>
+  </section>
+
+  <section id="history" class="history" hidden>
+    <div class="history-head">
+      <h1>検索履歴</h1>
+      <span>2009/09/17</span>
+    </div>
+
+    <div id="historyList" class="history-list">
+      <div class="row"><time>00:41</time><span>小形高</span></div>
+      <div class="row"><time>00:53</time><span>小形高　事故</span></div>
+      <div class="row"><time>01:08</time><span>小形高　9月17日</span></div>
+      <div class="row"><time>01:26</time><span>小形高　行方不明</span></div>
+
+      <div class="row gap"><time>01:47</time><span>小形高　転出</span></div>
+      <div class="row"><time>02:03</time><span>小形高　一家</span></div>
+      <div class="row"><time>02:18</time><span>小形高　4人</span></div>
+
+      <div class="row gap"><time>02:41</time><span>削除方法</span></div>
+      <div class="row"><time>02:44</time><span>検索履歴　削除</span></div>
+      <div class="row"><time>02:51</time><span>last search　削除</span></div>
+      <div class="row"><time>03:02</time><span>last search　止め方</span></div>
+
+      <div class="row gap"><time>03:11</time><span>自分の名前が検索結果に出る</span></div>
+      <div class="row"><time>03:13</time><span>久我あきら</span></div>
+      <div class="row"><time>03:14</time><span>久我あきら　削除</span></div>
+
+      <button id="blankRow" class="row blank gap" type="button">
+        <time>03:17</time><span>&nbsp;</span>
+      </button>
+    </div>
+  </section>
+
+  <section id="recovered" class="recovered" hidden>
+    <div class="archive-label">RECOVERED RECORD / 03:17</div>
+    <figure><img src="./img/distance-07.png" alt=""></figure>
+    <dl class="photo-meta">
+      <div><dt>撮影日時</dt><dd>2009/09/17 03:17</dd></div>
+    </dl>
+    <div id="restoreText" class="restore">検索語を復元しています……</div>
+    <div id="restoredQuery" class="restored-query" hidden>
+      <time>03:17</time><strong>この部屋にいる人</strong>
+    </div>
+    <div id="currentRows" class="current-rows"></div>
+    <div id="endText" class="end-text" hidden>検索履歴の保存を終了しました。</div>
+  </section>
+</main>
+<script src="./case.js"></script>
+</body>
+</html>
