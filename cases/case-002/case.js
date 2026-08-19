@@ -1,6 +1,25 @@
 (() => {
   "use strict";
 
+  // 正規ルート確認
+  // TOPからCASE 002へ遷移する直前に sessionStorage の
+  // ls_entry_case = "002" が設定されていることを前提とする。
+  // 怪文書ページとの往復や、同一タブでのリロードは許可する。
+  const CASE_ID = "002";
+  const ENTRY_KEY = "ls_entry_case";
+  const ACTIVE_KEY = "ls_case_002_active";
+
+  const entryCase = sessionStorage.getItem(ENTRY_KEY);
+  const alreadyActive = sessionStorage.getItem(ACTIVE_KEY) === "true";
+
+  if (entryCase === CASE_ID) {
+    sessionStorage.removeItem(ENTRY_KEY);
+    sessionStorage.setItem(ACTIVE_KEY, "true");
+  } else if (!alreadyActive) {
+    window.location.replace("../case-003/");
+    return;
+  }
+
   const $ = (s) => document.querySelector(s);
   const input = $("#searchInput");
   const form = $("#searchForm");
@@ -113,6 +132,8 @@
       localStorage.setItem("ls_seen_cases", JSON.stringify(["002"]));
     }
 
+    sessionStorage.removeItem(ACTIVE_KEY);
+    sessionStorage.removeItem(ENTRY_KEY);
     location.href = "../../";
   });
 

@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>転出記録について</title>
   <link rel="stylesheet" href="./document.css">
+<script>
+(() => {
+  const active = sessionStorage.getItem("ls_case_002_active") === "true";
+  if (!active) {
+    window.location.replace("../case-003/");
+  }
+})();
+</script>
 </head>
 <body>
 <main class="document">
