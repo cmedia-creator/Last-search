@@ -28,10 +28,10 @@
     → 糸
     → 「久我あきらが写っている画像をすべて選択してください」
 
-    最終の久我画面には久我本人は1枚も出さない。
+    最終の久我画面には久我本人の画像を9枚表示する。
     ・0枚選択 → 不正解。その場から進めない
     ・1枚以上選択 → 正解扱い。そのまま本人認証へ進む
-    ・「久我9枚」の追加画面は存在しない
+    ・追加の選択画面は存在しない
 
     認証完了後:
     ls_case_001_complete = true
@@ -61,7 +61,17 @@
     family4: "./img/family-04.webp",
 
     needle1: "./img/needle-01.webp",
-    thread1: "./img/thread-01.webp"
+    thread1: "./img/thread-01.webp",
+
+    kuga1: "./img/kuga-01.webp",
+    kuga2: "./img/kuga-02.webp",
+    kuga3: "./img/kuga-03.webp",
+    kuga4: "./img/kuga-04.webp",
+    kuga5: "./img/kuga-05.webp",
+    kuga6: "./img/kuga-06.webp",
+    kuga7: "./img/kuga-07.webp",
+    kuga8: "./img/kuga-08.webp",
+    kuga9: "./img/kuga-09.webp"
   };
 
   /*
@@ -122,14 +132,14 @@
         IMG.signal3, IMG.thread1, IMG.needle1,
         IMG.family4, IMG.house1,  IMG.bike4
       ],
-      correct: [4]
+      correct: [4, 5]
     },
     {
       prompt: "久我あきらが写っている画像をすべて選択してください",
       images: [
-        IMG.family1, IMG.house2,  IMG.signal1,
-        IMG.bike3,   IMG.family4, IMG.needle1,
-        IMG.house1,  IMG.thread1, IMG.signal4
+        IMG.kuga1, IMG.kuga2, IMG.kuga3,
+        IMG.kuga4, IMG.kuga5, IMG.kuga6,
+        IMG.kuga7, IMG.kuga8, IMG.kuga9
       ],
       kugaGate: true
     }
@@ -283,7 +293,7 @@
 
     /*
       最終「久我あきら」画面。
-      久我本人は一枚も存在しない。
+      9枚すべて久我あきら。
 
       0枚 → 不正解
       1枚以上 → 正解扱い → 即、本人認証開始
