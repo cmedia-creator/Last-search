@@ -90,7 +90,8 @@
     */
     const CASES = [
       { id:"001", path:"./cases/case-001/", weight:100, enabled:true, minSearchCount:1 },
-      { id:"002", path:"./cases/case-002/", weight:100, enabled:true, minSearchCount:1 }
+      { id:"002", path:"./cases/case-002/", weight:100, enabled:true, minSearchCount:1 },
+      { id:"005", path:"./cases/case-005/", weight:100, enabled:true, minSearchCount:1 }
     ];
 
     const CASE004_PATH = "./cases/case-004/";
@@ -201,6 +202,7 @@
       sessionStorage.removeItem("ls_case_001_active");
       sessionStorage.removeItem("ls_case_002_active");
       sessionStorage.removeItem("ls_case_004_active");
+      sessionStorage.removeItem("ls_case_005_active");
       sessionStorage.removeItem("ls_entry_case");
 
       updateLoginStatus();
