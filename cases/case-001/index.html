@@ -3,37 +3,47 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>LAST SEARCH - CASE 001 | 本人確認</title>
-<link rel="stylesheet" href="../../assets/css/last-search.css">
-<link rel="stylesheet" href="./case.css">
+<title>LAST SEARCH</title>
+<link rel="stylesheet" href="./assets/css/last-search.css">
 </head>
-<body class="case-body">
-<main class="case-wrap" id="app">
-  <header class="case-brand">
+<body>
+<button class="ls-login-status" id="loginStatus" type="button" hidden>ログイン中</button>
+<main class="ls-home">
+  <section class="ls-home-inner" aria-label="LAST SEARCH">
     <div class="ls-logo">LAST SEARCH</div>
-    <small>CASE 001</small>
-  </header>
-  <section class="ls-panel case-panel">
-    <div class="case-head">
-      <h1>画像認証</h1>
-      <p id="headText">続行するには、人間であることを確認してください。</p>
-    </div>
-    <div id="challenge" class="challenge">
-      <div class="prompt" id="prompt"></div>
-      <div class="grid" id="grid"></div>
-    </div>
-    <div class="case-status" id="status" aria-live="polite"></div>
-    <div class="case-actions" id="actions">
-      <button class="ls-secondary" id="resetBtn" type="button">やり直す</button>
-      <button class="ls-primary" id="verifyBtn" type="button">確認</button>
-    </div>
-    <div class="finish" id="finish">
-      <strong>本人確認が完了しました。</strong>
-      <span>認証情報を保存しています。</span>
-    </div>
+    <form class="ls-search-shell" id="searchForm" autocomplete="off">
+      <input id="searchInput" type="search" maxlength="120" placeholder="検索" aria-label="検索">
+      <button type="submit">検索</button>
+    </form>
+    <div class="ls-home-note" id="status" aria-live="polite"></div>
   </section>
 </main>
-<script src="../../assets/js/storage.js"></script>
-<script src="./case.js"></script>
+<script src="./assets/js/storage.js"></script>
+<script>
+const form=document.getElementById('searchForm');
+const input=document.getElementById('searchInput');
+const status=document.getElementById('status');
+const loginStatus=document.getElementById('loginStatus');
+const params=new URLSearchParams(location.search);
+const from=params.get('from');
+const case001Complete=LSStorage.get('ls_case_001_complete',false)===true;
+if(case001Complete){ loginStatus.hidden=false; }
+if(from==='case001'){
+  input.value='久我あきら';
+  status.textContent='検索ボタンを押すまで、何も始まりません。';
+}
+form.addEventListener('submit',e=>{
+  e.preventDefault();
+  const q=input.value.trim();
+  LSStorage.set('ls_last_query',q);
+  LSStorage.set('ls_search_count',(LSStorage.get('ls_search_count',0)||0)+1);
+  if(from==='case001'){
+    status.textContent='一致する検索結果はありません。';
+    return;
+  }
+  status.textContent='検索しています…';
+  setTimeout(()=>location.href='./cases/case-001/',450);
+});
+</script>
 </body>
 </html>

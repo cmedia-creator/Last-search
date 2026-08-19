@@ -91,7 +91,7 @@ function finish(){
   headText.textContent='認証情報を保存しています。';
   finishEl.style.display='block';
   glitch();
-  setTimeout(()=>location.href='../../index.html?from=case001',1800);
+  setTimeout(()=>location.href='../../index.html?from=case001',7000);
 }
 verifyBtn.addEventListener('click',verify);
 resetBtn.addEventListener('click',render);
