@@ -93,6 +93,19 @@
       { id:"002", path:"./cases/case-002/", weight:100, enabled:true, minSearchCount:1 }
     ];
 
+    const CASE004_PATH = "./cases/case-004/";
+
+    function normalizeQuery(value){
+      return value
+        .trim()
+        .replace(/[\s　]+/g,"")
+        .replace(/くがあきら/g,"久我あきら");
+    }
+
+    function isKugaQuery(value){
+      return normalizeQuery(value) === "久我あきら";
+    }
+
     const searchForm = document.getElementById("searchForm");
     const searchInput = document.getElementById("searchInput");
     const status = document.getElementById("status");
@@ -153,6 +166,18 @@
       const query=searchInput.value.trim();
       if(!query){ searchInput.focus(); return; }
 
+      // 「久我あきら」はランダム抽選より優先してCASE004へ。
+      if(isKugaQuery(query)){
+        localStorage.setItem("ls_last_query",query);
+        localStorage.setItem("ls_search_count",String(readNumber("ls_search_count")+1));
+        sessionStorage.setItem("ls_entry_case","004");
+
+        showStatus("検索しています");
+        setTimeout(()=>veil.classList.add("on"),420);
+        setTimeout(()=>{ window.location.href=CASE004_PATH; },900);
+        return;
+      }
+
       const nextSearchCount=readNumber("ls_search_count")+1;
       const seenCases=readSeenCases();
       const selectedCase=chooseCase(nextSearchCount,seenCases);
@@ -164,8 +189,6 @@
         return;
       }
 
-      // CASE 001 / 002側の入口チェックに渡す正規遷移トークン。
-      // CASE003は通常検索の抽選対象ではない。
       sessionStorage.setItem("ls_entry_case", selectedCase.id);
 
       showStatus("検索しています");
@@ -177,9 +200,21 @@
       // TOPに戻った時点でCASE内のactive状態は終了。
       sessionStorage.removeItem("ls_case_001_active");
       sessionStorage.removeItem("ls_case_002_active");
+      sessionStorage.removeItem("ls_case_004_active");
       sessionStorage.removeItem("ls_entry_case");
 
       updateLoginStatus();
+
+      // CASE004直後だけ、右上の「ログイン中」を10秒間「久我あきら」に変える。
+      const flashAt = Number(localStorage.getItem("ls_case_004_flash_name") || 0);
+      if (flashAt && Date.now() - flashAt < 15000) {
+        loginStatus.classList.add("visible");
+        loginStatus.textContent = "久我あきら";
+        setTimeout(() => {
+          loginStatus.textContent = "ログイン中";
+          localStorage.removeItem("ls_case_004_flash_name");
+        }, 10000);
+      }
 
       const pendingQuery=localStorage.getItem("ls_pending_query");
       if(pendingQuery){
