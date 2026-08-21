@@ -3,66 +3,64 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f4f4f1">
-  <title>LAST SEARCH</title>
+  <meta name="theme-color" content="#F4F4F1">
+  <title>CASE 004 | LAST SEARCH</title>
   <link rel="stylesheet" href="./case.css">
 </head>
 <body>
   <main class="page">
-    <header class="header">
-      <div class="logo">LAST SEARCH</div>
-      <form id="searchForm" class="search" autocomplete="off">
-        <input id="searchInput" type="search" value="久我あきら" aria-label="検索">
-        <button type="submit">検索</button>
-      </form>
-    </header>
+    <section class="panel" aria-live="polite">
+      <header class="head">
+        <div class="brand">LAST SEARCH</div>
+        <div class="case-no">CASE 004</div>
+      </header>
 
-    <section class="results-head">
-      <div class="result-meta">「久我あきら」の検索結果</div>
-      <h1>検索結果</h1>
-    </section>
+      <div class="content">
+        <p class="eyebrow">人物検索</p>
 
-    <section id="initialResult" class="initial-result">
-      <article class="result">
-        <div class="result-title">久我あきらについて</div>
-        <div class="url">last-search / person / lookup</div>
-        <p>保存されている公開情報はありません。</p>
-      </article>
+        <div class="person">
+          <div class="portrait-wrap">
+            <img src="./img/kuga-main.webp" alt="" class="portrait">
+          </div>
 
-      <div class="expand">
-        <p>検索範囲を拡張しますか？</p>
-        <button id="expandBtn" type="button">はい</button>
+          <div class="person-main">
+            <h1>久我あきら</h1>
+            <p class="meta">31歳 / 個人開発者</p>
+          </div>
+        </div>
+
+        <dl class="record">
+          <div>
+            <dt>主な記録</dt>
+            <dd>検索システム「Z Search」開発</dd>
+          </div>
+          <div>
+            <dt>最終確認</dt>
+            <dd id="lastSeen">2026年 / 記録停止</dd>
+          </div>
+          <div>
+            <dt>所在</dt>
+            <dd id="location">確認できません</dd>
+          </div>
+          <div>
+            <dt>状態</dt>
+            <dd id="status">照合中</dd>
+          </div>
+        </dl>
+
+        <div id="basis" class="basis" hidden>
+          <p class="basis-title">判定情報</p>
+          <div class="basis-row"><span>通信記録</span><b>更新なし</b></div>
+          <div class="basis-row"><span>金融記録</span><b>更新なし</b></div>
+          <div class="basis-row"><span>医療記録</span><b>更新なし</b></div>
+          <div class="basis-row"><span>所在記録</span><b>確認不能</b></div>
+        </div>
+
+        <p id="message" class="message">人物情報を照合しています。</p>
+
+        <button id="detailButton" class="secondary" type="button" hidden>判定情報を表示</button>
+        <button id="nextButton" class="primary" type="button" hidden>Z Searchを検索する</button>
       </div>
-    </section>
-
-    <section id="searching" class="searching" hidden>
-      <div id="searchingText">公開情報を検索しています……</div>
-    </section>
-
-    <section id="archiveResults" class="results" hidden>
-      <article class="result">
-        <a href="./profile.html">管理者について</a>
-        <div class="url">archive / kuga / profile</div>
-        <p>保存された個人サイトのプロフィール。</p>
-      </article>
-
-      <article class="result">
-        <a href="./stop.html">更新停止のお知らせ</a>
-        <div class="url">archive / kuga / notice</div>
-        <p>更新停止前に保存された文章。</p>
-      </article>
-
-      <article class="result">
-        <a href="./delete-request.html">削除依頼</a>
-        <div class="url">archive / request / delete</div>
-        <p>削除処理に関する保全記録。</p>
-      </article>
-
-      <article id="currentResult" class="result current-result" hidden>
-        <a href="./current.html">久我あきらについて</a>
-        <div class="url">last-search / user / current</div>
-        <p>本人確認済み</p>
-      </article>
     </section>
   </main>
 

@@ -1,96 +1,45 @@
 (() => {
   "use strict";
 
-  const CASE_ID = "004";
-  const ENTRY_KEY = "ls_entry_case";
-  const ACTIVE_KEY = "ls_case_004_active";
+  const status = document.getElementById("status");
+  const message = document.getElementById("message");
+  const basis = document.getElementById("basis");
+  const detailButton = document.getElementById("detailButton");
+  const nextButton = document.getElementById("nextButton");
 
-  const entryCase = sessionStorage.getItem(ENTRY_KEY);
-  const alreadyActive = sessionStorage.getItem(ACTIVE_KEY) === "true";
+  // CASE004の役割:
+  // 久我を「怪異」ではなく、実在したZ Search開発者として初めて整理して見せる。
+  // ただしLAST SEARCHだけが、データ欠落から「死亡」と推定している。
 
-  if (entryCase === CASE_ID) {
-    sessionStorage.removeItem(ENTRY_KEY);
-    sessionStorage.setItem(ACTIVE_KEY, "true");
-  } else if (!alreadyActive) {
-    window.location.replace("../case-003/");
-    return;
-  }
+  window.setTimeout(() => {
+    status.textContent = "所在不明";
+    message.textContent = "最終確認以降の生存記録を確認できません。";
+  }, 1600);
 
-  if (localStorage.getItem("ls_case_004_complete") === "true") {
-    document.addEventListener("DOMContentLoaded", () => {
-      document.body.innerHTML = `
-        <main style="min-height:100dvh;display:flex;align-items:center;justify-content:center;
-        padding:24px;background:#f4f4f1;color:#111;font-family:-apple-system,BlinkMacSystemFont,
-        'Segoe UI','Yu Gothic',Meiryo,sans-serif;">
-          <div style="text-align:center;max-width:640px;">
-            <div style="font-size:13px;color:#747474;margin-bottom:16px;letter-spacing:.08em;">
-              LAST SEARCH
-            </div>
-            <div style="font-size:22px;line-height:1.7;">
-              照合はすでに完了しています。
-            </div>
-          </div>
-        </main>`;
-      sessionStorage.removeItem(ACTIVE_KEY);
-      sessionStorage.removeItem(ENTRY_KEY);
-      setTimeout(() => window.location.replace("../../"), 3000);
-    });
-    return;
-  }
+  window.setTimeout(() => {
+    status.textContent = "死亡";
+    status.classList.add("status-dead");
+    message.textContent = "人物状態を更新しました。";
+  }, 3400);
 
-  const expandBtn = document.getElementById("expandBtn");
-  const initialResult = document.getElementById("initialResult");
-  const searching = document.getElementById("searching");
-  const searchingText = document.getElementById("searchingText");
-  const archiveResults = document.getElementById("archiveResults");
-  const currentResult = document.getElementById("currentResult");
-  const searchForm = document.getElementById("searchForm");
-  const searchInput = document.getElementById("searchInput");
+  window.setTimeout(() => {
+    detailButton.hidden = false;
+    nextButton.hidden = false;
+  }, 4700);
 
-  function visitedAll() {
-    return ["profile","stop","delete"].every(
-      key => localStorage.getItem(`ls_case_004_${key}`) === "true"
-    );
-  }
-
-  function revealCurrentIfReady() {
-    if (visitedAll()) currentResult.hidden = false;
-  }
-
-  expandBtn.addEventListener("click", () => {
-    initialResult.hidden = true;
-    searching.hidden = false;
-
-    setTimeout(() => {
-      searchingText.textContent = "該当なし";
-    }, 1300);
-
-    setTimeout(() => {
-      searchingText.textContent = "削除済みページを検索しています……";
-    }, 2600);
-
-    setTimeout(() => {
-      searchingText.textContent = "3件見つかりました";
-    }, 4000);
-
-    setTimeout(() => {
-      searching.hidden = true;
-      archiveResults.hidden = false;
-      localStorage.setItem("ls_case_004_expanded", "true");
-      revealCurrentIfReady();
-    }, 4900);
+  detailButton.addEventListener("click", () => {
+    basis.hidden = false;
+    detailButton.hidden = true;
+    message.textContent = "表示された記録には、死亡を直接確認した情報は含まれていません。";
+    localStorage.setItem("ls_case_004_basis_seen", "true");
   });
 
-  searchForm.addEventListener("submit", e => {
-    e.preventDefault();
-    if (searchInput.value.trim()) {
-      localStorage.setItem("ls_last_query", searchInput.value.trim());
-    }
+  nextButton.addEventListener("click", () => {
+    localStorage.setItem("ls_case_004_complete", "true");
+    localStorage.setItem("ls_kuga_profile_seen", "true");
+    localStorage.setItem("ls_kuga_creator_of", "z_search");
+    localStorage.setItem("ls_next_query", "Z Search");
+    localStorage.setItem("ls_last_query", "Z Search");
+    window.location.href = "../../index.html?prefill=Z%20Search";
   });
-
-  if (localStorage.getItem("ls_case_004_expanded") === "true") {
-    initialResult.hidden = true;
-    archiveResults.hidden = false;
-    revealCurrentIfReady();
-  }
 })();
