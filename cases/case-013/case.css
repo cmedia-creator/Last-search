@@ -1,0 +1,19 @@
+
+*{box-sizing:border-box}
+:root{--bg:#f4f4f1;--surface:#fff;--text:#111;--sub:#777;--border:#d8d8d4}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
+body{font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Segoe UI","Yu Gothic",Meiryo,sans-serif}
+button,input{font:inherit}.page{min-height:100dvh;display:grid;place-items:center;padding:20px}
+.panel{width:min(100%,700px);background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.06)}
+.head{display:flex;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--border)}
+.brand{font-size:14px;font-weight:700;letter-spacing:.16em}.case-no,.eyebrow,.message{font-size:12px;color:var(--sub)}
+.content{padding:28px 24px;min-height:500px}.eyebrow{margin:0 0 8px;letter-spacing:.08em}h1{margin:0 0 18px;font-size:27px}
+.message{min-height:24px;margin:18px 0 14px;line-height:1.7}
+.primary,.danger{min-height:44px;padding:0 18px;border:1px solid #111;border-radius:8px;background:#111;color:#fff;cursor:pointer}
+.danger{background:#fff;color:#111}.hidden{display:none!important}
+.shake{animation:shake .12s linear 4}@keyframes shake{0%,100%{transform:translate(0)}25%{transform:translate(3px,-1px)}50%{transform:translate(-2px,2px)}75%{transform:translate(1px,-2px)}}
+@media(max-width:500px){.page{padding:12px}.content{padding:22px 16px}h1{font-size:24px}}
+
+.history{border:1px solid var(--border);border-radius:10px;overflow:hidden}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-bottom:1px solid var(--border);animation:appear .35s}.row:last-child{border:0}.row span{font-size:13px}.row button{border:1px solid #aaa;border-radius:6px;background:#fff;padding:6px 10px;font-size:11px;cursor:pointer}.row.you span{font-weight:700}.row.restored{animation:flash .35s}
+@keyframes appear{from{opacity:0;transform:translateY(-4px)}}@keyframes flash{50%{background:#ddd}}
+.ending{margin-top:22px;padding:36px 18px;background:#050505;color:#fff;border-radius:10px;text-align:center}.ending p{margin:0 0 20px}.ending strong{font-size:20px}
