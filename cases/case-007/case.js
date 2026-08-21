@@ -1,84 +1,103 @@
 (() => {
 "use strict";
-const CASE_ID="007", ENTRY_KEY="ls_entry_case", ACTIVE_KEY="ls_case_007_active";
-const entry=sessionStorage.getItem(ENTRY_KEY);
-const active=sessionStorage.getItem(ACTIVE_KEY)==="true";
 
-if(entry===CASE_ID){
-  sessionStorage.removeItem(ENTRY_KEY);
-  sessionStorage.setItem(ACTIVE_KEY,"true");
-}else if(!active){
-  location.replace("../case-003/");
-  return;
+const checks = document.getElementById("checks");
+const nameBox = document.getElementById("nameBox");
+const ogotaka = document.getElementById("ogotaka");
+const freeze = document.getElementById("freeze");
+const connection = document.getElementById("connection");
+const state = document.getElementById("state");
+const message = document.getElementById("message");
+const continueButton = document.getElementById("continueButton");
+const panel = document.getElementById("panel");
+
+const items = [
+  ["人間", "一致しません"],
+  ["場所", "一致しません"],
+  ["組織", "一致しません"],
+  ["プログラム", "一致しません"],
+  ["範囲", "確認できません"]
+];
+
+let i = 0;
+
+function addCheck() {
+  if (i >= items.length) {
+    setTimeout(showName, 800);
+    return;
+  }
+  const row = document.createElement("div");
+  row.className = "check";
+  row.innerHTML = "<span></span><b></b>";
+  row.querySelector("span").textContent = items[i][0];
+  row.querySelector("b").textContent = items[i][1];
+  checks.appendChild(row);
+  i++;
+  setTimeout(addCheck, 480);
 }
 
-if(localStorage.getItem("ls_case_007_complete")==="true"){
-  document.addEventListener("DOMContentLoaded",()=>{
-    document.body.innerHTML=`<main style="min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;background:#f4f4f1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Yu Gothic',Meiryo,sans-serif"><div style="text-align:center"><div style="font-size:13px;color:#777;margin-bottom:16px;letter-spacing:.08em">LAST SEARCH</div><div style="font-size:22px">検索履歴は保存済みです。</div></div></main>`;
-    sessionStorage.removeItem(ACTIVE_KEY);
-    setTimeout(()=>location.replace("../../"),3000);
-  });
-  return;
-}
-
-const intro=document.getElementById("intro");
-const history=document.getElementById("history");
-const openBtn=document.getElementById("openBtn");
-const blankRow=document.getElementById("blankRow");
-const recovered=document.getElementById("recovered");
-const restoreText=document.getElementById("restoreText");
-const restoredQuery=document.getElementById("restoredQuery");
-const currentRows=document.getElementById("currentRows");
-const endText=document.getElementById("endText");
-let sequenceStarted=false;
-
-openBtn.addEventListener("click",()=>{
-  intro.hidden=true;
-  history.hidden=false;
-  history.scrollIntoView({behavior:"smooth",block:"start"});
-});
-
-blankRow.addEventListener("click",()=>{
-  if(sequenceStarted) return;
-  sequenceStarted=true;
-  blankRow.disabled=true;
-  recovered.hidden=false;
-  recovered.scrollIntoView({behavior:"smooth",block:"start"});
-
-  setTimeout(()=>{
-    restoreText.hidden=true;
-    restoredQuery.hidden=false;
-  },5000);
-
-  setTimeout(()=>{
-    const now=new Date();
-    const hh=String(now.getHours()).padStart(2,"0");
-    const mm=String(now.getMinutes()).padStart(2,"0");
-    const time=`${hh}:${mm}`;
-
-    currentRows.innerHTML=`
-      <div class="row new"><time>${time}</time><span>久我あきら　2009年9月17日</span></div>
-      <div class="row"><time>${time}</time><span>この履歴を見ている人</span></div>
-    `;
-  },8000);
-
-  setTimeout(()=>{
-    endText.hidden=false;
-  },15000);
-
-  setTimeout(()=>{
-    localStorage.setItem("ls_case_007_complete","true");
-    try{
-      const seen=JSON.parse(localStorage.getItem("ls_seen_cases")||"[]");
-      const list=Array.isArray(seen)?seen:[];
-      if(!list.includes("007")) list.push("007");
-      localStorage.setItem("ls_seen_cases",JSON.stringify(list));
-    }catch{
-      localStorage.setItem("ls_seen_cases",JSON.stringify(["007"]));
+function typeName() {
+  const word = "OGOTAKA";
+  let n = 0;
+  const timer = setInterval(() => {
+    ogotaka.textContent = word.slice(0, ++n);
+    if (n === word.length) {
+      clearInterval(timer);
+      localStorage.setItem("ls_ogotaka_identifier_seen", "true");
+      message.textContent = "仮の名前を保存しました。";
+      setTimeout(beginFreeze, 1300);
     }
-    sessionStorage.removeItem(ACTIVE_KEY);
-    sessionStorage.removeItem(ENTRY_KEY);
-    location.href="../../";
-  },18000);
+  }, 260);
+}
+
+function showName() {
+  nameBox.hidden = false;
+  message.textContent = "分類できないため、仮の名前を付けます。";
+  setTimeout(typeName, 900);
+}
+
+function beginFreeze() {
+  freeze.hidden = false;
+  document.body.style.cursor = "wait";
+  message.textContent = "";
+  // 「見つけた瞬間、向こうにも見つかった」ための無音の間。
+  setTimeout(connectBack, 4200);
+}
+
+function connectBack() {
+  freeze.hidden = true;
+  document.body.style.cursor = "";
+  panel.classList.add("shock");
+  setTimeout(() => panel.classList.remove("shock"), 700);
+
+  connection.hidden = false;
+  message.textContent = "";
+  localStorage.setItem("ls_external_access_after_naming", "true");
+
+  setTimeout(() => {
+    state.textContent = "確認中";
+    message.textContent = "接続元を確認できません。";
+  }, 1500);
+
+  setTimeout(() => {
+    const line = document.createElement("p");
+    line.style.cssText = "margin:16px 0 0;text-align:center;font-size:13px;font-weight:650;";
+    line.textContent = "こちらを確認しています";
+    connection.appendChild(line);
+    message.textContent = "";
+  }, 3100);
+
+  setTimeout(() => {
+    continueButton.hidden = false;
+  }, 5000);
+}
+
+continueButton.addEventListener("click", () => {
+  localStorage.setItem("ls_case_007_complete", "true");
+  localStorage.setItem("ls_next_query", "OGOTAKA");
+  localStorage.setItem("ls_last_query", "OGOTAKA");
+  location.href = "../../index.html?prefill=OGOTAKA";
 });
+
+setTimeout(addCheck, 900);
 })();
