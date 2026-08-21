@@ -3,55 +3,57 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f3f1ea">
-  <title>LAST SEARCH</title>
+  <meta name="theme-color" content="#F4F4F1">
+  <title>CASE 002 | LAST SEARCH</title>
   <link rel="stylesheet" href="./case.css">
 </head>
 <body>
   <main class="page">
-    <header class="header">
-      <a class="logo" href="../../" aria-label="LAST SEARCH">LAST SEARCH</a>
-      <form id="searchForm" class="search" autocomplete="off">
-        <input id="searchInput" type="search" maxlength="120" aria-label="検索">
-        <button type="submit">検索</button>
-      </form>
-    </header>
+    <section class="panel" id="panel">
+      <header class="head">
+        <div class="brand">LAST SEARCH</div>
+        <div class="case-no">CASE 002</div>
+      </header>
 
-    <section id="dataNotice" class="data-notice" hidden>
-      <p id="dataNoticeText"></p>
+      <div class="content">
+        <p class="eyebrow">人物状態照合</p>
+
+        <h1>久我あきら</h1>
+
+        <dl class="record" id="record">
+          <div>
+            <dt>識別状態</dt>
+            <dd>照合済み</dd>
+          </div>
+          <div>
+            <dt>最終確認</dt>
+            <dd id="lastSeen">00:28</dd>
+          </div>
+          <div>
+            <dt>状態</dt>
+            <dd id="lifeStatus" class="alive">生存</dd>
+          </div>
+        </dl>
+
+        <div class="source-box" id="sourceBox" hidden>
+          <div class="source-line"><span>通信</span><b id="src1">確認中</b></div>
+          <div class="source-line"><span>金融</span><b id="src2">確認中</b></div>
+          <div class="source-line"><span>医療</span><b id="src3">確認中</b></div>
+          <div class="source-line"><span>所在</span><b id="src4">確認中</b></div>
+        </div>
+
+        <p class="message" id="message">最新状態を確認できます。</p>
+
+        <button id="checkButton" class="primary" type="button">状態を更新</button>
+      </div>
     </section>
 
-    <section class="results-head">
-      <div id="resultMeta" class="result-meta"></div>
-      <h1 id="resultTitle">検索結果</h1>
-    </section>
-
-    <section id="historyPanel" class="history-panel" hidden>
-      <div class="history-title">最近の検索</div>
-      <div id="historyRows"></div>
-      <div id="syncMessage" class="sync-message" aria-live="polite"></div>
-    </section>
-
-    <section class="results">
-      <article class="result">
-        <a href="./record-09-17.html">記録番号 09-17 / 保全済</a>
-        <div class="url">archive.local / record / 09-17</div>
-        <p>公開終了したページの記録。本文のみ保存されています。</p>
-      </article>
-
-      <article class="result">
-        <a href="./transfer-record.html">転出記録について</a>
-        <div class="url">archive.local / transfer / 2009</div>
-        <p>2009年に保存された個人ページ。内容の正確性は確認されていません。</p>
-      </article>
-    </section>
-
-    <section id="finalSearch" class="final-search" hidden>
-      <p>検索を続ける</p>
-      <form id="finalSearchForm" autocomplete="off">
-        <input id="finalSearchInput" type="search" value="小形高" aria-label="検索">
-        <button type="submit">検索</button>
-      </form>
+    <section class="death-screen" id="deathScreen" hidden aria-live="assertive">
+      <div class="death-inner">
+        <div class="death-time">00:29</div>
+        <div class="death-name">久我あきら</div>
+        <div class="death-status">死亡</div>
+      </div>
     </section>
   </main>
 
