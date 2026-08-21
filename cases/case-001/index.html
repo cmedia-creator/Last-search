@@ -3,47 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f4f4f1">
-  <title>LAST SEARCH - CASE 001</title>
-
-  <!-- LAST SEARCH 共通UI -->
-  <link rel="stylesheet" href="../../assets/css/last-search.css">
-
-  <!-- CASE 001 固有UI -->
+  <meta name="theme-color" content="#F4F4F1">
+  <title>CASE 001 | LAST SEARCH</title>
   <link rel="stylesheet" href="./case.css">
 </head>
-
 <body>
-  <main class="wrap" id="app">
-    <div class="brand">
-      LAST SEARCH
-      <small>CASE 001 / VERIFY</small>
-    </div>
-
-    <section class="card" aria-label="画像認証">
-      <div class="head">
-        <h1>画像認証</h1>
-        <p>続行するには、人間であることを確認してください。</p>
+  <main class="page">
+    <section class="captcha" aria-live="polite">
+      <div class="captcha-head">
+        <div class="brand">LAST SEARCH</div>
+        <div class="case-no">CASE 001</div>
       </div>
 
-      <div class="challenge" id="challenge">
-        <div class="prompt" id="prompt"></div>
-        <div class="grid" id="grid" aria-live="polite"></div>
-      </div>
-
-      <div class="status" id="status" aria-live="polite"></div>
+      <div id="prompt" class="prompt">画像認証を読み込んでいます...</div>
+      <div id="grid" class="grid" aria-label="画像認証"></div>
 
       <div class="actions">
-        <button class="ctrl" id="resetBtn" type="button">やり直す</button>
-        <button class="ctrl primary" id="verifyBtn" type="button">確認</button>
+        <div id="status" class="status"></div>
+        <button id="verify" class="verify" type="button">確認</button>
+      </div>
+    </section>
+
+    <section id="complete" class="complete" hidden>
+      <div class="complete-inner">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>本人確認が完了しました。</p>
       </div>
     </section>
   </main>
 
-  <!-- 共通 localStorage -->
-  <script src="../../assets/js/storage.js"></script>
-
-  <!-- CASE 001 本体 -->
   <script src="./case.js"></script>
 </body>
 </html>
