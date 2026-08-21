@@ -1,60 +1,89 @@
 (() => {
   "use strict";
 
-  const CASE_ID = "005";
-  const ENTRY_KEY = "ls_entry_case";
-  const ACTIVE_KEY = "ls_case_005_active";
+  const terminal = document.getElementById("terminal");
+  const summary = document.getElementById("summary");
+  const processName = document.getElementById("processName");
+  const message = document.getElementById("message");
+  const continueButton = document.getElementById("continueButton");
 
-  const entryCase = sessionStorage.getItem(ENTRY_KEY);
-  const alreadyActive = sessionStorage.getItem(ACTIVE_KEY) === "true";
+  const logs = [
+    ["[23:41:08] crawl completed", "dim"],
+    ["[23:41:08] indexed: 18,441", "dim"],
+    ["[23:41:09] orphan pages: 327", "dim"],
+    ["", "blank"],
+    ["[23:41:15] archive fragment detected", "warn"],
+    ["[23:41:15] source date: 2009", "warn"],
+    ["[23:41:16] format: unknown", ""],
+    ["[23:41:18] attempting read...", ""],
+    ["", "blank"],
+    ["[23:41:24] executable data detected", "warn"],
+    ["[23:41:24] process state: inactive", ""],
+    ["[23:41:27] sandbox created", ""],
+    ["[23:41:31] process state: active", "warn"],
+    ["", "blank"],
+    ["[23:41:34] external process initialized", "warn"],
+    ["[23:41:35] origin: unresolved", ""],
+    ["[23:41:36] process name: UNKNOWN", ""]
+  ];
 
-  if (entryCase === CASE_ID) {
-    sessionStorage.removeItem(ENTRY_KEY);
-    sessionStorage.setItem(ACTIVE_KEY, "true");
-  } else if (!alreadyActive) {
-    location.replace("../case-003/");
-    return;
+  let i = 0;
+
+  function appendLine(text, cls = "") {
+    const div = document.createElement("div");
+    div.className = "line " + cls;
+    div.textContent = text;
+    terminal.appendChild(div);
+    terminal.scrollTop = terminal.scrollHeight;
   }
 
-  if (localStorage.getItem("ls_case_005_complete") === "true") {
-    document.addEventListener("DOMContentLoaded", () => {
-      document.body.innerHTML = `
-        <main style="min-height:100dvh;display:flex;align-items:center;justify-content:center;
-        padding:24px;background:#f4f4f1;color:#111;font-family:-apple-system,BlinkMacSystemFont,
-        'Segoe UI','Yu Gothic',Meiryo,sans-serif;">
-          <div style="text-align:center;max-width:640px;">
-            <div style="font-size:13px;color:#747474;margin-bottom:16px;letter-spacing:.08em;">LAST SEARCH</div>
-            <div style="font-size:22px;line-height:1.7;">検索結果は更新済みです。</div>
-          </div>
-        </main>`;
-      sessionStorage.removeItem(ACTIVE_KEY);
-      sessionStorage.removeItem(ENTRY_KEY);
-      setTimeout(() => location.replace("../../"), 3000);
-    });
-    return;
-  }
-
-  const input = document.getElementById("searchInput");
-  const form = document.getElementById("searchForm");
-  const resultMeta = document.getElementById("resultMeta");
-  const results = document.getElementById("results");
-  const emptyState = document.getElementById("emptyState");
-
-  const q = localStorage.getItem("ls_last_query") || "";
-  input.value = q;
-  resultMeta.textContent = q ? `「${q}」の検索結果` : "検索結果";
-
-  if (localStorage.getItem("ls_case_005_record_erased") === "true") {
-    results.hidden = true;
-    emptyState.hidden = false;
-  }
-
-  form.addEventListener("submit", e => {
-    e.preventDefault();
-    const query = input.value.trim();
-    if (query) {
-      localStorage.setItem("ls_last_query", query);
-      resultMeta.textContent = `「${query}」の検索結果`;
+  function writeNext() {
+    if (i >= logs.length) {
+      afterLogs();
+      return;
     }
+
+    const [text, cls] = logs[i];
+    appendLine(text, cls);
+    i += 1;
+
+    const delay = text === "" ? 300 : 420;
+    window.setTimeout(writeNext, delay);
+  }
+
+  function afterLogs() {
+    summary.hidden = false;
+    message.textContent = "Z Searchの実行環境に未登録の処理を確認しました。";
+
+    window.setTimeout(() => {
+      processName.textContent = "Z SEARCH";
+      appendLine("[23:41:41] process name: Z SEARCH", "warn");
+      message.textContent = "処理情報が更新されました。";
+    }, 1800);
+
+    window.setTimeout(() => {
+      appendLine("[23:41:44] indexed pages: 18,441", "dim");
+      appendLine("[23:41:44] indexed pages: 42,907", "warn");
+      message.textContent = "検索可能な情報が増加しています。";
+    }, 3400);
+
+    window.setTimeout(() => {
+      appendLine("[23:41:49] new query relationship detected", "");
+      appendLine("[23:41:49] date: 2009", "");
+      appendLine("[23:41:50] continue?", "cursor");
+      continueButton.hidden = false;
+      message.textContent = "2009年の記録を検索できます。";
+    }, 5200);
+  }
+
+  continueButton.addEventListener("click", () => {
+    localStorage.setItem("ls_case_005_complete", "true");
+    localStorage.setItem("ls_zsearch_ai_fusion_detected", "true");
+    localStorage.setItem("ls_2009_archive_seen", "true");
+    localStorage.setItem("ls_next_query", "2009");
+    localStorage.setItem("ls_last_query", "2009");
+    window.location.href = "../../index.html?prefill=2009";
   });
+
+  window.setTimeout(writeNext, 700);
 })();

@@ -3,36 +3,47 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f4f4f1">
-  <title>LAST SEARCH</title>
+  <meta name="theme-color" content="#F4F4F1">
+  <title>CASE 005 | LAST SEARCH</title>
   <link rel="stylesheet" href="./case.css">
 </head>
 <body>
   <main class="page">
-    <header class="header">
-      <div class="logo">LAST SEARCH</div>
-      <form id="searchForm" class="search" autocomplete="off">
-        <input id="searchInput" type="search" aria-label="検索">
-        <button type="submit">検索</button>
-      </form>
-    </header>
+    <section class="panel" aria-live="polite">
+      <header class="head">
+        <div class="brand">LAST SEARCH</div>
+        <div class="case-no">CASE 005</div>
+      </header>
 
-    <section class="results-head">
-      <div id="resultMeta" class="result-meta"></div>
-      <h1>検索結果</h1>
-    </section>
+      <div class="content">
+        <p class="eyebrow">Z SEARCH / DEVELOPMENT LOG</p>
+        <h1>Build 0.8.4</h1>
 
-    <section id="results">
-      <article class="result" id="targetResult">
-        <a href="./record.html">2009年9月17日　地域記録</a>
-        <div class="url">archive.local / ogataka / 2009-09-17</div>
-        <p>小形高地区に関する保存記録。</p>
-      </article>
-    </section>
+        <div class="terminal" id="terminal" aria-label="開発ログ"></div>
 
-    <section id="emptyState" class="empty-state" hidden>
-      <p>検索結果：0件</p>
-      <div class="updated">検索結果を更新しました。</div>
+        <div class="summary" id="summary" hidden>
+          <div class="summary-row">
+            <span>INDEXED</span>
+            <b id="indexed">18,441</b>
+          </div>
+          <div class="summary-row">
+            <span>UNKNOWN ARCHIVE</span>
+            <b id="archive">DETECTED</b>
+          </div>
+          <div class="summary-row">
+            <span>DATE</span>
+            <b id="archiveDate">2009</b>
+          </div>
+          <div class="summary-row">
+            <span>PROCESS</span>
+            <b id="processName">UNKNOWN</b>
+          </div>
+        </div>
+
+        <p id="message" class="message">ログを復元しています。</p>
+
+        <button id="continueButton" class="primary" type="button" hidden>続ける</button>
+      </div>
     </section>
   </main>
 
