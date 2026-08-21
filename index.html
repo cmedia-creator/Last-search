@@ -12,235 +12,512 @@
     * { box-sizing:border-box; }
     html,body {
       margin:0; min-height:100%; background:var(--bg); color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",
+      "Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;
     }
-    body { min-height:100dvh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    body {
+      min-height:100dvh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .login-status,
+    .observation-status {
+      display:none;
+      position:fixed;
+      right:20px;
+      z-index:5;
+      padding:8px 10px;
+      border:0;
+      background:transparent;
+      font:inherit;
+      letter-spacing:.08em;
+      cursor:default;
+      user-select:none;
+      pointer-events:none;
+    }
     .login-status {
-      display:none; position:fixed; top:18px; right:20px; z-index:5;
-      padding:8px 10px; border:0; background:transparent; color:#666;
-      font:inherit; font-size:12px; letter-spacing:.08em; cursor:default; user-select:none;
+      top:18px;
+      color:#666;
+      font-size:12px;
     }
-    .login-status.visible { display:block; }
-    .page { width:min(760px,calc(100% - 32px)); transform:translateY(-6vh); }
-    .brand { margin-bottom:42px; text-align:center; user-select:none; }
+    .observation-status {
+      top:47px;
+      color:#5a5a5a;
+      font-size:11px;
+    }
+    .login-status.visible,
+    .observation-status.visible { display:block; }
+
+    .observation-dot {
+      display:inline-block;
+      width:6px;
+      height:6px;
+      margin-right:6px;
+      border-radius:50%;
+      background:#666;
+      vertical-align:1px;
+      animation:observePulse 2.6s ease-in-out infinite;
+    }
+    @keyframes observePulse {
+      0%,100% { opacity:.35; }
+      50% { opacity:1; }
+    }
+
+    .page {
+      width:min(760px,calc(100% - 32px));
+      transform:translateY(-6vh);
+    }
+    .brand {
+      margin-bottom:42px;
+      text-align:center;
+      user-select:none;
+    }
     .brand h1 {
-      margin:0; color:#f3f3f3; font-size:clamp(2.3rem,8vw,4.8rem);
-      font-weight:600; letter-spacing:.18em; text-indent:.18em;
+      margin:0;
+      color:#f3f3f3;
+      font-size:clamp(2.3rem,8vw,4.8rem);
+      font-weight:600;
+      letter-spacing:.18em;
+      text-indent:.18em;
     }
+
     .search-box {
-      display:flex; align-items:center; width:100%; min-height:58px;
-      background:#0a0a0a; border:1px solid var(--line); border-radius:4px;
+      display:flex;
+      align-items:center;
+      width:100%;
+      min-height:58px;
+      background:#0a0a0a;
+      border:1px solid var(--line);
+      border-radius:4px;
     }
-    .search-box:focus-within { border-color:#505050; background:#0c0c0c; }
-    .search-icon { flex:0 0 auto; width:20px; height:20px; margin-left:18px; opacity:.45; }
+    .search-box:focus-within {
+      border-color:#505050;
+      background:#0c0c0c;
+    }
+    .search-icon {
+      flex:0 0 auto;
+      width:20px;
+      height:20px;
+      margin-left:18px;
+      opacity:.45;
+    }
     .search-input {
-      flex:1; min-width:0; height:58px; padding:0 14px; border:0; outline:0;
-      background:transparent; color:#e7e7e7; font-size:16px; caret-color:#aaa;
+      flex:1;
+      min-width:0;
+      height:58px;
+      padding:0 14px;
+      border:0;
+      outline:0;
+      background:transparent;
+      color:#e7e7e7;
+      font-size:16px;
+      caret-color:#aaa;
     }
     .search-input::placeholder { color:#454545; }
+
     .search-button {
-      flex:0 0 auto; min-width:74px; height:44px; margin-right:7px; padding:0 16px;
-      border:1px solid #292929; border-radius:3px; background:#111; color:#aaa;
-      font-size:13px; cursor:pointer;
+      flex:0 0 auto;
+      min-width:74px;
+      height:44px;
+      margin-right:7px;
+      padding:0 16px;
+      border:1px solid #292929;
+      border-radius:3px;
+      background:#111;
+      color:#aaa;
+      font-size:13px;
+      cursor:pointer;
     }
     .search-button:active { transform:translateY(1px); }
+
     .status {
-      min-height:24px; margin-top:14px; text-align:center; color:#444;
-      font-size:12px; letter-spacing:.06em; opacity:0; transition:opacity 180ms ease;
+      min-height:24px;
+      margin-top:14px;
+      text-align:center;
+      color:#444;
+      font-size:12px;
+      letter-spacing:.06em;
+      opacity:0;
+      transition:opacity 180ms ease;
     }
     .status.visible { opacity:1; }
+
     .veil {
-      position:fixed; inset:0; z-index:20; pointer-events:none;
-      background:rgba(0,0,0,0); transition:background 420ms ease;
+      position:fixed;
+      inset:0;
+      z-index:20;
+      pointer-events:none;
+      background:rgba(0,0,0,0);
+      transition:background 420ms ease;
     }
     .veil.on { background:rgba(0,0,0,.96); }
+
     @media (max-width:520px) {
-      .page { width:calc(100% - 26px); transform:translateY(-8vh); }
+      .page {
+        width:calc(100% - 26px);
+        transform:translateY(-8vh);
+      }
       .brand { margin-bottom:34px; }
-      .brand h1 { font-size:clamp(2rem,12vw,3.5rem); letter-spacing:.13em; text-indent:.13em; }
-      .search-button { min-width:64px; padding:0 12px; }
-      .login-status { top:10px; right:10px; }
+      .brand h1 {
+        font-size:clamp(2rem,12vw,3.5rem);
+        letter-spacing:.13em;
+        text-indent:.13em;
+      }
+      .search-button {
+        min-width:64px;
+        padding:0 12px;
+      }
+      .login-status {
+        top:10px;
+        right:10px;
+      }
+      .observation-status {
+        top:37px;
+        right:10px;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      *,*::before,*::after {
+        animation-duration:.001ms !important;
+        animation-iteration-count:1 !important;
+      }
     }
   </style>
 </head>
+
 <body>
   <button id="loginStatus" class="login-status" type="button" tabindex="-1">ログイン中</button>
+  <div id="observationStatus" class="observation-status">
+    <span class="observation-dot"></span>観測中
+  </div>
+
   <div id="veil" class="veil"></div>
 
   <main class="page">
-    <section class="brand" aria-label="LAST SEARCH"><h1>LAST SEARCH</h1></section>
+    <section class="brand" aria-label="LAST SEARCH">
+      <h1>LAST SEARCH</h1>
+    </section>
+
     <form id="searchForm" autocomplete="off">
       <div class="search-box">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.5"></circle>
           <path d="M16 16L21 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
         </svg>
-        <input id="searchInput" class="search-input" type="search" maxlength="120" placeholder="検索..." aria-label="検索">
+
+        <input
+          id="searchInput"
+          class="search-input"
+          type="search"
+          maxlength="120"
+          placeholder="検索..."
+          aria-label="検索"
+        >
+
         <button class="search-button" type="submit">検索</button>
       </div>
+
       <div id="status" class="status" aria-live="polite"></div>
     </form>
   </main>
 
   <script>
     /*
-      CASE 003は不正アクセス専用なので通常抽選には入れない。
-      CASE 001 / 002へ正規遷移する直前に sessionStorage の
-      ls_entry_case を設定する。
+      LAST SEARCH FREE / TOP ROUTER
+      -----------------------------
+      CASE001-012 : 本編
+      CASE013-015 : おごたか観測系ランダム怪異
+      CASE003     : 不正アクセス専用のため通常抽選しない
+
+      重要:
+      本編CASEが残した固定検索語はランダム抽選より必ず優先する。
+      観測系CASEは固定検索語では発生させない。
     */
-    const CASES = [
-      { id:"001", path:"./cases/case-001/", weight:100, enabled:true, minSearchCount:1 },
-      { id:"002", path:"./cases/case-002/", weight:100, enabled:true, minSearchCount:1 },
-      { id:"005", path:"./cases/case-005/", weight:100, enabled:true, minSearchCount:1 },
-      { id:"006", path:"./cases/case-006/", weight:100, enabled:true, minSearchCount:1 },
-      { id:"007", path:"./cases/case-007/", weight:100, enabled:true, minSearchCount:1 }
+
+    const PATH = id => `./cases/case-${id}/`;
+
+    // 物語上の固定検索語。
+    // 各CASEが localStorage / URL に残す語と揃えている。
+    const STORY_ROUTES = [
+      { id:"004", query:"久我あきら" },
+      { id:"005", query:"Z Search" },
+      { id:"006", query:"2009" },
+      { id:"007", query:"2009年9月17日" },
+      { id:"008", query:"OGOTAKA" },
+      { id:"009", query:"小形高 2009年9月17日" },
+      { id:"010", query:"OFFLINE" },
+      { id:"011", query:"久我あきら 最終記録" },
+      { id:"012", query:"見つからない場所 位置情報" },
+
+      // 旧CASE006/007系の検索語が残っている環境への互換ルート。
+      { id:"007", query:"久我あきら 2009年9月17日" },
+      { id:"012", query:"接続しない場所 位置情報" }
     ];
 
-    const CASE004_PATH = "./cases/case-004/";
-    const CASE007_PATH = "./cases/case-007/";
+    // 固定ルートへまだ入っていない通常検索時に遭遇する本編。
+    // 001 / 002を入口怪異として扱う。
+    const ENTRY_CASES = [
+      { id:"001", weight:100 },
+      { id:"002", weight:100 }
+    ];
 
-    function normalizeQuery(value){
-      return value
-        .trim()
-        .replace(/[\s　]+/g,"")
-        .replace(/くがあきら/g,"久我あきら");
-    }
+    // ストーリーを進めない、おごたか観測系。
+    // 未閲覧を優先し、通常検索時のみ低確率で乱入する。
+    const OBSERVATION_CASES = [
+      { id:"013", weight:100 },
+      { id:"014", weight:100 },
+      { id:"015", weight:100 }
+    ];
 
-    function isKugaQuery(value){
-      return normalizeQuery(value) === "久我あきら";
-    }
+    // 未遭遇観測CASEがある場合の乱入率。
+    // 3回に1回などにはしない。ホラーより抽選機になるため18%。
+    const OBSERVATION_CHANCE_UNSEEN = 0.18;
+
+    // 013-015を全て見た後も、ごく低確率で再遭遇可能。
+    const OBSERVATION_CHANCE_REPEAT = 0.04;
 
     const searchForm = document.getElementById("searchForm");
     const searchInput = document.getElementById("searchInput");
     const status = document.getElementById("status");
     const veil = document.getElementById("veil");
     const loginStatus = document.getElementById("loginStatus");
+    const observationStatus = document.getElementById("observationStatus");
 
     function readNumber(key,fallback=0){
-      const value=Number(localStorage.getItem(key));
-      return Number.isFinite(value)?value:fallback;
+      const value = Number(localStorage.getItem(key));
+      return Number.isFinite(value) ? value : fallback;
     }
+
+    function isTrue(key){
+      return localStorage.getItem(key) === "true";
+    }
+
     function readSeenCases(){
       try {
-        const parsed=JSON.parse(localStorage.getItem("ls_seen_cases")||"[]");
-        return Array.isArray(parsed)?parsed:[];
-      } catch { return []; }
+        const parsed = JSON.parse(localStorage.getItem("ls_seen_cases") || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
     }
-    function saveSeenCases(cases){ localStorage.setItem("ls_seen_cases",JSON.stringify(cases)); }
-    function isTrue(key){ return localStorage.getItem(key)==="true"; }
-    function updateLoginStatus(){
-      if(isTrue("ls_case_001_complete")) loginStatus.classList.add("visible");
+
+    function saveSeenCases(value){
+      localStorage.setItem("ls_seen_cases", JSON.stringify(value));
     }
+
+    function markSeen(id){
+      const seen = readSeenCases();
+      if(!seen.includes(id)){
+        seen.push(id);
+        saveSeenCases(seen);
+      }
+    }
+
+    // 空白、全角空白、英字大小文字を吸収。
+    // 日本語そのものは壊さない。
+    function normalizeQuery(value){
+      return String(value || "")
+        .trim()
+        .replace(/[\s　]+/g,"")
+        .replace(/くがあきら/g,"久我あきら")
+        .toLowerCase();
+    }
+
+    function findStoryRoute(query){
+      const normalized = normalizeQuery(query);
+      return STORY_ROUTES.find(route =>
+        normalizeQuery(route.query) === normalized
+      ) || null;
+    }
+
     function weightedRandom(items){
       if(!items.length) return null;
-      const total=items.reduce((sum,item)=>sum+Math.max(0,Number(item.weight)||0),0);
-      if(total<=0) return items[Math.floor(Math.random()*items.length)];
-      let roll=Math.random()*total;
+
+      const total = items.reduce(
+        (sum,item) => sum + Math.max(0, Number(item.weight) || 0),
+        0
+      );
+
+      if(total <= 0){
+        return items[Math.floor(Math.random() * items.length)];
+      }
+
+      let roll = Math.random() * total;
+
       for(const item of items){
-        roll-=Math.max(0,Number(item.weight)||0);
-        if(roll<=0) return item;
+        roll -= Math.max(0, Number(item.weight) || 0);
+        if(roll <= 0) return item;
       }
-      return items[items.length-1];
+
+      return items[items.length - 1];
     }
-    function chooseCase(searchCount,seenCases){
-      const eligible=CASES.filter(item=>item.enabled && searchCount>=(item.minSearchCount||0));
-      if(!eligible.length) return null;
-      const unseen=eligible.filter(item=>!seenCases.includes(item.id));
-      return weightedRandom(unseen.length?unseen:eligible);
+
+    function chooseEntryCase(){
+      const seen = readSeenCases();
+      const unseen = ENTRY_CASES.filter(item => !seen.includes(item.id));
+      return weightedRandom(unseen.length ? unseen : ENTRY_CASES);
     }
-    function saveSearchState(query,selectedCase){
-      const searchCount=readNumber("ls_search_count")+1;
-      const seenCases=readSeenCases();
-      localStorage.setItem("ls_search_count",String(searchCount));
-      localStorage.setItem("ls_last_query",query);
-      if(!localStorage.getItem("ls_first_visit")) localStorage.setItem("ls_first_visit",String(Date.now()));
-      if(selectedCase && !seenCases.includes(selectedCase.id)){
-        seenCases.push(selectedCase.id);
-        saveSeenCases(seenCases);
+
+    function chooseObservationCase(){
+      const seen = readSeenCases();
+      const unseen = OBSERVATION_CASES.filter(item => !seen.includes(item.id));
+
+      if(unseen.length){
+        if(Math.random() > OBSERVATION_CHANCE_UNSEEN) return null;
+        return weightedRandom(unseen);
       }
-      return searchCount;
+
+      if(Math.random() > OBSERVATION_CHANCE_REPEAT) return null;
+      return weightedRandom(OBSERVATION_CASES);
     }
+
+    function incrementSearchCount(){
+      const next = readNumber("ls_search_count") + 1;
+      localStorage.setItem("ls_search_count", String(next));
+      return next;
+    }
+
+    function saveCommonSearchState(query){
+      incrementSearchCount();
+      localStorage.setItem("ls_last_query", query);
+
+      if(!localStorage.getItem("ls_first_visit")){
+        localStorage.setItem("ls_first_visit", String(Date.now()));
+      }
+    }
+
     function showStatus(message){
-      status.textContent=message;
+      status.textContent = message;
       status.classList.add("visible");
     }
 
-    searchForm.addEventListener("submit",event=>{
-      event.preventDefault();
-      const query=searchInput.value.trim();
-      if(!query){ searchInput.focus(); return; }
-
-      // CASE006が残した検索語はCASE007へ直結。
-      if(normalizeQuery(query) === normalizeQuery("久我あきら　2009年9月17日")){
-        localStorage.setItem("ls_last_query",query);
-        localStorage.setItem("ls_search_count",String(readNumber("ls_search_count")+1));
-        sessionStorage.setItem("ls_entry_case","007");
-
-        showStatus("検索しています");
-        setTimeout(()=>veil.classList.add("on"),420);
-        setTimeout(()=>{ window.location.href=CASE007_PATH; },900);
-        return;
-      }
-
-      // 「久我あきら」はランダム抽選より優先してCASE004へ。
-      if(isKugaQuery(query)){
-        localStorage.setItem("ls_last_query",query);
-        localStorage.setItem("ls_search_count",String(readNumber("ls_search_count")+1));
-        sessionStorage.setItem("ls_entry_case","004");
-
-        showStatus("検索しています");
-        setTimeout(()=>veil.classList.add("on"),420);
-        setTimeout(()=>{ window.location.href=CASE004_PATH; },900);
-        return;
-      }
-
-      const nextSearchCount=readNumber("ls_search_count")+1;
-      const seenCases=readSeenCases();
-      const selectedCase=chooseCase(nextSearchCount,seenCases);
-
-      saveSearchState(query,selectedCase);
-
-      if(!selectedCase){
-        showStatus("検索結果が見つかりませんでした");
-        return;
-      }
-
-      sessionStorage.setItem("ls_entry_case", selectedCase.id);
+    function transitionToCase(id, query){
+      saveCommonSearchState(query);
+      markSeen(id);
+      sessionStorage.setItem("ls_entry_case", id);
 
       showStatus("検索しています");
-      setTimeout(()=>veil.classList.add("on"),420);
-      setTimeout(()=>{ window.location.href=selectedCase.path; },900);
-    });
 
-    window.addEventListener("load",()=>{
-      // TOPに戻った時点でCASE内のactive状態は終了。
-      sessionStorage.removeItem("ls_case_001_active");
-      sessionStorage.removeItem("ls_case_002_active");
-      sessionStorage.removeItem("ls_case_004_active");
-      sessionStorage.removeItem("ls_case_005_active");
-      sessionStorage.removeItem("ls_case_006_active");
-      sessionStorage.removeItem("ls_case_007_active");
-      sessionStorage.removeItem("ls_entry_case");
+      setTimeout(() => veil.classList.add("on"), 420);
+      setTimeout(() => {
+        window.location.href = PATH(id);
+      }, 900);
+    }
 
-      updateLoginStatus();
+    function updateTopIndicators(){
+      // CASE001後は従来どおり「ログイン中」。
+      if(isTrue("ls_case_001_complete") || isTrue("ls_logged_in")){
+        loginStatus.classList.add("visible");
+      }
 
-      // CASE004直後だけ、右上の「ログイン中」を10秒間「久我あきら」に変える。
-      const flashAt = Number(localStorage.getItem("ls_case_004_flash_name") || 0);
-      if (flashAt && Date.now() - flashAt < 15000) {
+      // CASE013-015のいずれかに遭遇すると観測表示。
+      if(isTrue("ls_observation_active")){
+        observationStatus.classList.add("visible");
+      }
+    }
+
+    function applyKugaFlash(){
+      const flashAt = Number(
+        localStorage.getItem("ls_case_004_flash_name") || 0
+      );
+
+      if(flashAt && Date.now() - flashAt < 15000){
         loginStatus.classList.add("visible");
         loginStatus.textContent = "久我あきら";
+
         setTimeout(() => {
           loginStatus.textContent = "ログイン中";
           localStorage.removeItem("ls_case_004_flash_name");
         }, 10000);
       }
+    }
 
-      const pendingQuery=localStorage.getItem("ls_pending_query");
-      if(pendingQuery){
-        searchInput.value=pendingQuery;
-        localStorage.removeItem("ls_pending_query");
+    function getPrefill(){
+      // URL指定を最優先。
+      const params = new URLSearchParams(window.location.search);
+      const urlPrefill = params.get("prefill");
+      if(urlPrefill) return urlPrefill;
+
+      // 新CASE群が利用しているキー。
+      const nextQuery = localStorage.getItem("ls_next_query");
+      if(nextQuery){
+        localStorage.removeItem("ls_next_query");
+        return nextQuery;
       }
-      setTimeout(()=>searchInput.focus(),250);
+
+      // 過去CASE互換。
+      const pending = localStorage.getItem("ls_pending_query");
+      if(pending){
+        localStorage.removeItem("ls_pending_query");
+        return pending;
+      }
+
+      return "";
+    }
+
+    searchForm.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const query = searchInput.value.trim();
+      if(!query){
+        searchInput.focus();
+        return;
+      }
+
+      /*
+        1. 本編固定検索語
+        ここでは観測系乱入を絶対に起こさない。
+      */
+      const story = findStoryRoute(query);
+      if(story){
+        transitionToCase(story.id, query);
+        return;
+      }
+
+      /*
+        2. おごたか観測CASE
+        通常検索時のみ低確率で乱入。
+      */
+      const observation = chooseObservationCase();
+      if(observation){
+        transitionToCase(observation.id, query);
+        return;
+      }
+
+      /*
+        3. 本編入口CASE
+        001 / 002の未閲覧を優先。
+      */
+      const entry = chooseEntryCase();
+      if(entry){
+        transitionToCase(entry.id, query);
+        return;
+      }
+
+      showStatus("検索結果が見つかりませんでした");
+    });
+
+    window.addEventListener("load", () => {
+      // CASE内のactive状態を掃除。
+      for(let i=1; i<=15; i++){
+        const id = String(i).padStart(3,"0");
+        sessionStorage.removeItem(`ls_case_${id}_active`);
+      }
+      sessionStorage.removeItem("ls_entry_case");
+
+      updateTopIndicators();
+      applyKugaFlash();
+
+      const prefill = getPrefill();
+      if(prefill){
+        searchInput.value = prefill;
+      }
+
+      setTimeout(() => searchInput.focus(), 250);
     });
   </script>
 </body>
