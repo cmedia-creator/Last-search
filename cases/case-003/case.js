@@ -1,46 +1,50 @@
 (() => {
   "use strict";
 
+  const title = document.getElementById("title");
   const message = document.getElementById("message");
-  const submessage = document.getElementById("submessage");
-  const screen = document.getElementById("screen");
+  const detail = document.getElementById("detail");
+  const backButton = document.getElementById("backButton");
+  const requestValue = document.getElementById("requestValue");
+  const contextValue = document.getElementById("contextValue");
+  const recordValue = document.getElementById("recordValue");
 
-  function setMessage(main, sub = "") {
-    message.classList.add("fade");
-    submessage.classList.add("fade");
-
-    setTimeout(() => {
-      message.textContent = main;
-      submessage.textContent = sub;
-      message.classList.remove("fade");
-      submessage.classList.remove("fade");
-    }, 350);
-  }
-
-  function pulse() {
-    screen.classList.add("glitch");
-    setTimeout(() => screen.classList.remove("glitch"), 650);
-  }
-
-  // CASE 003は「正規ルートではないアクセス」を拾うためのCASE。
-  // 一度踏んだことだけ記録しておく。
   localStorage.setItem("ls_case_003_seen", "true");
 
-  setTimeout(() => {
-    pulse();
-    setMessage("この記録はまだ開かれていません。");
-  }, 1800);
+  const hasSearchContext =
+    localStorage.getItem("ls_last_query") ||
+    localStorage.getItem("ls_search_count");
 
-  setTimeout(() => {
-    pulse();
-    setMessage("あなたはまだ、ここを検索していない。");
-  }, 4300);
+  if (hasSearchContext) {
+    requestValue.textContent = "INVALID CONTEXT";
+    contextValue.textContent = "INSUFFICIENT";
+  }
 
-  setTimeout(() => {
-    submessage.textContent = "検索画面へ戻ります。";
-  }, 7000);
+  window.setTimeout(() => {
+    title.textContent = "この記録はまだ開かれていません。";
+    message.textContent = "表示に必要な検索履歴を確認できませんでした。";
+  }, 1700);
 
-  setTimeout(() => {
-    window.location.href = "../../";
-  }, 9000);
+  window.setTimeout(() => {
+    detail.hidden = false;
+  }, 2900);
+
+  window.setTimeout(() => {
+    message.textContent = "あなたはまだ、ここを検索していない。";
+    recordValue.textContent = "UNOPENED";
+  }, 4500);
+
+  window.setTimeout(() => {
+    message.textContent = "検索画面へ戻ります。";
+    backButton.hidden = false;
+  }, 6500);
+
+  function returnTop() {
+    localStorage.setItem("ls_case_003_complete", "true");
+    localStorage.setItem("ls_case_003_reason", "missing_search_context");
+    window.location.href = "../../index.html";
+  }
+
+  backButton.addEventListener("click", returnTop);
+  window.setTimeout(returnTop, 9000);
 })();
