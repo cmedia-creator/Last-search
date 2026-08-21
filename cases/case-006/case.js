@@ -1,107 +1,68 @@
 (() => {
-"use strict";
-const CASE_ID="006", ENTRY_KEY="ls_entry_case", ACTIVE_KEY="ls_case_006_active";
-const entry=sessionStorage.getItem(ENTRY_KEY);
-const active=sessionStorage.getItem(ACTIVE_KEY)==="true";
+  "use strict";
 
-if(entry===CASE_ID){
-  sessionStorage.removeItem(ENTRY_KEY);
-  sessionStorage.setItem(ACTIVE_KEY,"true");
-}else if(!active){
-  location.replace("../case-003/");
-  return;
-}
+  const records = [
+    {img:"distance-01.png", distance:"312m", source:"TRAFFIC CAMERA", date:"2026 / CURRENT", relation:"MATCHED AREA"},
+    {img:"distance-02.png", distance:"184m", source:"STORE SECURITY", date:"2026 / CURRENT", relation:"MATCHED AREA"},
+    {img:"distance-03.png", distance:"72m", source:"STREET CAMERA", date:"2026 / CURRENT", relation:"MATCHED AREA"},
+    {img:"distance-04.png", distance:"18m", source:"BUILDING CCTV", date:"2026 / CURRENT", relation:"MATCHED BUILDING"},
+    {img:"distance-05.png", distance:"0m", source:"ENTRY CAMERA", date:"2026 / CURRENT", relation:"MATCHED LOCATION"},
+    {img:"distance-06.png", distance:"0m", source:"ARCHIVE IMAGE", date:"2009/09/17", relation:"SAME LOCATION"},
+    {img:"distance-07.png", distance:"-4m", source:"DEVICE CAMERA", date:"2009/09/17", relation:"UNRESOLVED"}
+  ];
 
-if(localStorage.getItem("ls_case_006_complete")==="true"){
-  document.addEventListener("DOMContentLoaded",()=>{
-    document.body.innerHTML=`<main style="min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;background:#f4f4f1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Yu Gothic',Meiryo,sans-serif"><div style="text-align:center"><div style="font-size:13px;color:#777;margin-bottom:16px;letter-spacing:.08em">LAST SEARCH</div><div style="font-size:22px">位置記録は確認済みです。</div></div></main>`;
-    sessionStorage.removeItem(ACTIVE_KEY);
-    setTimeout(()=>location.replace("../../"),3000);
+  const viewer = document.getElementById("viewer");
+  const photo = document.getElementById("photo");
+  const distance = document.getElementById("distance");
+  const source = document.getElementById("source");
+  const meta = document.getElementById("meta");
+  const dateValue = document.getElementById("dateValue");
+  const sourceValue = document.getElementById("sourceValue");
+  const relationValue = document.getElementById("relationValue");
+  const message = document.getElementById("message");
+  const nextImage = document.getElementById("nextImage");
+  const searchPlace = document.getElementById("searchPlace");
+
+  let index = 0;
+
+  function render() {
+    const r = records[index];
+    viewer.hidden = false;
+    meta.hidden = false;
+    photo.src = "./img/" + r.img;
+    distance.textContent = r.distance;
+    source.textContent = "SOURCE: " + r.source;
+    dateValue.textContent = r.date;
+    sourceValue.textContent = r.source;
+    relationValue.textContent = r.relation;
+
+    if (index < 5) {
+      message.textContent = "同一地点に関連する記録です。";
+    } else if (index === 5) {
+      message.textContent = "同一地点の過去記録が見つかりました。";
+    } else {
+      message.textContent = "取得元の異なる記録が同一地点として関連付けられています。";
+    }
+
+    nextImage.hidden = index >= records.length - 1;
+    searchPlace.hidden = index < records.length - 1;
+  }
+
+  nextImage.addEventListener("click", () => {
+    if (index < records.length - 1) {
+      index += 1;
+      render();
+    }
   });
-  return;
-}
 
-const records=[
- {img:"distance-01.png",date:"2026/08/14",distance:"312m"},
- {img:"distance-02.png",date:"2026/08/15",distance:"184m"},
- {img:"distance-03.png",date:"2026/08/16",distance:"72m"},
- {img:"distance-04.png",date:"2026/08/17",distance:"18m"},
- {img:"distance-05.png",date:"2026/08/18",distance:"0m"},
- {img:"distance-06.png",date:"2009/09/17",distance:"0m",past:true},
- {img:"distance-07.png",date:"2009/09/17 03:17",distance:"-4m",place:"内部",inside:true}
-];
+  searchPlace.addEventListener("click", () => {
+    localStorage.setItem("ls_case_006_complete", "true");
+    localStorage.setItem("ls_cross_system_access_seen", "true");
+    localStorage.setItem("ls_2009_location_seen", "true");
+    localStorage.setItem("ls_next_query", "2009年9月17日");
+    localStorage.setItem("ls_last_query", "2009年9月17日");
+    window.location.href = "../../index.html?prefill=2009%E5%B9%B49%E6%9C%8817%E6%97%A5";
+  });
 
-let index=Number(sessionStorage.getItem("ls_case_006_index")||0);
-if(index<0||index>=records.length) index=0;
-
-const photo=document.getElementById("photo");
-const date=document.getElementById("date");
-const distance=document.getElementById("distance");
-const place=document.getElementById("place");
-const placeRow=place.parentElement;
-const personRow=document.getElementById("personRow");
-const nextBtn=document.getElementById("nextBtn");
-const searchPlaceBtn=document.getElementById("searchPlaceBtn");
-let finalTimerStarted=false;
-
-function render(){
- const r=records[index];
- photo.src="./img/"+r.img;
- date.textContent=r.date;
- distance.textContent=r.distance;
- placeRow.hidden=!r.place;
- if(r.place) place.textContent=r.place;
- personRow.hidden=true;
- searchPlaceBtn.hidden=true;
-
- if(index===4) nextBtn.textContent="過去の記録";
- else nextBtn.textContent="次の記録";
-
- if(index===records.length-1){
-   nextBtn.hidden=true;
-   startFinal();
- } else {
-   nextBtn.hidden=false;
- }
- sessionStorage.setItem("ls_case_006_index",String(index));
-}
-
-function startFinal(){
- if(finalTimerStarted) return;
- finalTimerStarted=true;
-
- setTimeout(()=>{ distance.textContent="現在"; },5000);
- setTimeout(()=>{
-   personRow.hidden=false;
- },7500);
- setTimeout(()=>{
-   searchPlaceBtn.hidden=false;
- },9500);
-}
-
-nextBtn.addEventListener("click",()=>{
- if(index<records.length-1){
-   index++;
-   render();
- }
-});
-
-searchPlaceBtn.addEventListener("click",()=>{
- localStorage.setItem("ls_case_006_complete","true");
- localStorage.setItem("ls_pending_query","久我あきら　2009年9月17日");
- try{
-   const seen=JSON.parse(localStorage.getItem("ls_seen_cases")||"[]");
-   const list=Array.isArray(seen)?seen:[];
-   if(!list.includes("006")) list.push("006");
-   localStorage.setItem("ls_seen_cases",JSON.stringify(list));
- }catch{
-   localStorage.setItem("ls_seen_cases",JSON.stringify(["006"]));
- }
- sessionStorage.removeItem("ls_case_006_index");
- sessionStorage.removeItem(ACTIVE_KEY);
- sessionStorage.removeItem(ENTRY_KEY);
- location.href="../../";
-});
-
-render();
+  window.setTimeout(render, 1100);
 })();
