@@ -1,59 +1,20 @@
-LAST SEARCH / CASE 007 恐怖演出強化版
-======================================
+LAST SEARCH / CASE 007 FIX
+============================
 
-■ 方針
-正史は変更しない。
-旧CASE007のシステムログ中心の表現をやめ、
-「見つけた瞬間、向こうにも見つかった」
-という体験型ホラーへ再演出。
+修正内容:
+1. [hidden]{display:none !important;} を追加。
+2. .freeze の display:grid が hidden を上書きして表示され続ける事故を防止。
+3. JS初期化時にも nameBox / freeze / connection / continueButton を明示的に hidden に設定。
+4. DOM欠損時の安全停止を追加。
+5. 「こちらを確認しています」の重複追加を防止。
+6. 続けるボタンの二重押下を防止。
+7. 正史・演出内容は変更しない。
 
-■ 流れ
-1. 2009年の未分類データを確認。
-2. 人間 / 場所 / 組織 / プログラムのどれにも一致しない。
-3. 範囲すら確認できない。
-4. 分類不能なので仮の名前を付ける。
-5. OGOTAKA が一文字ずつ表示される。
-6. 「仮の名前を保存しました。」
-7. 直後、画面が約4.2秒停止。
-8. 「接続されました」
-9. 接続元：不明
-10. 状態：確認中
-11. 最後に「こちらを確認しています」
-
-■ 正史上の意味
-2009年AIが説明不能な対象を観測し、
-解析上の仮識別名として OGOTAKA と名付ける。
-
-その直後、おごたか側から2009年AIへのアクセスが始まる。
-
-ただしプレイヤーには
-「おごたかが接続した」
-「OGOTAKAという名前を認識した」
-とはまだ断定しない。
-
-CASE007で理解してほしいのは一つだけ。
-
-何かを見つけて名前を付けた。
-その直後、向こうから接続された。
-
-■ CASE008への接続
-最後にTOPへ戻し、検索欄へ OGOTAKA を残す。
-CASE008で、外部接続側がOGOTAKAという名称を解析し、
-OGATAKA / 小形高へ誤到達する。
-
-■ 保存キー
-ls_ogotaka_identifier_seen = true
-ls_external_access_after_naming = true
-ls_case_007_complete = true
-ls_next_query = OGOTAKA
-ls_last_query = OGOTAKA
-
-■ 配置
-cases/
-└─ case-007/
-   ├─ index.html
-   ├─ case.css
-   ├─ case.js
-   └─ README.txt
-
-画像素材不要。
+配置:
+Last-search/
+└─ cases/
+   └─ case-007/
+      ├─ index.html
+      ├─ case.css
+      ├─ case.js
+      └─ README.txt
