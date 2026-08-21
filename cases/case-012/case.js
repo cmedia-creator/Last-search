@@ -84,7 +84,7 @@ finish.onclick=()=>{
  localStorage.setItem("ls_case_012_complete","true");
  localStorage.setItem("ls_free_ending_complete","true");
  ending.hidden=false;
- setTimeout(()=>{end1.textContent="";end2.hidden=false},2200);
+ setTimeout(()=>{end2.hidden=false},2200);
  setTimeout(()=>end3.hidden=false,4300);
 };
 })();
