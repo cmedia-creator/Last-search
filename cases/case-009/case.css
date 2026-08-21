@@ -1,0 +1,36 @@
+*{box-sizing:border-box}
+:root{--bg:#f4f4f1;--surface:#fff;--text:#111;--sub:#777;--border:#d8d8d4}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
+body{font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Segoe UI","Yu Gothic",Meiryo,sans-serif}
+button{font:inherit}
+.page{min-height:100dvh;display:grid;place-items:center;padding:20px}
+.panel{width:min(100%,760px);background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.06)}
+.head{display:flex;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--border)}
+.brand{font-size:14px;font-weight:700;letter-spacing:.16em}
+.case-no,.eyebrow,.intro,.message{font-size:12px;color:var(--sub)}
+.content{padding:28px 24px}
+.eyebrow{margin:0 0 8px;letter-spacing:.08em}
+h1{margin:0 0 8px;font-size:27px}
+.intro,.message{line-height:1.75}
+
+.photo-card{margin:18px 0 0;padding:10px 10px 8px;border:1px solid #bdbdb8;border-radius:7px;background:#e9e7df;box-shadow:0 8px 26px rgba(0,0,0,.08)}
+.photo-stage{position:relative;overflow:hidden;background:#111;border-radius:2px}
+.photo-stage img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;filter:brightness(.88) saturate(.82) contrast(.96)}
+.photo-stage:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.12;background-image:repeating-radial-gradient(circle at 30% 40%,#fff 0 1px,transparent 1px 4px);mix-blend-mode:overlay}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.flash.on{animation:photoFlash .45s ease}
+@keyframes photoFlash{0%{opacity:0}35%{opacity:.9}100%{opacity:0}}
+figcaption{display:flex;justify-content:space-between;padding:8px 2px 0;font:11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#555}
+figcaption b{font-weight:700}
+
+.status-box{margin-top:16px;border:1px solid var(--border);border-radius:9px;padding:12px 13px;display:flex;justify-content:space-between;font-size:12px}
+.status-box span{color:var(--sub)}
+.status-box b{font-weight:650}
+.message{min-height:24px;margin:18px 0 14px}
+.primary{min-height:44px;padding:0 18px;border:1px solid #111;border-radius:8px;background:#111;color:#fff;cursor:pointer}
+
+@media(max-width:500px){
+  .page{padding:12px}
+  .content{padding:22px 16px}
+  h1{font-size:24px}
+}
