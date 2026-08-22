@@ -1,14 +1,94 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F4F4F1">
-<title>CASE 005 | LAST SEARCH</title>
-<link rel="stylesheet" href="./case.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>CASE 005 | LAST SEARCH</title>
+  <link rel="stylesheet" href="./case.css?v=20260822b">
 </head>
 <body>
-<main class="page"><section class="panel"><header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 005</div></header><div class="content stack"><p class="eyebrow">RECORD COLLISION</p><h1 class="title">記録が一致しません</h1><div id="record" class="doc"></div><div class="note">左の記録は同一対象を参照しています。照合元が変わるたび、人数が一致しなくなります。</div><div class="actions"><button id="next" class="primary">別の記録を見る</button><button id="home" class="secondary">検索画面へ戻る</button></div></div></section></main>
-<script src="./case.js"></script>
+<main class="page article-mode" id="articleMode">
+  <header class="site-head">
+    <div class="brand-wrap">
+      <div class="brand">Babuu news</div>
+      <div class="sub">怪事件・未解決事案の記録アーカイブ</div>
+    </div>
+    <div class="case-no">CASE 005</div>
+  </header>
+  <article class="article-card" id="articleCard">
+    <p class="eyebrow">特集記事</p>
+    <h1>怪事件？ 一家失踪事件のナゾ</h1>
+    <p>ある日、突如として失踪した一家がいることはご存じだろうか。</p>
+    <p>当メディアでは失踪した一家が生存している可能性が高いと考えていることから、プライバシーに配慮するため実名等は一切伏せることとする。</p>
+    <p>件の失踪事件は、公式上は事件性なしとして警察による捜査は打ち切られている。当時、警察は明言を避けていたが、一家心中を匂わせる発言をしていた。しかし、本当にそうだろうか。奇妙な点がいくつかある。</p>
+
+    <section class="section-block">
+      <h2>① 家庭環境に関するトラブルの噂が一切ない</h2>
+      <p>近隣住民は「仲の良い家族」と表現していた。休日は家族で出かけることが多いとのこと。夫婦喧嘩などをしている様子もなく、笑い声がよく聞こえてきたとのことだった。もちろん、家庭内のことは本人たちにしか分からないが、少なくとも周囲には仲良し家族と思われていた。</p>
+    </section>
+
+    <section class="section-block">
+      <h2>② 借金をしていた形跡はなく、むしろ裕福な家庭だった</h2>
+      <p>父親は某大手製鉄メーカーに勤務しており、管理職の地位にあった。推定年収としては、900万円〜1200万円のレンジ内にあると思われる。また、母親は専業主婦ではあったが、親族から相続した不動産を複数所持しており、賃貸収入を得ていたことも分かっている。そのため、お金で困っていたという可能性は低い。</p>
+    </section>
+
+    <section class="section-block">
+      <h2>③ 長女、次男は極めて優秀な学生だった</h2>
+      <p>成績は常に上位、学校での生活態度も良く、他の模範となる存在だったようだ。よって、子供に原因があって一家心中をしたとは考えづらい。</p>
+    </section>
+
+    <section class="section-block">
+      <h2>④ 失踪前日までに各種サービスの解約手続きを済ませていた</h2>
+      <p>携帯、銀行口座、インターネットなど、あらゆるサービスの解約手続きを済ませていた。一家心中をするのであれば、わざわざ解約などする必要もない。ましてや、それほどまでに追い込まれた精神状態だとしたら、解約など思いつくだろうか。</p>
+    </section>
+
+    <section class="section-block">
+      <h2>一族に関する奇妙な背景</h2>
+      <p>また、事件とは直接の関係はないが、父親はその土地では有名な家系の出身であったらしい。一族に関する調査は難航しており、明らかになっていないことが多いが、少なくとも父親は「一族代々暮らしてきた場所を守る」ことを大事にしていたらしい。よって、一家心中をするにしても、最期の場所として選ぶのならその地域内であると考えるのが妥当である。しかし、大がかりな捜査を行ったもののその地域では何ら手がかりがつかめていない。</p>
+    </section>
+
+    <div class="article-end" id="articleEnd">
+      <p>―― 記事はここで終わりです ――</p>
+      <p class="muted">最後まで読了後、画面は自動で更新されます。</p>
+    </div>
+  </article>
+  <div class="sticky-hint hidden" id="bottomHint">記事を最後まで読みました。5秒後に画面が更新されます。</div>
+</main>
+
+<section class="overlay hidden" id="hackOverlay" aria-live="polite">
+  <div class="terminal-panel">
+    <div class="terminal-header"><span class="brand mini">LAST SEARCH</span><span class="status">UNAUTHORIZED ACCESS</span></div>
+    <div class="terminal-body" id="terminalBody"></div>
+
+    <div class="flash-card hidden" id="familyFlash">
+      <div class="flash-head">画像照合対象</div>
+      <img src="./img/family-photo.webp" alt="照合対象の家族写真">
+    </div>
+
+    <div class="flash-card hidden" id="saCard">
+      <div class="flash-head">2009/09/18 高速道路SA / 防犯カメラ</div>
+      <img src="./img/sa-family-back.webp" alt="高速道路SAの家族4人後ろ姿" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+      <div class="sa-fallback" style="display:none;">
+        <div class="sa-label">画像未設定</div>
+        <p>img/sa-family-back.webp を配置すると、ここに家族4人の後ろ姿が表示されます。</p>
+      </div>
+    </div>
+
+    <div class="choice-wrap hidden" id="choiceWrap">
+      <p class="choice-title">調査を続けますか。</p>
+      <div class="actions">
+        <button type="button" class="choice-btn yes" id="yesBtn">YES</button>
+        <button type="button" class="choice-btn no" id="noBtn">NO</button>
+      </div>
+    </div>
+
+    <div class="warning-wrap hidden" id="warningWrap">
+      <p class="warning-title">アクセスを検知されました</p>
+      <p class="warning-text"><span id="countNum">5</span>秒後にセッションを中断します。</p>
+    </div>
+  </div>
+</section>
+
+<script src="./case.js?v=20260822b"></script>
 </body>
 </html>
