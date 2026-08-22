@@ -87,6 +87,14 @@ async function submitQuery(){
   loggedQuery.textContent=q;
   loggedTime.textContent=currentTime();
   log.classList.remove('hidden');
+  // The trace result is the core reveal. Keep it immediately visible even on mobile.
+  requestAnimationFrame(()=>{
+    const r=log.getBoundingClientRect();
+    const vh=window.innerHeight || document.documentElement.clientHeight;
+    if(r.bottom>vh-12 || r.top<8){
+      log.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+  });
   hint.textContent='判定中……';
   store('ls_case_002_user_query',q);
   await sleep(3000);
