@@ -1,524 +1,436 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#050505">
-  <meta name="description" content="LAST SEARCH">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#F4F4F1">
+  <meta name="robots" content="index,follow">
   <title>LAST SEARCH</title>
-
   <style>
-    :root { --bg:#050505; --text:#f1f1f1; --muted:#555; --line:#2a2a2a; }
-    * { box-sizing:border-box; }
-    html,body {
-      margin:0; min-height:100%; background:var(--bg); color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",
-      "Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;
+    :root{
+      --bg:#F4F4F1;
+      --surface:#FFFFFF;
+      --text:#111111;
+      --sub:#747474;
+      --border:#D8D8D4;
+      --hover:#ECECE8;
+      --shadow:0 12px 40px rgba(0,0,0,.06);
     }
-    body {
-      min-height:100dvh;
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
+    body{
+      min-height:100vh;
+      font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
       display:flex;
       align-items:center;
       justify-content:center;
-      overflow:hidden;
+      padding:24px;
     }
-
-    .login-status,
-    .observation-status {
-      display:none;
+    button,input{font:inherit}
+    .top-status{
       position:fixed;
-      right:20px;
-      z-index:5;
-      padding:8px 10px;
-      border:0;
-      background:transparent;
-      font:inherit;
-      letter-spacing:.08em;
-      cursor:default;
-      user-select:none;
-      pointer-events:none;
-    }
-    .login-status {
-      top:18px;
-      color:#666;
-      font-size:12px;
-    }
-    .observation-status {
-      top:47px;
-      color:#5a5a5a;
-      font-size:11px;
-    }
-    .login-status.visible,
-    .observation-status.visible { display:block; }
-
-    .observation-dot {
-      display:inline-block;
-      width:6px;
-      height:6px;
-      margin-right:6px;
-      border-radius:50%;
-      background:#666;
-      vertical-align:1px;
-      animation:observePulse 2.6s ease-in-out infinite;
-    }
-    @keyframes observePulse {
-      0%,100% { opacity:.35; }
-      50% { opacity:1; }
-    }
-
-    .page {
-      width:min(760px,calc(100% - 32px));
-      transform:translateY(-6vh);
-    }
-    .brand {
-      margin-bottom:42px;
-      text-align:center;
-      user-select:none;
-    }
-    .brand h1 {
-      margin:0;
-      color:#f3f3f3;
-      font-size:clamp(2.3rem,8vw,4.8rem);
-      font-weight:600;
-      letter-spacing:.18em;
-      text-indent:.18em;
-    }
-
-    .search-box {
+      top:max(16px,env(safe-area-inset-top));
+      right:max(18px,env(safe-area-inset-right));
+      min-height:32px;
       display:flex;
       align-items:center;
+      color:var(--sub);
+      font-size:.78rem;
+      letter-spacing:.04em;
+      user-select:none;
+    }
+    .top-status[hidden]{display:none}
+    .wrap{width:min(760px,100%);text-align:center}
+    .logo{
+      margin:0 0 42px;
+      font-weight:700;
+      letter-spacing:.16em;
+      font-size:clamp(1.75rem,5vw,2.55rem);
+    }
+    .search-shell{
+      display:flex;
+      align-items:center;
+      gap:10px;
       width:100%;
-      min-height:58px;
-      background:#0a0a0a;
-      border:1px solid var(--line);
-      border-radius:4px;
     }
-    .search-box:focus-within {
-      border-color:#505050;
-      background:#0c0c0c;
-    }
-    .search-icon {
-      flex:0 0 auto;
-      width:20px;
-      height:20px;
-      margin-left:18px;
-      opacity:.45;
-    }
-    .search-input {
-      flex:1;
+    .search-input{
+      width:100%;
       min-width:0;
-      height:58px;
-      padding:0 14px;
-      border:0;
-      outline:0;
-      background:transparent;
-      color:#e7e7e7;
+      min-height:56px;
+      padding:0 21px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:var(--surface);
+      color:var(--text);
+      box-shadow:0 6px 24px rgba(0,0,0,.05);
+      outline:none;
       font-size:16px;
-      caret-color:#aaa;
+      transition:border-color .15s ease,box-shadow .15s ease;
     }
-    .search-input::placeholder { color:#454545; }
-
-    .search-button {
-      flex:0 0 auto;
-      min-width:74px;
-      height:44px;
-      margin-right:7px;
-      padding:0 16px;
-      border:1px solid #292929;
-      border-radius:3px;
+    .search-input:focus{
+      border-color:#A9A9A4;
+      box-shadow:0 8px 28px rgba(0,0,0,.07);
+    }
+    .search-button{
+      min-width:94px;
+      min-height:54px;
+      border:1px solid #111;
+      border-radius:999px;
       background:#111;
-      color:#aaa;
-      font-size:13px;
+      color:#fff;
       cursor:pointer;
+      padding:0 20px;
     }
-    .search-button:active { transform:translateY(1px); }
-
-    .status {
-      min-height:24px;
-      margin-top:14px;
-      text-align:center;
-      color:#444;
-      font-size:12px;
-      letter-spacing:.06em;
+    .search-button:disabled{opacity:.55;cursor:default}
+    .subline{
+      min-height:22px;
+      margin:16px 0 0;
+      color:var(--sub);
+      font-size:.82rem;
       opacity:0;
-      transition:opacity 180ms ease;
+      transition:opacity .2s ease;
     }
-    .status.visible { opacity:1; }
-
-    .veil {
-      position:fixed;
-      inset:0;
-      z-index:20;
-      pointer-events:none;
-      background:rgba(0,0,0,0);
-      transition:background 420ms ease;
-    }
-    .veil.on { background:rgba(0,0,0,.96); }
-
-    @media (max-width:520px) {
-      .page {
-        width:calc(100% - 26px);
-        transform:translateY(-8vh);
-      }
-      .brand { margin-bottom:34px; }
-      .brand h1 {
-        font-size:clamp(2rem,12vw,3.5rem);
-        letter-spacing:.13em;
-        text-indent:.13em;
-      }
-      .search-button {
-        min-width:64px;
-        padding:0 12px;
-      }
-      .login-status {
-        top:10px;
-        right:10px;
-      }
-      .observation-status {
-        top:37px;
-        right:10px;
-      }
-    }
-
-    @media (prefers-reduced-motion:reduce) {
-      *,*::before,*::after {
-        animation-duration:.001ms !important;
-        animation-iteration-count:1 !important;
-      }
+    .subline.show{opacity:1}
+    @media(max-width:560px){
+      body{padding:18px}
+      .wrap{width:100%}
+      .logo{margin-bottom:34px}
+      .search-shell{flex-direction:column}
+      .search-button{width:100%;min-height:52px}
     }
   </style>
 </head>
-
 <body>
-  <button id="loginStatus" class="login-status" type="button" tabindex="-1">ログイン中</button>
-  <div id="observationStatus" class="observation-status">
-    <span class="observation-dot"></span>観測中
-  </div>
+  <div id="loginState" class="top-status" hidden>ログイン中</div>
 
-  <div id="veil" class="veil"></div>
-
-  <main class="page">
-    <section class="brand" aria-label="LAST SEARCH">
-      <h1>LAST SEARCH</h1>
-    </section>
-
-    <form id="searchForm" autocomplete="off">
-      <div class="search-box">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.5"></circle>
-          <path d="M16 16L21 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-        </svg>
-
-        <input
-          id="searchInput"
-          class="search-input"
-          type="search"
-          maxlength="120"
-          placeholder="検索..."
-          aria-label="検索"
-        >
-
-        <button class="search-button" type="submit">検索</button>
-      </div>
-
-      <div id="status" class="status" aria-live="polite"></div>
+  <main class="wrap" aria-label="LAST SEARCH">
+    <h1 class="logo">LAST SEARCH</h1>
+    <form id="searchForm" class="search-shell" autocomplete="off">
+      <input
+        id="query"
+        class="search-input"
+        type="search"
+        inputmode="search"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="検索キーワード"
+        placeholder="検索"
+      >
+      <button id="searchButton" class="search-button" type="submit">検索</button>
     </form>
+    <p id="subline" class="subline" aria-live="polite">検索しています...</p>
   </main>
 
   <script>
+  (() => {
+    'use strict';
+
+    /* =========================================================
+       LAST SEARCH FREE ROUTER
+       ---------------------------------------------------------
+       採用ルール
+       ・初回検索 → CASE001確定
+       ・通常抽選 → 未閲覧70% / 既読25% / 特殊5%
+       ・既読2連続 → 次回未閲覧100%
+       ・直近2CASEは通常抽選から除外
+       ・Phase 1: unique 0〜2 → CASE001〜006相当
+       ・Phase 2: unique 3〜6 → CASE001〜010相当
+       ・Phase 3: unique 7〜   → CASE001〜014相当
+       ・CASE015解放 → unique 10以上 + 011/012/014閲覧
+       ・CASE015通常出現率 → 15 → 25 → 40 → 60 → 100%
+       ・CASE015クリア後は通常抽選から外し、「佐伯」で再訪可能
+       ========================================================= */
+
+    const $ = (selector) => document.querySelector(selector);
+
+    const form = $('#searchForm');
+    const input = $('#query');
+    const button = $('#searchButton');
+    const subline = $('#subline');
+    const loginState = $('#loginState');
+
+    const CASE_PATH = (id) => `./cases/case-${String(id).padStart(3, '0')}/`;
+
+    const STORE = {
+      get(key, fallback = null) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (raw === null) return fallback;
+          try { return JSON.parse(raw); } catch { return raw; }
+        } catch { return fallback; }
+      },
+      set(key, value) {
+        try {
+          localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+        } catch {}
+      },
+      remove(key) {
+        try { localStorage.removeItem(key); } catch {}
+      }
+    };
+
+    const isComplete = (id) => STORE.get(`ls_case_${String(id).padStart(3, '0')}_complete`) === 'true';
+
+    function completedFreeCases() {
+      const ids = [];
+      for (let id = 1; id <= 14; id++) {
+        if (isComplete(id)) ids.push(id);
+      }
+      return ids;
+    }
+
+    function uniqueCount() {
+      return completedFreeCases().length;
+    }
+
+    function currentPhase() {
+      const n = uniqueCount();
+      if (n <= 2) return 1;
+      if (n <= 6) return 2;
+      return 3;
+    }
+
     /*
-      LAST SEARCH FREE / TOP ROUTER
-      -----------------------------
-      CASE001-012 : 本編
-      CASE013-015 : おごたか観測系ランダム怪異
-      CASE003     : 不正アクセス専用のため通常抽選しない
-
-      重要:
-      本編CASEが残した固定検索語はランダム抽選より必ず優先する。
-      観測系CASEは固定検索語では発生させない。
+      CASE003は「検索を経ずに記録へ触れた」違和感を担うため、
+      通常70/25枠から外し、5%の特殊枠でのみ出現させる。
+      CASE001は初回専用色が強いため、クリア後の通常再抽選から外す。
     */
+    const PHASE_POOL = {
+      1: [1, 2, 4, 5, 6],
+      2: [1, 2, 4, 5, 6, 7, 8, 9, 10],
+      3: [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+    };
 
-    const PATH = id => `./cases/case-${id}/`;
+    const SPECIAL_POOL = {
+      1: [3, 6, 5],
+      2: [3, 8, 10, 9],
+      3: [3, 13, 14, 11, 12]
+    };
 
-    // 物語上の固定検索語。
-    // 各CASEが localStorage / URL に残す語と揃えている。
-    const STORY_ROUTES = [
-      { id:"004", query:"久我あきら" },
-      { id:"005", query:"Z Search" },
-      { id:"006", query:"2009" },
-      { id:"007", query:"2009年9月17日" },
-      { id:"008", query:"OGOTAKA" },
-      { id:"009", query:"小形高 2009年9月17日" },
-      { id:"010", query:"OFFLINE" },
-      { id:"011", query:"久我あきら 最終記録" },
-      { id:"012", query:"見つからない場所 位置情報" },
-
-      // 旧CASE006/007系の検索語が残っている環境への互換ルート。
-      { id:"007", query:"久我あきら 2009年9月17日" },
-      { id:"012", query:"接続しない場所 位置情報" }
+    const KEYWORD_ROUTES = [
+      { test: q => q === '久我あきら' || q === '久我', caseId: 4 },
+      { test: q => q === '2009年9月17日' || q === '2009/9/17' || q === '2009-09-17', caseId: 5 },
+      { test: q => q === '距離', caseId: 6 },
+      { test: q => q === '検索履歴', caseId: 7 },
+      { test: q => q === '権限' || q === '権限がありません', caseId: 8 },
+      { test: q => q === 'おごたか', caseId: 8 },
+      { test: q => q === '五人目' || q === '5人目', caseId: 9 },
+      { test: q => q === '接続元', caseId: 10 },
+      { test: q => q === '見つけましたか', caseId: 11 },
+      { test: q => q === '探してください', caseId: 12 },
+      { test: q => q === 'どこにでもいる', caseId: 13 },
+      { test: q => q === '空白', caseId: 14 },
+      { test: q => q.includes('富士樹海') || q.includes('青木ヶ原'), caseId: 14 }
     ];
 
-    // 固定ルートへまだ入っていない通常検索時に遭遇する本編。
-    // 001 / 002を入口怪異として扱う。
-    const ENTRY_CASES = [
-      { id:"001", weight:100 },
-      { id:"002", weight:100 }
-    ];
-
-    // ストーリーを進めない、おごたか観測系。
-    // 未閲覧を優先し、通常検索時のみ低確率で乱入する。
-    const OBSERVATION_CASES = [
-      { id:"013", weight:100 },
-      { id:"014", weight:100 },
-      { id:"015", weight:100 }
-    ];
-
-    // 未遭遇観測CASEがある場合の乱入率。
-    // 3回に1回などにはしない。ホラーより抽選機になるため18%。
-    const OBSERVATION_CHANCE_UNSEEN = 0.18;
-
-    // 013-015を全て見た後も、ごく低確率で再遭遇可能。
-    const OBSERVATION_CHANCE_REPEAT = 0.04;
-
-    const searchForm = document.getElementById("searchForm");
-    const searchInput = document.getElementById("searchInput");
-    const status = document.getElementById("status");
-    const veil = document.getElementById("veil");
-    const loginStatus = document.getElementById("loginStatus");
-    const observationStatus = document.getElementById("observationStatus");
-
-    function readNumber(key,fallback=0){
-      const value = Number(localStorage.getItem(key));
-      return Number.isFinite(value) ? value : fallback;
-    }
-
-    function isTrue(key){
-      return localStorage.getItem(key) === "true";
-    }
-
-    function readSeenCases(){
-      try {
-        const parsed = JSON.parse(localStorage.getItem("ls_seen_cases") || "[]");
-        return Array.isArray(parsed) ? parsed : [];
-      } catch {
-        return [];
-      }
-    }
-
-    function saveSeenCases(value){
-      localStorage.setItem("ls_seen_cases", JSON.stringify(value));
-    }
-
-    function markSeen(id){
-      const seen = readSeenCases();
-      if(!seen.includes(id)){
-        seen.push(id);
-        saveSeenCases(seen);
-      }
-    }
-
-    // 空白、全角空白、英字大小文字を吸収。
-    // 日本語そのものは壊さない。
-    function normalizeQuery(value){
-      return String(value || "")
+    function normalizeQuery(value) {
+      return value
         .trim()
-        .replace(/[\s　]+/g,"")
-        .replace(/くがあきら/g,"久我あきら")
-        .toLowerCase();
+        .replace(/[\u3000\s]+/g, ' ')
+        .replace(/　/g, ' ');
     }
 
-    function findStoryRoute(query){
-      const normalized = normalizeQuery(query);
-      return STORY_ROUTES.find(route =>
-        normalizeQuery(route.query) === normalized
-      ) || null;
+    function endUnlocked() {
+      return uniqueCount() >= 10 && isComplete(11) && isComplete(12) && isComplete(14);
     }
 
-    function weightedRandom(items){
-      if(!items.length) return null;
-
-      const total = items.reduce(
-        (sum,item) => sum + Math.max(0, Number(item.weight) || 0),
-        0
-      );
-
-      if(total <= 0){
-        return items[Math.floor(Math.random() * items.length)];
-      }
-
-      let roll = Math.random() * total;
-
-      for(const item of items){
-        roll -= Math.max(0, Number(item.weight) || 0);
-        if(roll <= 0) return item;
-      }
-
-      return items[items.length - 1];
+    function randomItem(items) {
+      if (!items.length) return null;
+      return items[Math.floor(Math.random() * items.length)];
     }
 
-    function chooseEntryCase(){
-      const seen = readSeenCases();
-      const unseen = ENTRY_CASES.filter(item => !seen.includes(item.id));
-      return weightedRandom(unseen.length ? unseen : ENTRY_CASES);
+    function recentCases() {
+      const value = STORE.get('ls_recent_cases', []);
+      return Array.isArray(value) ? value.slice(0, 2) : [];
     }
 
-    function chooseObservationCase(){
-      const seen = readSeenCases();
-      const unseen = OBSERVATION_CASES.filter(item => !seen.includes(item.id));
-
-      if(unseen.length){
-        if(Math.random() > OBSERVATION_CHANCE_UNSEEN) return null;
-        return weightedRandom(unseen);
-      }
-
-      if(Math.random() > OBSERVATION_CHANCE_REPEAT) return null;
-      return weightedRandom(OBSERVATION_CASES);
+    function pushRecent(id) {
+      const next = [id, ...recentCases().filter(x => x !== id)].slice(0, 2);
+      STORE.set('ls_recent_cases', next);
+      STORE.set('ls_last_routed_case', String(id));
     }
 
-    function incrementSearchCount(){
-      const next = readNumber("ls_search_count") + 1;
-      localStorage.setItem("ls_search_count", String(next));
-      return next;
+    function filterRecent(items) {
+      const recent = new Set(recentCases());
+      const filtered = items.filter(id => !recent.has(id));
+      return filtered.length ? filtered : items;
     }
 
-    function saveCommonSearchState(query){
-      incrementSearchCount();
-      localStorage.setItem("ls_last_query", query);
+    function unseenFrom(items) {
+      return items.filter(id => !isComplete(id));
+    }
 
-      if(!localStorage.getItem("ls_first_visit")){
-        localStorage.setItem("ls_first_visit", String(Date.now()));
+    function seenFrom(items) {
+      return items.filter(id => isComplete(id));
+    }
+
+    function markSelectionType(caseId) {
+      if (isComplete(caseId)) {
+        const streak = Number(STORE.get('ls_seen_route_streak', 0)) || 0;
+        STORE.set('ls_seen_route_streak', streak + 1);
+      } else {
+        STORE.set('ls_seen_route_streak', 0);
       }
     }
 
-    function showStatus(message){
-      status.textContent = message;
-      status.classList.add("visible");
+    function chooseSpecial(phase) {
+      let candidates = filterRecent(SPECIAL_POOL[phase].slice());
+
+      // 特殊枠でも、できれば未閲覧を優先する。
+      const unseen = unseenFrom(candidates);
+      if (unseen.length) return randomItem(unseen);
+      return randomItem(candidates);
     }
 
-    function transitionToCase(id, query){
-      saveCommonSearchState(query);
-      markSeen(id);
-      sessionStorage.setItem("ls_entry_case", id);
+    function chooseNormalCase() {
+      const phase = currentPhase();
+      let base = PHASE_POOL[phase].slice();
 
-      showStatus("検索しています");
+      // CASE001は初回完了後、通常再抽選から外す。
+      if (isComplete(1)) base = base.filter(id => id !== 1);
 
-      setTimeout(() => veil.classList.add("on"), 420);
-      setTimeout(() => {
-        window.location.href = PATH(id);
-      }, 900);
-    }
+      base = filterRecent(base);
 
-    function updateTopIndicators(){
-      // CASE001後は従来どおり「ログイン中」。
-      if(isTrue("ls_case_001_complete") || isTrue("ls_logged_in")){
-        loginStatus.classList.add("visible");
+      const unseen = unseenFrom(base);
+      const seen = seenFrom(base);
+      const seenStreak = Number(STORE.get('ls_seen_route_streak', 0)) || 0;
+
+      // 既読が2回続いたら、次は未閲覧を確定。
+      if (seenStreak >= 2 && unseen.length) {
+        return randomItem(unseen);
       }
 
-      // CASE013-015のいずれかに遭遇すると観測表示。
-      if(isTrue("ls_observation_active")){
-        observationStatus.classList.add("visible");
+      const roll = Math.random();
+
+      // 未閲覧 70%
+      if (roll < 0.70) {
+        if (unseen.length) return randomItem(unseen);
+        if (seen.length) return randomItem(seen);
       }
+
+      // 既読 25%
+      if (roll < 0.95) {
+        if (seen.length) return randomItem(seen);
+        if (unseen.length) return randomItem(unseen);
+      }
+
+      // 特殊 5%
+      const special = chooseSpecial(phase);
+      if (special !== null) return special;
+
+      return randomItem(unseen.length ? unseen : seen);
     }
 
-    function applyKugaFlash(){
-      const flashAt = Number(
-        localStorage.getItem("ls_case_004_flash_name") || 0
-      );
-
-      if(flashAt && Date.now() - flashAt < 15000){
-        loginStatus.classList.add("visible");
-        loginStatus.textContent = "久我あきら";
-
-        setTimeout(() => {
-          loginStatus.textContent = "ログイン中";
-          localStorage.removeItem("ls_case_004_flash_name");
-        }, 10000);
-      }
+    function case15Chance() {
+      const misses = Number(STORE.get('ls_case15_miss_count', 0)) || 0;
+      const table = [0.15, 0.25, 0.40, 0.60, 1.00];
+      return table[Math.min(misses, table.length - 1)];
     }
 
-    function getPrefill(){
-      // URL指定を最優先。
+    function maybeRouteCase15() {
+      if (!endUnlocked() || isComplete(15)) return null;
+
+      const chance = case15Chance();
+      if (Math.random() < chance) {
+        STORE.set('ls_case15_miss_count', 0);
+        return 15;
+      }
+
+      const misses = Number(STORE.get('ls_case15_miss_count', 0)) || 0;
+      STORE.set('ls_case15_miss_count', misses + 1);
+      return null;
+    }
+
+    function keywordCase(query) {
+      // CASE015だけは解放条件あり。
+      if (query === '佐伯') {
+        if (endUnlocked() || isComplete(15)) return 15;
+        // まだ終盤条件を満たしていない段階では、佐伯という語を
+        // 「向こう側との接触」に寄せる。
+        return 11;
+      }
+
+      for (const route of KEYWORD_ROUTES) {
+        if (route.test(query)) return route.caseId;
+      }
+      return null;
+    }
+
+    function goToCase(id, query, mode) {
+      STORE.set('ls_last_query', query);
+      STORE.set('ls_last_route_mode', mode);
+      STORE.set('ls_search_count', (Number(STORE.get('ls_search_count', 0)) || 0) + 1);
+      markSelectionType(id);
+      pushRecent(id);
+
+      button.disabled = true;
+      input.disabled = true;
+      subline.classList.add('show');
+
+      window.setTimeout(() => {
+        window.location.assign(CASE_PATH(id));
+      }, 320);
+    }
+
+    function resolveRoute(query) {
+      // 1. 最初の検索は必ずCASE001。
+      if (!isComplete(1)) {
+        return { caseId: 1, mode: 'first' };
+      }
+
+      // 2. 明示キーワードは確定ルート。
+      const fixed = keywordCase(query);
+      if (fixed !== null) {
+        return { caseId: fixed, mode: 'keyword' };
+      }
+
+      // 3. 無料版エンド解放後は段階確率でCASE015判定。
+      const ending = maybeRouteCase15();
+      if (ending !== null) {
+        return { caseId: ending, mode: 'ending' };
+      }
+
+      // 4. 通常は進行度に応じた未閲覧優遇抽選。
+      return { caseId: chooseNormalCase(), mode: 'random' };
+    }
+
+    function applyPrefill() {
       const params = new URLSearchParams(window.location.search);
-      const urlPrefill = params.get("prefill");
-      if(urlPrefill) return urlPrefill;
+      const fromUrl = params.get('prefill');
+      const fromStore = STORE.get('ls_next_query', '');
+      const prefill = fromUrl || fromStore || '';
 
-      // 新CASE群が利用しているキー。
-      const nextQuery = localStorage.getItem("ls_next_query");
-      if(nextQuery){
-        localStorage.removeItem("ls_next_query");
-        return nextQuery;
+      if (prefill) {
+        input.value = prefill;
+        STORE.remove('ls_next_query');
       }
-
-      // 過去CASE互換。
-      const pending = localStorage.getItem("ls_pending_query");
-      if(pending){
-        localStorage.removeItem("ls_pending_query");
-        return pending;
-      }
-
-      return "";
     }
 
-    searchForm.addEventListener("submit", event => {
+    function updateLoginState() {
+      if (STORE.get('ls_logged_in') === 'true') {
+        loginState.hidden = false;
+      }
+    }
+
+    form.addEventListener('submit', (event) => {
       event.preventDefault();
+      if (button.disabled) return;
 
-      const query = searchInput.value.trim();
-      if(!query){
-        searchInput.focus();
+      const query = normalizeQuery(input.value);
+      if (!query) {
+        input.focus();
         return;
       }
 
-      /*
-        1. 本編固定検索語
-        ここでは観測系乱入を絶対に起こさない。
-      */
-      const story = findStoryRoute(query);
-      if(story){
-        transitionToCase(story.id, query);
-        return;
-      }
-
-      /*
-        2. おごたか観測CASE
-        通常検索時のみ低確率で乱入。
-      */
-      const observation = chooseObservationCase();
-      if(observation){
-        transitionToCase(observation.id, query);
-        return;
-      }
-
-      /*
-        3. 本編入口CASE
-        001 / 002の未閲覧を優先。
-      */
-      const entry = chooseEntryCase();
-      if(entry){
-        transitionToCase(entry.id, query);
-        return;
-      }
-
-      showStatus("検索結果が見つかりませんでした");
+      const route = resolveRoute(query);
+      if (!route || !route.caseId) return;
+      goToCase(route.caseId, query, route.mode);
     });
 
-    window.addEventListener("load", () => {
-      // CASE内のactive状態を掃除。
-      for(let i=1; i<=15; i++){
-        const id = String(i).padStart(3,"0");
-        sessionStorage.removeItem(`ls_case_${id}_active`);
-      }
-      sessionStorage.removeItem("ls_entry_case");
-
-      updateTopIndicators();
-      applyKugaFlash();
-
-      const prefill = getPrefill();
-      if(prefill){
-        searchInput.value = prefill;
-      }
-
-      setTimeout(() => searchInput.focus(), 250);
-    });
+    updateLoginState();
+    applyPrefill();
+  })();
   </script>
 </body>
 </html>
