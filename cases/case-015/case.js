@@ -1,25 +1,18 @@
 (()=>{
-const input=document.getElementById("input"),sug=document.getElementById("suggestions"),msg=document.getElementById("message"),search=document.getElementById("search"),final=document.getElementById("final"),finish=document.getElementById("finish");
-let phase=0, timer=null;
-function list(arr){sug.innerHTML="";arr.forEach(x=>{const d=document.createElement("div");d.className="suggestion";d.textContent=x;sug.appendChild(d)})}
-list(["おごたか","おごたかとは","おごたか　意味"]);
-input.addEventListener("input",()=>{
- clearTimeout(timer); phase++;
- if(phase===1) list(["それではありません"]);
- else if(phase===2) list(["違います"]);
- else if(phase===3) list(["消してください"]);
- else list(["検索しなくても分かります"]);
- timer=setTimeout(takeOver,900);
-});
-search.onclick=takeOver;
-function takeOver(){
- if(final.classList.contains("hidden")===false)return;
- input.disabled=true;search.disabled=true;input.value="";sug.innerHTML="";msg.textContent="";
- final.classList.remove("hidden");
- setTimeout(()=>document.getElementById("f2").classList.remove("hidden"),1800);
- setTimeout(()=>document.getElementById("f3").classList.remove("hidden"),3800);
- setTimeout(()=>{document.getElementById("f4").classList.remove("hidden");localStorage.setItem("ls_searcher_is_target","true")},5800);
- setTimeout(()=>finish.classList.remove("hidden"),7600);
-}
-finish.onclick=()=>{localStorage.setItem("ls_case_015_complete","true");localStorage.setItem("ls_observation_active","true");location.href="../../index.html?observed=1"};
+'use strict';
+const $=(s,root=document)=>root.querySelector(s);
+const $$=(s,root=document)=>Array.from(root.querySelectorAll(s));
+const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+const store=(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}};
+const read=(k,fallback=null)=>{try{const v=localStorage.getItem(k);if(v===null)return fallback;try{return JSON.parse(v)}catch{return v}}catch{return fallback}};
+const complete=(id)=>store(`ls_case_${id}_complete`,'true');
+const routeHome=(prefill='')=>{if(prefill){store('ls_next_query',prefill);store('ls_last_query',prefill);} const q=prefill?`?prefill=${encodeURIComponent(prefill)}`:''; window.location.assign('../../index.html'+q);};
+
+const input=$('#query'); const result=$('#result'); const paid=$('#paidNotice'); let timer=null; let runs=0;
+function seed(){ clearTimeout(timer); timer=setTimeout(()=>{ if(!input.value.trim()) input.value='佐伯'; }, 1600); }
+input.addEventListener('input', seed);
+$('#search').addEventListener('click', async()=>{ if(input.value.trim()!=='佐伯'){ result.classList.remove('hidden'); result.innerHTML='<h3>検索結果</h3><p>一致する結果が見つかりません。</p>'; seed(); return; } runs++; result.classList.remove('hidden'); result.innerHTML='<h3>検索結果</h3><p>見つけましたか</p>'; complete('015'); store('ls_free_complete','true'); if(runs>=1){ await sleep(1200); paid.classList.remove('hidden'); } });
+$('#home').addEventListener('click',()=>routeHome('佐伯'));
+seed();
+
 })();
