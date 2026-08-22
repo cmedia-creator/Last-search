@@ -1,52 +1,14 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#F4F4F1">
-  <title>CASE 005 | LAST SEARCH</title>
-  <link rel="stylesheet" href="./case.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F4F4F1">
+<title>CASE 005 | LAST SEARCH</title>
+<link rel="stylesheet" href="./case.css">
 </head>
 <body>
-  <main class="page">
-    <section class="panel" aria-live="polite">
-      <header class="head">
-        <div class="brand">LAST SEARCH</div>
-        <div class="case-no">CASE 005</div>
-      </header>
-
-      <div class="content">
-        <p class="eyebrow">Z SEARCH / DEVELOPMENT LOG</p>
-        <h1>Build 0.8.4</h1>
-
-        <div class="terminal" id="terminal" aria-label="開発ログ"></div>
-
-        <div class="summary" id="summary" hidden>
-          <div class="summary-row">
-            <span>INDEXED</span>
-            <b id="indexed">18,441</b>
-          </div>
-          <div class="summary-row">
-            <span>UNKNOWN ARCHIVE</span>
-            <b id="archive">DETECTED</b>
-          </div>
-          <div class="summary-row">
-            <span>DATE</span>
-            <b id="archiveDate">2009</b>
-          </div>
-          <div class="summary-row">
-            <span>PROCESS</span>
-            <b id="processName">UNKNOWN</b>
-          </div>
-        </div>
-
-        <p id="message" class="message">ログを復元しています。</p>
-
-        <button id="continueButton" class="primary" type="button" hidden>続ける</button>
-      </div>
-    </section>
-  </main>
-
-  <script src="./case.js"></script>
+<main class="page"><section class="panel"><header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 005</div></header><div class="content stack"><p class="eyebrow">RECORD COLLISION</p><h1 class="title">記録が一致しません</h1><div id="record" class="doc"></div><div class="note">左の記録は同一対象を参照しています。照合元が変わるたび、人数が一致しなくなります。</div><div class="actions"><button id="next" class="primary">別の記録を見る</button><button id="home" class="secondary">検索画面へ戻る</button></div></div></section></main>
+<script src="./case.js"></script>
 </body>
 </html>
