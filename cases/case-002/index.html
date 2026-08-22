@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0a">
 <title>CASE 002 | LAST SEARCH</title>
-<link rel="stylesheet" href="./case.css">
+<link rel="stylesheet" href="./case.css?v=20260822-2">
 </head>
 <body>
 <main class="page">
@@ -27,12 +27,12 @@
       <p class="intro">検索結果から、関連性の高い2件の記録が復元されました。</p>
 
       <div class="documents">
-        <section class="documentCard" data-doc="1">
-          <button class="docToggle" type="button" aria-expanded="false" aria-controls="doc1">
+        <details class="documentCard" data-doc="1" id="details1">
+          <summary class="docToggle">
             <span><b>資料1</b><small>記憶の断片</small></span>
-            <span class="toggleMark">＋</span>
-          </button>
-          <div id="doc1" class="docBody" hidden>
+            <span class="toggleMark" aria-hidden="true">＋</span>
+          </summary>
+          <div class="docBody">
             <div class="memoWrap">
               <div class="memoMeta">RECOVERED TEXT / SOURCE UNKNOWN</div>
               <div class="memoPaper">
@@ -44,14 +44,14 @@
               </div>
             </div>
           </div>
-        </section>
+        </details>
 
-        <section class="documentCard" data-doc="2">
-          <button class="docToggle" type="button" aria-expanded="false" aria-controls="doc2">
+        <details class="documentCard" data-doc="2" id="details2">
+          <summary class="docToggle">
             <span><b>資料2</b><small>消去済み掲示板のミラー</small></span>
-            <span class="toggleMark">＋</span>
-          </button>
-          <div id="doc2" class="docBody" hidden>
+            <span class="toggleMark" aria-hidden="true">＋</span>
+          </summary>
+          <div class="docBody">
             <div class="bbs">
               <div class="bbsHeader">
                 <strong>都市伝説を語るスレ</strong>
@@ -73,7 +73,7 @@
                 <article><div class="postNo">都市伝説を語る民0008</div><p><span class="quote">&gt;&gt;都市伝説を語る民「スレ主」</span><br>釣り乙</p></article>
                 <article><div class="postNo">都市伝説を語る民0009</div><p><span class="quote">&gt;&gt;都市伝説を語る民「スレ主」</span><br>釣り乙</p></article>
                 <article><div class="postNo">都市伝説を語る民0010</div><p><span class="quote">&gt;&gt;都市伝説を語る民「スレ主」</span><br>最近はここの質も落ちたな</p></article>
-                <article class="odd"><div class="postNo">都市伝説を語る民0011</div><p>実体とはなんですか</p></article>
+                <article class="odd" id="oddPost"><div class="postNo">都市伝説を語る民0011</div><p>実体とはなんですか</p></article>
                 <article><div class="postNo">都市伝説を語る民0012</div><p>らんらんるー</p></article>
                 <article><div class="postNo">都市伝説を語る民0013</div><p>どさくさにまぎれて変なのまぎれこんだぞwww</p></article>
                 <article><div class="postNo">都市伝説を語る民0014</div><p>さすが便所の落書き</p></article>
@@ -84,12 +84,12 @@
               <div class="threadClosed">このスレッドは閉鎖しました</div>
             </div>
           </div>
-        </section>
+        </details>
       </div>
 
       <div id="syncNotice" class="syncNotice" hidden>
         <span class="pulse"></span>
-        閲覧済み資料を照合しています。
+        <span id="syncText">閲覧済み資料を照合しています。</span>
       </div>
 
       <div class="actions">
@@ -106,6 +106,6 @@
     </div>
   </section>
 </main>
-<script src="./case.js"></script>
+<script src="./case.js?v=20260822-2"></script>
 </body>
 </html>
