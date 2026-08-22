@@ -1,8 +1,94 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#F4F4F1"><title>CASE 006 | LAST SEARCH</title><link rel="stylesheet" href="./case.css"></head>
-<body><main class="page"><section class="panel"><header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 006</div></header><div class="content"><p class="eyebrow">CONTINUOUS TRACKING</p><h1 class="title">継続追跡</h1><p class="lead">同一人物として照合された記録が見つかりました。</p>
-<div class="viewer"><img id="image" src="./img/track-01.webp" alt="監視記録"><div class="hud"><div class="hudTop"><span id="camera">CAM-01</span><span id="time">23:41:12</span></div><div class="hudBottom"><div>対象：久我あきら</div><div id="confidence">人物一致率：97.8%</div></div></div></div>
-<div class="progress" id="progress"></div>
-<div class="meta"><div class="metaRow"><strong>取得元</strong><span id="source">街頭防犯カメラ</span></div><div class="metaRow"><strong>管理系統</strong><span id="owner">自治体管理</span></div><div class="metaRow"><strong>前記録との関係</strong><span id="handoff">最初の記録</span></div><div class="metaRow hidden" id="accessRow"><strong>映像アクセス権限</strong><span id="access">確認中</span></div></div>
-<div class="status" id="status">対象を照合しています。</div><div class="actions"><button class="primary" id="next" type="button">次の記録</button><button class="secondary" id="home" type="button">検索画面へ戻る</button></div></div></section></main>
-<section id="final" class="final hidden"><div class="finalCard"><h2>追跡は継続されています。</h2><p>5件の記録は、互いに異なる管理システムから取得されています。</p><p>共通する監視アカウントは確認できませんでした。</p></div></section><script src="./case.js"></script></body></html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>CASE 006 | LAST SEARCH</title>
+  <link rel="stylesheet" href="./case.css?v=20260822e">
+</head>
+<body>
+  <main class="shell" id="shell">
+    <section class="search-stage" id="searchStage">
+      <div class="case-label">CASE 006</div>
+      <h1>探しますか？</h1>
+
+      <form id="searchForm" class="search-form" autocomplete="off">
+        <input
+          id="searchInput"
+          type="search"
+          inputmode="search"
+          placeholder="検索語を入力"
+          aria-label="検索語"
+          maxlength="80"
+        >
+        <button type="submit">検索</button>
+      </form>
+
+      <p class="hint">入力内容に応じて処理を開始します。</p>
+    </section>
+
+    <section class="trace-stage hidden" id="traceStage" aria-live="polite">
+      <div class="trace-head">
+        <span>LAST SEARCH / TRACKING SESSION</span>
+        <span class="blink-dot"></span>
+      </div>
+
+      <div class="status-box">
+        <div class="status-text" id="statusText">待機中</div>
+        <div class="progress-wrap hidden" id="progressWrap">
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="progress-num" id="progressNum">0%</div>
+        </div>
+      </div>
+
+      <div class="gallery" id="gallery">
+        <figure class="camera-card hidden" id="cam1">
+          <img src="./img/track-01.webp" alt="防犯カメラ記録1">
+          <figcaption>CAMERA SOURCE 01 / MATCH</figcaption>
+        </figure>
+
+        <figure class="camera-card hidden" id="cam2">
+          <img src="./img/track-02.webp" alt="防犯カメラ記録2">
+          <figcaption>CAMERA SOURCE 02 / MATCH</figcaption>
+        </figure>
+
+        <figure class="camera-card hidden" id="cam3">
+          <img src="./img/track-03.webp" alt="防犯カメラ記録3">
+          <figcaption>CAMERA SOURCE 03 / MATCH</figcaption>
+        </figure>
+
+        <figure class="camera-card hidden" id="cam4">
+          <img src="./img/track-04.webp" alt="防犯カメラ記録4">
+          <figcaption>CAMERA SOURCE 04 / MATCH</figcaption>
+        </figure>
+
+        <div class="camera-card error-card hidden" id="cam5Error">
+          <div class="error-noise"></div>
+          <div class="error-copy">
+            <strong>IMAGE DATA ERROR</strong>
+            <span>SOURCE 05</span>
+            <span>ACCESS RESTRICTED</span>
+            <span>FRAME UNAVAILABLE</span>
+          </div>
+        </div>
+
+        <figure class="camera-card hidden" id="cam5">
+          <img src="./img/track-05.webp" alt="防犯カメラ記録5">
+          <figcaption>FIRE ALARM / NETWORK CAMERA SOURCE / MATCH</figcaption>
+        </figure>
+      </div>
+
+      <div class="event-log" id="eventLog"></div>
+    </section>
+  </main>
+
+  <section class="blackout hidden" id="blackout" aria-live="assertive">
+    <div class="blackout-inner">
+      <div class="blackout-line" id="blackoutLine"></div>
+      <div class="death hidden" id="deathText">久我あきら　死亡</div>
+    </div>
+  </section>
+
+  <script src="./case.js?v=20260822e"></script>
+</body>
+</html>
