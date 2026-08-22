@@ -46,3 +46,42 @@ p{line-height:1.9;margin:0 0 18px}
 @media (max-width:640px){
   .brand{font-size:1.55rem}.article-card{padding:18px}.terminal-body{font-size:.92rem}.actions{flex-direction:column}.choice-btn{width:100%}
 }
+
+/* FIX 2026-08-22c: keep all interactive controls inside the viewport */
+.overlay{overflow:hidden}
+.terminal-panel{
+  max-height:94vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.terminal-body{
+  min-height:150px;
+  max-height:32vh;
+  overflow-y:auto;
+  flex:0 0 auto;
+}
+.flash-card{
+  max-height:38vh;
+  overflow:hidden;
+  flex:0 0 auto;
+}
+.flash-card img{
+  max-height:31vh;
+  object-fit:contain;
+}
+.choice-wrap,.warning-wrap{
+  flex:0 0 auto;
+}
+.choice-wrap{
+  position:relative;
+  z-index:4;
+  border-color:#555;
+  box-shadow:0 0 0 1px rgba(255,255,255,.04),0 12px 30px rgba(0,0,0,.4);
+}
+.choice-title{font-size:1.15rem;font-weight:700}
+@media(max-height:700px){
+  .terminal-body{max-height:27vh}
+  .flash-card{max-height:31vh}
+  .flash-card img{max-height:24vh}
+}
