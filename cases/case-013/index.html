@@ -1,51 +1,110 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F4F4F1">
-<title>CASE 013 | LAST SEARCH</title>
-<link rel="stylesheet" href="./case.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>CASE 013 | X</title>
+  <link rel="stylesheet" href="./case.css?v=20260822x1">
 </head>
 <body>
-<main class="page">
-  <section class="panel">
-    <header class="head">
-      <div class="brand">LAST SEARCH</div>
+  <main class="x-shell">
+    <header class="x-header">
+      <div class="x-logo">𝕏</div>
+      <div class="x-head-text">
+        <strong>ホーム</strong>
+        <span>おすすめ</span>
+      </div>
       <div class="case-no">CASE 013</div>
     </header>
-    <div class="content stack">
-      <p class="eyebrow">SYSTEM WIDE</p>
-      <h1 class="title">どこにでもいる</h1>
-      <p class="lead">同一内容を表示した記録が、複数のシステムから取得されています。</p>
 
-      <div class="record-meta">
-        <span class="badge" id="counter">記録 1 / 6</span>
-        <span class="badge" id="source">電車内広告</span>
+    <section class="timeline" id="timeline" aria-label="タイムライン">
+
+      <article class="post">
+        <div class="avatar">ぽ</div>
+        <div class="post-main">
+          <div class="post-head">
+            <strong>ぽぽろ</strong>
+            <span>@poporo · 1分</span>
+          </div>
+          <p class="post-text">なんか電車の広告やばい。サイバー攻撃？</p>
+          <img class="post-image" src="./img/post-01.webp" alt="電車内のデジタル広告に「探してください」と表示されている">
+          <div class="post-actions" aria-hidden="true">
+            <span>♡ 12</span><span>↻ 4</span><span>◯ 2</span><span>⌁</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="avatar">ガ</div>
+        <div class="post-main">
+          <div class="post-head">
+            <strong>ガンバーリマン@突撃系ライバー</strong>
+            <span>@ganbariman · 2分</span>
+          </div>
+          <p class="post-text">え？ガチ？？</p>
+          <img class="post-image" src="./img/post-02.webp" alt="駅の案内表示に「探してください」と表示されている">
+          <div class="post-actions" aria-hidden="true">
+            <span>♡ 41</span><span>↻ 17</span><span>◯ 8</span><span>⌁</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="avatar">家</div>
+        <div class="post-main">
+          <div class="post-head">
+            <strong>家電のプロにお任せを｜ブロガー</strong>
+            <span>@kaden_pro · 4分</span>
+          </div>
+          <p class="post-text">こんな壊れ方ある？普通に怖いんだけど</p>
+          <img class="post-image" src="./img/post-03.webp" alt="家電量販店のテレビ画面に同じ文言が表示されている">
+          <div class="post-actions" aria-hidden="true">
+            <span>♡ 108</span><span>↻ 63</span><span>◯ 22</span><span>⌁</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="avatar">R</div>
+        <div class="post-main">
+          <div class="post-head">
+            <strong>RYOU👑0629</strong>
+            <span>@ryou0629 · 6分</span>
+          </div>
+          <p class="post-text">店長、デジタル広告なんかいらないって言った自分がバカでした。<br>めっちゃバズってます。謎の広告風って感じ。<br>グッジョブ！</p>
+          <img class="post-image" src="./img/post-04.webp" alt="店舗のデジタル広告に異常なメッセージが表示されている">
+          <div class="post-actions" aria-hidden="true">
+            <span>♡ 286</span><span>↻ 121</span><span>◯ 39</span><span>⌁</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="post" id="lastPost">
+        <div class="avatar">く</div>
+        <div class="post-main">
+          <div class="post-head">
+            <strong>くるたそしか勝たん♡</strong>
+            <span>@kurutaso · 8分</span>
+          </div>
+          <p class="post-text">これ俺が撮った写真じゃなくて勝手に回ってきたけど話題のヤツだよな？<br>サイバーテロの実験かなにか？日本オワタ？</p>
+          <img class="post-image" src="./img/post-05.webp" alt="スマートフォンに「探してください」と表示されている">
+          <div class="post-actions" aria-hidden="true">
+            <span>♡ 614</span><span>↻ 302</span><span>◯ 71</span><span>⌁</span>
+          </div>
+        </div>
+      </article>
+
+      <div class="timeline-end" id="timelineEnd">
+        <span>最新の投稿は以上です</span>
       </div>
+    </section>
+  </main>
 
-      <figure class="evidence">
-        <img id="evidenceImage" src="./img/train.webp" alt="電車内広告に表示された『探してください』">
-      </figure>
+  <div class="exit-notice hidden" id="exitNotice" aria-live="polite">
+    タイムラインを終了します
+  </div>
 
-      <div class="doc" id="detail">
-        <div class="kv"><strong>取得元</strong><span id="origin">車内デジタル広告設備</span></div>
-        <div class="kv"><strong>表示内容</strong><span>探してください</span></div>
-        <div class="kv"><strong>関連性</strong><span>不明</span></div>
-      </div>
-
-      <div id="finalNote" class="note hidden">
-        取得元はすべて異なります。<br>
-        共通する配信元・アカウント・管理システムは確認できませんでした。
-      </div>
-
-      <div class="actions">
-        <button id="next" class="primary" type="button">別の記録を見る</button>
-        <button id="home" class="secondary" type="button">検索画面へ戻る</button>
-      </div>
-    </div>
-  </section>
-</main>
-<script src="./case.js"></script>
+  <script src="./case.js?v=20260822x1"></script>
 </body>
 </html>
