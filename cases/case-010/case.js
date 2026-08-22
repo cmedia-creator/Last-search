@@ -1,58 +1,19 @@
-(() => {
-"use strict";
-const panel=document.getElementById("panel"),message=document.getElementById("message"),
-searchStage=document.getElementById("searchStage"),query=document.getElementById("query"),
-finalBox=document.getElementById("finalBox"),next=document.getElementById("next");
+(()=>{
+'use strict';
+const $=(s,root=document)=>root.querySelector(s);
+const $$=(s,root=document)=>Array.from(root.querySelectorAll(s));
+const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+const store=(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}};
+const read=(k,fallback=null)=>{try{const v=localStorage.getItem(k);if(v===null)return fallback;try{return JSON.parse(v)}catch{return v}}catch{return fallback}};
+const complete=(id)=>store(`ls_case_${id}_complete`,'true');
+const routeHome=(prefill='')=>{if(prefill){store('ls_next_query',prefill);store('ls_last_query',prefill);} const q=prefill?`?prefill=${encodeURIComponent(prefill)}`:''; window.location.assign('../../index.html'+q);};
 
-const changes=[
- ["v0","解約済み","携帯電話"],
- ["v1","アカウントが存在しません","メール"],
- ["v2","ユーザーが見つかりません","SNS"],
- ["v3","取得できません","位置情報"],
- ["v4","人物を検出できません","人物照合"]
-];
+const seq=[
+  ['1','家庭用回線'],['12','国内クラウド'],['138','企業ネットワーク'],['2048','国外サーバー'],['65535','家庭用ルーター / 監視装置 / IoT'],['∞','単一の接続元が存在しません']
+]; let i=0; const src=$('#sources');
+function render(){ const row=document.createElement('div'); row.className='card'; row.innerHTML=`<h3>${seq[i][0]}</h3><p>${seq[i][1]}</p>`; src.appendChild(row); $('#count').textContent=seq[i][0]; $('#bar').style.width = `${Math.min((i+1)*18,100)}%`; }
+$('#trace').addEventListener('click',()=>{ if(i<seq.length-1){ render(); i++; if(i===seq.length-1) $('#trace').textContent='終了'; } else { complete('010'); routeHome('見つけましたか'); } });
+$('#home').addEventListener('click',()=>routeHome('見つけましたか'));
+render(); i++;
 
-function erase(n){
- const [id,text,label]=changes[n];
- const card=document.querySelector(`[data-step="${n}"]`);
- document.getElementById(id).textContent=text;
- card.classList.add("deleted");
- panel.classList.add("pulse");
- setTimeout(()=>panel.classList.remove("pulse"),650);
- message.textContent=label+"の記録が消えました。";
-}
-
-changes.forEach((_,n)=>setTimeout(()=>erase(n),1500+n*1700));
-
-setTimeout(()=>{
- message.textContent="";
- searchStage.hidden=false;
- typeQuery("見つからない場所");
-},10300);
-
-function typeQuery(text){
- let i=0;
- const timer=setInterval(()=>{
-   query.textContent=text.slice(0,++i);
-   if(i>=text.length){
-     clearInterval(timer);
-     localStorage.setItem("ls_missing_place_query_seen","true");
-     setTimeout(showFinal,1700);
-   }
- },260);
-}
-
-function showFinal(){
- finalBox.hidden=false;
- message.textContent="以降の記録を確認できません。";
- setTimeout(()=>{next.hidden=false},1600);
-}
-
-next.onclick=()=>{
- localStorage.setItem("ls_case_010_complete","true");
- localStorage.setItem("ls_household_self_erasure_seen","true");
- localStorage.setItem("ls_next_query","久我あきら 最終記録");
- localStorage.setItem("ls_last_query","久我あきら 最終記録");
- location.href="../../index.html?prefill="+encodeURIComponent("久我あきら 最終記録");
-};
 })();
