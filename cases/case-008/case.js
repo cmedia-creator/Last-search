@@ -1,91 +1,20 @@
-(() => {
-"use strict";
+(()=>{
+'use strict';
+const $=(s,root=document)=>root.querySelector(s);
+const $$=(s,root=document)=>Array.from(root.querySelectorAll(s));
+const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+const store=(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}};
+const read=(k,fallback=null)=>{try{const v=localStorage.getItem(k);if(v===null)return fallback;try{return JSON.parse(v)}catch{return v}}catch{return fallback}};
+const complete=(id)=>store(`ls_case_${id}_complete`,'true');
+const routeHome=(prefill='')=>{if(prefill){store('ls_next_query',prefill);store('ls_last_query',prefill);} const q=prefill?`?prefill=${encodeURIComponent(prefill)}`:''; window.location.assign('../../index.html'+q);};
 
-const word = document.getElementById("word");
-const resultCard = document.getElementById("resultCard");
-const judgement = document.getElementById("judgement");
-const judgeLabel = document.getElementById("judgeLabel");
-const referenceBox = document.getElementById("referenceBox");
-const referenceTarget = document.getElementById("referenceTarget");
-const message = document.getElementById("message");
-const continueButton = document.getElementById("continueButton");
-const panel = document.getElementById("panel");
+const docs=[
+  '<div class="doc redacted"><h3>警察照会記録</h3><p>######## ######## ########</p><p class="reveal">対象：佐伯</p><p class="reveal">関係：父親</p></div>',
+  '<div class="doc redacted"><h3>識別名照会</h3><p>######## ######## ########</p><p class="reveal">返答：私はおごたかです</p></div>',
+  '<div class="doc redacted"><h3>公安参照メモ</h3><p>######## ######## ########</p><p class="reveal">2001 / 東都大学・加野研究所</p></div>'
+];
+let i=0; const docsEl=$('#docs');
+$('#reveal').addEventListener('click',()=>{ if(i<docs.length){ const wrap=document.createElement('div'); wrap.innerHTML=docs[i]; docsEl.appendChild(wrap.firstChild); i++; if(i===docs.length) $('#reveal').textContent='終了'; } else { complete('008'); routeHome('五人目'); } });
+$('#home').addEventListener('click',()=>routeHome('五人目'));
 
-function typeTo(target, delay=260) {
-  return new Promise(resolve => {
-    let i = 0;
-    word.textContent = "";
-    const timer = setInterval(() => {
-      word.textContent = target.slice(0, ++i);
-      if (i >= target.length) {
-        clearInterval(timer);
-        resolve();
-      }
-    }, delay);
-  });
-}
-
-async function sequence() {
-  // 外部接続側が「OGOTAKA」という文字列を解析しているように見せる。
-  await new Promise(r => setTimeout(r, 1400));
-
-  await typeTo("OGATAKA", 280);
-  message.textContent = "似た文字列を見つけました。";
-
-  await new Promise(r => setTimeout(r, 1200));
-  await typeTo("おがたか", 300);
-
-  await new Promise(r => setTimeout(r, 1000));
-  resultCard.hidden = false;
-  message.textContent = "";
-
-  await new Promise(r => setTimeout(r, 1400));
-  judgement.hidden = false;
-  judgeLabel.textContent = "一致";
-
-  await new Promise(r => setTimeout(r, 1800));
-  panel.classList.add("glitch");
-  judgement.classList.add("wrong");
-  judgeLabel.textContent = "一致";
-  setTimeout(() => panel.classList.remove("glitch"), 800);
-
-  await new Promise(r => setTimeout(r, 900));
-  const correction = document.createElement("div");
-  correction.style.cssText = "margin-top:10px;text-align:center;font-size:16px;font-weight:700;";
-  correction.textContent = "違う";
-  judgement.insertAdjacentElement("afterend", correction);
-
-  await new Promise(r => setTimeout(r, 1700));
-  await typeTo("OGOTAKA", 220);
-  message.textContent = "参照先を確認しています。";
-
-  await new Promise(r => setTimeout(r, 1400));
-  referenceBox.hidden = false;
-
-  await new Promise(r => setTimeout(r, 1800));
-  referenceTarget.textContent = "接続元";
-  message.textContent = "";
-
-  localStorage.setItem("ls_ogotaka_self_reference_detected", "true");
-
-  await new Promise(r => setTimeout(r, 1800));
-  const subtle = document.createElement("p");
-  subtle.style.cssText = "margin:16px 0 0;text-align:center;color:#777;font-size:12px;";
-  subtle.textContent = "小形高の記録は関連履歴に残されています。";
-  referenceBox.insertAdjacentElement("afterend", subtle);
-
-  await new Promise(r => setTimeout(r, 1400));
-  continueButton.hidden = false;
-}
-
-continueButton.addEventListener("click", () => {
-  localStorage.setItem("ls_case_008_complete", "true");
-  localStorage.setItem("ls_ogotaka_ogataka_same", "false");
-  localStorage.setItem("ls_ogataka_record_retained", "true");
-  localStorage.setItem("ls_next_query", "小形高 2009年9月17日");
-  localStorage.setItem("ls_last_query", "小形高 2009年9月17日");
-  location.href = "../../index.html?prefill=" + encodeURIComponent("小形高 2009年9月17日");
-});
-
-sequence();
 })();
