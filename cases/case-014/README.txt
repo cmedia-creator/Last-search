@@ -14,7 +14,7 @@ CASE015は廃止。
 5. ボタンを押すと有料ページへ遷移
 
 現在の有料ページURL:
-../../premium-guide.html
+https://note.com/ogotaka/n/n0c838e4fec79
 
 実際のnote等へ直接飛ばす場合は index.html 内の
 href="../../premium-guide.html"
