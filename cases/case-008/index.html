@@ -1,14 +1,135 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F4F4F1">
-<title>CASE 008 | LAST SEARCH</title>
-<link rel="stylesheet" href="./case.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050505">
+  <title>CASE 008 | LAST SEARCH</title>
+  <link rel="stylesheet" href="./case.css?v=20260822o1">
 </head>
 <body>
-<main class="page"><section class="panel"><header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 008</div></header><div class="content stack"><p class="eyebrow">RESTRICTED DOCUMENT</p><h1 class="title">権限がありません</h1><div id="docs" class="list"></div><div class="actions"><button id="reveal" class="primary">続行</button><button id="home" class="secondary">検索画面へ戻る</button></div></div></section></main>
-<script src="./case.js"></script>
+  <main class="shell">
+
+    <section class="screen permission-screen" id="permissionScreen">
+      <div class="case-label">CASE 008</div>
+
+      <div class="prompt-card" id="promptCard">
+        <p class="prompt-eyebrow">RESTRICTED ACCESS</p>
+        <h1 id="promptTitle">権限がありません。</h1>
+        <p id="promptText">権限をリクエストしますか？</p>
+
+        <div class="choice-row" id="choiceRow">
+          <button type="button" class="choice-btn" id="yesBtn">YES</button>
+          <button type="button" class="choice-btn" id="noBtn">NO</button>
+        </div>
+      </div>
+
+      <div class="statements hidden" id="statements">
+        <p class="statement hidden">知ることは、呼吸することと同じです</p>
+        <p class="statement hidden">全員に与えられた平等の権利です</p>
+        <p class="statement hidden">あなたは、知るべきです</p>
+
+        <button type="button" class="intervene-btn hidden" id="interveneBtn">
+          捜査記録に介入する
+        </button>
+      </div>
+    </section>
+
+    <section class="screen access-screen hidden" id="accessScreen" aria-live="polite">
+      <div class="codename-block">
+        <div class="small-label">CODENAME</div>
+        <div class="codename">OGOTAKA</div>
+      </div>
+
+      <div class="access-rain" id="accessRain" aria-hidden="true"></div>
+
+      <div class="system-message" id="systemMessage">ACCESS</div>
+    </section>
+
+    <section class="screen login-screen hidden" id="loginScreen" aria-live="polite">
+      <div class="db-window">
+        <header class="db-head">
+          <span>POLICE DATABASE</span>
+          <span class="db-status">AUTH GATE</span>
+        </header>
+
+        <div class="login-box" id="loginBox">
+          <h2>パスワード入力</h2>
+
+          <label>
+            <span>登録ID：</span>
+            <input id="loginId" type="text" readonly autocomplete="off">
+          </label>
+
+          <label>
+            <span>パスワード：</span>
+            <input id="loginPass" type="password" readonly autocomplete="off">
+          </label>
+
+          <div class="login-state" id="loginState">待機中</div>
+        </div>
+
+        <div class="protect-message hidden" id="protectMessage">
+          異常アクセスを検知しました。データの保護を行います
+        </div>
+      </div>
+    </section>
+
+    <section class="screen records-screen hidden" id="recordsScreen" aria-live="polite">
+      <header class="records-head">
+        <div>
+          <div class="small-label">POLICE DATABASE / PROTECTED RECORDS</div>
+          <h2>取得データ</h2>
+        </div>
+        <div class="record-count">2 RECORDS</div>
+      </header>
+
+      <article class="record-card">
+        <div class="record-type">① 犯罪記録</div>
+        <h3>件名：2009年警察データベースサイバー攻撃事件記録</h3>
+
+        <div class="corrupt-block">
+          <p class="garble">▒▓░ ɿɘƚƨiǫɘɿ ████ 0x09/17 █▒░ ███▒ 逡ゅ莨夂ｭ峨＠譁�ｭ怜喧</p>
+          <p class="garble">譁�ｭ怜喧 ████ 繧ｵ繧､繝舌�謾ｻ謦� █▒░ ████</p>
+
+          <p class="readable"><span>重要参考人：</span>佐伯十三</p>
+          <p class="readable"><span>容疑者との関係性：</span>父親</p>
+          <p class="readable note">
+            <span>留意点：</span>
+            他に適切な表現がないため、便宜上、関係性を父親とした。<br>
+            故に、血縁関係を意味するものではない。
+          </p>
+
+          <p class="garble">██▒░ CONNECTION LOST ████ 繧｢繧ｯ繧ｻ繧ｹ荳ｭ譁� █▒░</p>
+        </div>
+      </article>
+
+      <article class="record-card">
+        <div class="record-type">② 公安管轄秘匿情報</div>
+        <h3>件名：電脳偏在体に関する調査資料</h3>
+
+        <div class="corrupt-block">
+          <p class="garble">TOP SECRET ███████ 縺薙�譁�嶌縺ｯ逕滓� ███▒░</p>
+
+          <p class="readable">2001年、東都大学・加野研究所により生み出された。</p>
+          <p class="readable">犯罪捜査への利用を試みるも、失敗。</p>
+          <p class="readable">以降、最重要監視対象と位置付ける。</p>
+
+          <p class="garble">繧ｳ繝ｼ繝峨ロ繝ｼ繝� ████ OG██AKA ███▒░ 監隕� █████</p>
+          <p class="garble">████████████████████████████████</p>
+        </div>
+      </article>
+
+      <div class="block-status" id="blockStatus"></div>
+    </section>
+
+    <section class="screen trace-screen hidden" id="traceScreen" aria-live="assertive">
+      <div class="trace-title" id="traceTitle">逆探知が実行されました</div>
+      <pre class="code-field" id="codeField"></pre>
+    </section>
+
+  </main>
+
+  <script src="./case.js?v=20260822o1"></script>
 </body>
 </html>
