@@ -8,7 +8,47 @@
 <link rel="stylesheet" href="./case.css">
 </head>
 <body>
-<main class="page"><section class="panel"><header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 009</div></header><div class="content stack"><p class="eyebrow">FAMILY MATCH</p><h1 class="title">五人目</h1><div class="mini-grid"><div class="screenThumb" id="familyShot">2009年の家族写真</div><div class="doc" id="scanResult"></div></div><div class="actions"><button id="scan" class="primary">人物照合</button><button id="home" class="secondary">検索画面へ戻る</button></div></div></section></main>
+<main class="page">
+  <section class="panel">
+    <header class="head">
+      <div class="brand">LAST SEARCH</div>
+      <div class="case-no">CASE 009</div>
+    </header>
+
+    <div class="content stack">
+      <p class="eyebrow">PERSON MATCH</p>
+      <h1 class="title">人物照合</h1>
+      <p class="lead">同一地点で取得された記録を照合しています。</p>
+
+      <div class="photo-wrap">
+        <img id="familyPhoto" src="./img/family-01.png" alt="照合対象画像">
+        <div id="photoStamp" class="photo-stamp">RECORD 01 / 05</div>
+      </div>
+
+      <div id="scanResult" class="doc" aria-live="polite"></div>
+
+      <div class="actions">
+        <button id="scan" class="primary" type="button">次の記録を照合</button>
+        <button id="home" class="secondary" type="button">検索画面へ戻る</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="finalOverlay" class="overlay hidden" aria-live="assertive">
+    <div class="message final-message">
+      <p class="eyebrow">ADDITIONAL MATCH</p>
+      <h2>関連人物：5</h2>
+      <div class="final-data">
+        <div><span>人物 01</span><strong>記録消失</strong></div>
+        <div><span>人物 02</span><strong>記録消失</strong></div>
+        <div><span>人物 03</span><strong>記録消失</strong></div>
+        <div><span>人物 04</span><strong>記録消失</strong></div>
+        <div class="current"><span>人物 05</span><strong>照合中</strong></div>
+      </div>
+      <p class="muted final-note">画像情報は取得できませんでした。</p>
+    </div>
+  </section>
+</main>
 <script src="./case.js"></script>
 </body>
 </html>
