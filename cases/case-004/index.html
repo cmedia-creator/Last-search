@@ -6,9 +6,136 @@
 <meta name="theme-color" content="#F4F4F1">
 <title>CASE 004 | LAST SEARCH</title>
 <link rel="stylesheet" href="./case.css">
+<style>
+  .person-layout{
+    display:grid;
+    grid-template-columns:minmax(220px, 0.9fr) minmax(0, 1.1fr);
+    gap:18px;
+    align-items:start;
+  }
+  .person-photo{
+    margin:0;
+    border:1px solid var(--border, #D8D8D4);
+    border-radius:14px;
+    overflow:hidden;
+    background:#111;
+  }
+  .person-photo img{
+    display:block;
+    width:100%;
+    aspect-ratio:4/5;
+    object-fit:cover;
+    object-position:center;
+  }
+  .person-photo figcaption{
+    padding:10px 12px;
+    background:#FAFAF8;
+    color:var(--sub, #6E6E69);
+    font-size:.8rem;
+    letter-spacing:.04em;
+    border-top:1px solid var(--border, #D8D8D4);
+  }
+  .record-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+  }
+  .record-title .badge{
+    flex:0 0 auto;
+  }
+  .session-warning{
+    margin-top:12px;
+    padding:12px 14px;
+    border:1px solid var(--border, #D8D8D4);
+    border-radius:12px;
+    background:#FAFAF8;
+    color:var(--sub, #6E6E69);
+    font-size:.9rem;
+  }
+  @media (max-width:640px){
+    .person-layout{grid-template-columns:1fr}
+    .person-photo img{aspect-ratio:16/11;object-position:center 30%}
+  }
+</style>
 </head>
 <body>
-<main class="page"><section class="panel"><header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 004</div></header><div class="content stack"><p class="eyebrow">PERSON RECORD</p><h1 class="title">久我あきら</h1><div class="doc"><div class="kv"><strong>氏名</strong><span>久我あきら</span></div><div class="kv"><strong>年齢</strong><span>31</span></div><div class="kv"><strong>職業</strong><span>個人開発者</span></div><div class="kv"><strong>関連語</strong><span>Z Search / 佐伯 / おごたか</span></div><div class="kv"><strong>状態</strong><span>照合中</span></div><div class="kv"><strong>最終確認</strong><span id="lastCheck">取得中</span></div><div class="kv"><strong>現在のセッション</strong><span id="sessionState">確認中</span></div></div><div class="actions"><button id="scan" class="primary">再照合</button><button id="home" class="secondary">検索画面へ戻る</button></div></div></section><section id="match" class="overlay hidden"><div class="message"><h2>現在のセッション：一致</h2><p class="muted">照合対象はログイン中の利用者です。</p></div></section></main>
+<main class="page">
+  <section class="panel">
+    <header class="head">
+      <div class="brand">LAST SEARCH</div>
+      <div class="case-no">CASE 004</div>
+    </header>
+
+    <div class="content stack">
+      <div>
+        <p class="eyebrow">PERSON RECORD</p>
+        <div class="record-title">
+          <h1 class="title">久我あきら</h1>
+          <span class="badge">人物記録</span>
+        </div>
+      </div>
+
+      <div class="person-layout">
+        <figure class="person-photo">
+          <img src="./img/kuga-main.webp" alt="久我あきらの記録写真">
+          <figcaption>記録画像 / 撮影時期不明</figcaption>
+        </figure>
+
+        <div>
+          <div class="doc">
+            <div class="kv">
+              <strong>氏名</strong>
+              <span>久我あきら</span>
+            </div>
+            <div class="kv">
+              <strong>年齢</strong>
+              <span>31</span>
+            </div>
+            <div class="kv">
+              <strong>職業</strong>
+              <span>個人開発者</span>
+            </div>
+            <div class="kv">
+              <strong>関連語</strong>
+              <span>Z Search / 佐伯 / おごたか</span>
+            </div>
+            <div class="kv">
+              <strong>状態</strong>
+              <span>照合中</span>
+            </div>
+            <div class="kv">
+              <strong>最終確認</strong>
+              <span id="lastCheck">取得中</span>
+            </div>
+            <div class="kv">
+              <strong>現在のセッション</strong>
+              <span id="sessionState">確認中</span>
+            </div>
+          </div>
+
+          <div class="session-warning">
+            この人物記録と、現在の閲覧セッションを照合しています。
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="scan" class="primary" type="button">再照合</button>
+        <button id="home" class="secondary" type="button">検索画面へ戻る</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="match" class="overlay hidden" aria-live="assertive">
+    <div class="message">
+      <h2>現在のセッション：一致</h2>
+      <p class="muted">照合対象はログイン中の利用者です。</p>
+    </div>
+  </section>
+</main>
+
 <script src="./case.js"></script>
 </body>
 </html>
