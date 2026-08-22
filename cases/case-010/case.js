@@ -83,7 +83,7 @@ function codeLine(i){
 async function run(){
   currentTime.textContent=jpTime();
 
-  await sleep(3600);
+  await sleep(10000);
 
   mailView.classList.add('hidden');
   analysisView.classList.remove('hidden');
