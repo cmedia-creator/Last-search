@@ -1,35 +1,19 @@
 (()=>{
-const H=document.getElementById("history"),msg=document.getElementById("message"),all=document.getElementById("deleteAll"),panel=document.getElementById("panel"),ending=document.getElementById("ending"),finish=document.getElementById("finish");
-let items=["久我あきら","小形高","2009年9月17日","OGOTAKA","削除済み"], youCount=0, specialOpened=false;
-function draw(){
- H.innerHTML="";
- items.forEach((name,i)=>{
-  const r=document.createElement("div");r.className="row"+(name==="あなた"?" you":"");
-  const s=document.createElement("span");s.textContent=name;
-  const b=document.createElement("button");b.textContent="削除";b.onclick=()=>remove(i,name);
-  r.append(s,b);H.appendChild(r);
- });
- if(items.length>=3 && items.every(x=>x==="あなた")) all.classList.remove("hidden");
-}
-function remove(i,name){
- if(name==="削除済み" && !specialOpened){
-   specialOpened=true; items.splice(i,1,"あなた"); msg.textContent="削除しました。"; draw(); return;
- }
- if(name==="あなた"){
-   items.splice(i,1); draw(); msg.textContent="削除しました。";
-   setTimeout(()=>{items.splice(Math.min(i,items.length),0,"あなた");draw();msg.textContent="復元しました。";panel.classList.add("shake");setTimeout(()=>panel.classList.remove("shake"),650)},850);
-   return;
- }
- items.splice(i,1); draw(); msg.textContent="削除しました。";
- setTimeout(()=>{items.splice(Math.min(i,items.length),0,"あなた");youCount++;draw();msg.textContent="復元しました。"; if(youCount>=2) all.classList.remove("hidden")},700);
-}
-all.onclick=()=>{
- H.innerHTML="";all.classList.add("hidden");msg.textContent="";
- setTimeout(()=>ending.classList.remove("hidden"),3000);
- setTimeout(()=>document.getElementById("line2").classList.remove("hidden"),4800);
- setTimeout(()=>{document.getElementById("line3").classList.remove("hidden");localStorage.setItem("ls_observation_target","you")},6500);
- setTimeout(()=>finish.classList.remove("hidden"),8000);
-};
-finish.onclick=()=>{localStorage.setItem("ls_case_013_complete","true");localStorage.setItem("ls_observation_active","true");location.href="../../index.html?observed=1"};
-draw();
+'use strict';
+const $=(s,root=document)=>root.querySelector(s);
+const $$=(s,root=document)=>Array.from(root.querySelectorAll(s));
+const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+const store=(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}};
+const read=(k,fallback=null)=>{try{const v=localStorage.getItem(k);if(v===null)return fallback;try{return JSON.parse(v)}catch{return v}}catch{return fallback}};
+const complete=(id)=>store(`ls_case_${id}_complete`,'true');
+const routeHome=(prefill='')=>{if(prefill){store('ls_next_query',prefill);store('ls_last_query',prefill);} const q=prefill?`?prefill=${encodeURIComponent(prefill)}`:''; window.location.assign('../../index.html'+q);};
+
+const data=[
+  ['電車内広告','探してください'],['駅の電光掲示板','探してください'],['家電量販店のテレビ','探してください'],['店舗サイネージ','探してください'],['スマートフォン通知','探してください'],['街頭ビジョン','探してください']
+]; let i=0; const wrap=$('#systems');
+function add(){ const card=document.createElement('div'); card.className='card'; card.innerHTML=`<div class="tag">${data[i][0]}</div><div class="screenThumb" style="margin-top:10px">${data[i][1]}</div>`; wrap.appendChild(card); }
+$('#next').addEventListener('click',()=>{ if(i<data.length){ add(); i++; if(i===data.length) $('#next').textContent='終了'; } else { complete('013'); routeHome('空白'); } });
+$('#home').addEventListener('click',()=>routeHome('空白'));
+add(); i++;
+
 })();
