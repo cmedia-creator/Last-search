@@ -15,35 +15,35 @@ function routeHome(prefill='接続元'){
 
 const records=[
   {
-    img:'./img/family-01.webp',
+    img:'./img/family-01.png',
     count:'4名',
     status:'全員一致',
     missing:'0名',
     note:'同一世帯として登録されています。'
   },
   {
-    img:'./img/family-02.webp',
+    img:'./img/family-02.png',
     count:'3名',
     status:'人物 01 を検出できません',
     missing:'1名',
     note:'撮影地点・背景・記録日時の連続性は保たれています。'
   },
   {
-    img:'./img/family-03.webp',
+    img:'./img/family-03.png',
     count:'2名',
     status:'人物 01 / 04 を検出できません',
     missing:'2名',
     note:'画像の改変履歴は検出されませんでした。'
   },
   {
-    img:'./img/family-04.webp',
+    img:'./img/family-04.png',
     count:'1名',
     status:'人物 01 / 02 / 04 を検出できません',
     missing:'3名',
     note:'同一地点の記録として照合されています。'
   },
   {
-    img:'./img/family-05.webp',
+    img:'./img/family-05.png',
     count:'0名',
     status:'登録人物を検出できません',
     missing:'4名',

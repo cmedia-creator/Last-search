@@ -1,11 +1,11 @@
 CASE 009 家族写真組み込み版
 
 使用画像:
-- img/family-01.webp : 4人
-- img/family-02.webp : 3人
-- img/family-03.webp : 2人
-- img/family-04.webp : 1人
-- img/family-05.webp : 0人
+- img/family-01.png : 4人
+- img/family-02.png : 3人
+- img/family-03.png : 2人
+- img/family-04.png : 1人
+- img/family-05.png : 0人
 
 演出:
 人物照合を進めるごとに、同じ部屋から家族が1人ずつ減る。
@@ -16,4 +16,4 @@ GitHub適用:
 既存 cases/case-009/ の index.html / case.css / case.js を差し替え、img/ に5枚のPNGを配置してください。
 
 
-画像軽量化版: すべての家族画像をWebP化し、横幅を1100pxに縮小、品質を下げて高速表示向けに最適化。
+軽量化修正版：ファイル名と拡張子は従来どおり family-01.png〜family-05.png のまま維持。画像のみ800px・96色へ圧縮し、GitHub Pagesでの参照ズレを防止。
