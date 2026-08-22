@@ -1,45 +1,16 @@
-(() => {
-  "use strict";
+(()=>{
+'use strict';
+const $=(s,root=document)=>root.querySelector(s);
+const $$=(s,root=document)=>Array.from(root.querySelectorAll(s));
+const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+const store=(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}};
+const read=(k,fallback=null)=>{try{const v=localStorage.getItem(k);if(v===null)return fallback;try{return JSON.parse(v)}catch{return v}}catch{return fallback}};
+const complete=(id)=>store(`ls_case_${id}_complete`,'true');
+const routeHome=(prefill='')=>{if(prefill){store('ls_next_query',prefill);store('ls_last_query',prefill);} const q=prefill?`?prefill=${encodeURIComponent(prefill)}`:''; window.location.assign('../../index.html'+q);};
 
-  const status = document.getElementById("status");
-  const message = document.getElementById("message");
-  const basis = document.getElementById("basis");
-  const detailButton = document.getElementById("detailButton");
-  const nextButton = document.getElementById("nextButton");
+const states=['取得中','2026-08-22 00:28','2026-08-22 00:29 이후取得なし'];
+let step=0;
+$('#scan').addEventListener('click', async()=>{ step++; $('#lastCheck').textContent=states[Math.min(step,states.length-1)]; if(step===1){ $('#sessionState').textContent='一致候補あり'; } if(step>=2){ $('#sessionState').textContent='一致'; $('#match').classList.remove('hidden'); complete('004'); await sleep(3500); routeHome('2009年9月17日'); } });
+$('#home').addEventListener('click',()=>routeHome('2009年9月17日'));
 
-  // CASE004の役割:
-  // 久我を「怪異」ではなく、実在したZ Search開発者として初めて整理して見せる。
-  // ただしLAST SEARCHだけが、データ欠落から「死亡」と推定している。
-
-  window.setTimeout(() => {
-    status.textContent = "所在不明";
-    message.textContent = "最終確認以降の生存記録を確認できません。";
-  }, 1600);
-
-  window.setTimeout(() => {
-    status.textContent = "死亡";
-    status.classList.add("status-dead");
-    message.textContent = "人物状態を更新しました。";
-  }, 3400);
-
-  window.setTimeout(() => {
-    detailButton.hidden = false;
-    nextButton.hidden = false;
-  }, 4700);
-
-  detailButton.addEventListener("click", () => {
-    basis.hidden = false;
-    detailButton.hidden = true;
-    message.textContent = "表示された記録には、死亡を直接確認した情報は含まれていません。";
-    localStorage.setItem("ls_case_004_basis_seen", "true");
-  });
-
-  nextButton.addEventListener("click", () => {
-    localStorage.setItem("ls_case_004_complete", "true");
-    localStorage.setItem("ls_kuga_profile_seen", "true");
-    localStorage.setItem("ls_kuga_creator_of", "z_search");
-    localStorage.setItem("ls_next_query", "Z Search");
-    localStorage.setItem("ls_last_query", "Z Search");
-    window.location.href = "../../index.html?prefill=Z%20Search";
-  });
 })();
