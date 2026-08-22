@@ -22,8 +22,8 @@ const cam4=$('#cam4');
 const cam5Error=$('#cam5Error');
 const cam5=$('#cam5');
 
-const blackout=$('#blackout');
-const blackoutLine=$('#blackoutLine');
+const endSequence=$('#endSequence');
+const endSequenceBody=$('#endSequenceBody');
 const deathText=$('#deathText');
 
 let running=false;
@@ -62,6 +62,14 @@ function addLog(text,cls=''){
   line.className='log-line '+cls;
   line.textContent=text;
   eventLog.appendChild(line);
+}
+
+function addEndLine(text,cls=''){
+  const line=document.createElement('span');
+  line.className='end-line '+cls;
+  line.textContent=text;
+  endSequenceBody.appendChild(line);
+  line.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 async function loading(message,duration=1700){
@@ -146,25 +154,26 @@ async function runTracking(){
 
   await sleep(7000);
 
-  blackout.classList.remove('hidden');
-  blackoutLine.textContent='追跡可能領域から離脱';
+  // 画面を切り替えず、同じ追跡画面の下部へ状態を追加していく。
+  endSequence.classList.remove('hidden');
+  addEndLine('追跡可能領域から離脱','fail');
   await sleep(1600);
 
-  blackoutLine.textContent='再検索';
+  addEndLine('再検索');
   await sleep(900);
-  blackoutLine.textContent='再検索 → 失敗';
+  addEndLine('再検索 → 失敗','fail');
   await sleep(1200);
 
-  blackoutLine.textContent='再検索';
+  addEndLine('再検索');
   await sleep(900);
-  blackoutLine.textContent='再検索 → 失敗';
+  addEndLine('再検索 → 失敗','fail');
   await sleep(1400);
 
-  blackoutLine.textContent='追跡を中止します';
+  addEndLine('追跡を中止します','stop');
   await sleep(1500);
 
-  blackoutLine.textContent='';
   deathText.classList.remove('hidden');
+  deathText.scrollIntoView({behavior:'smooth',block:'center'});
   await sleep(7000);
 
   saveComplete();
