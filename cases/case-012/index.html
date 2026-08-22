@@ -1,14 +1,43 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F4F4F1">
-<title>CASE 012 | LAST SEARCH</title>
-<link rel="stylesheet" href="./case.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050505">
+  <title>CASE 012 | CHAT ROOM</title>
+  <link rel="stylesheet" href="./case.css?v=20260822c12">
 </head>
 <body>
-<main class="page"><section class="panel"><header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 012</div></header><div class="content stack"><p class="eyebrow">REQUEST</p><h1 class="title">探してください</h1><div class="list"><div class="doc"><h3>断片資料 A</h3><p>2009年9月17日 / 富士山麓 / 一家の足取り途絶</p></div><div class="doc"><h3>断片資料 B</h3><p>以降の通信記録なし / 遺体確認なし / 状況不明</p></div></div><div class="searchRow"><input id="query" type="text" placeholder="何を？"><button id="send" class="primary">検索</button></div><div id="response" class="card hidden"></div><div class="actions"><button id="home" class="secondary">検索画面へ戻る</button></div></div></section></main>
-<script src="./case.js"></script>
+  <main class="shell">
+    <header class="room-head">
+      <div>
+        <div class="eyebrow">LAST SEARCH / PRIVATE ROOM</div>
+        <div class="room-title">CHAT ROOM</div>
+      </div>
+      <div class="case-no">CASE 012</div>
+    </header>
+
+    <section class="board" id="board" aria-live="polite">
+      <div class="system-line">チャットルームに入室しました。</div>
+    </section>
+
+    <form class="input-area" id="chatForm" autocomplete="off">
+      <label for="chatInput">コメント</label>
+      <div class="input-row">
+        <input
+          id="chatInput"
+          type="text"
+          maxlength="120"
+          placeholder="コメントを入力"
+          disabled
+          autocomplete="off"
+        >
+        <button type="submit" id="sendBtn" disabled>送信</button>
+      </div>
+      <div class="input-state" id="inputState"></div>
+    </form>
+  </main>
+
+  <script src="./case.js?v=20260822c12"></script>
 </body>
 </html>
