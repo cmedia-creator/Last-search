@@ -1,10 +1,17 @@
 (()=>{
-const n=document.getElementById("number"),s=document.getElementById("status"),m=document.getElementById("message"),f=document.getElementById("finish");
-setTimeout(()=>{n.textContent="人物：1";s.textContent="1名を確認しました。"},1800);
-setTimeout(()=>{n.textContent="人物：2";s.textContent="再確認しています。"},3900);
-setTimeout(()=>{m.textContent="1名が画面を見ています。"},5600);
-setTimeout(()=>{m.classList.add("alert");m.textContent="1名があなたを見ています。";localStorage.setItem("ls_second_observer_seen","true")},7600);
-setTimeout(()=>{n.textContent="人物：1";s.textContent="確認を終了しました。";m.textContent="";m.classList.remove("alert")},10000);
-setTimeout(()=>f.classList.remove("hidden"),11500);
-f.onclick=()=>{localStorage.setItem("ls_case_014_complete","true");localStorage.setItem("ls_observation_active","true");location.href="../../index.html?observed=1"};
+'use strict';
+const $=(s,root=document)=>root.querySelector(s);
+const $$=(s,root=document)=>Array.from(root.querySelectorAll(s));
+const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+const store=(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}};
+const read=(k,fallback=null)=>{try{const v=localStorage.getItem(k);if(v===null)return fallback;try{return JSON.parse(v)}catch{return v}}catch{return fallback}};
+const complete=(id)=>store(`ls_case_${id}_complete`,'true');
+const routeHome=(prefill='')=>{if(prefill){store('ls_next_query',prefill);store('ls_last_query',prefill);} const q=prefill?`?prefill=${encodeURIComponent(prefill)}`:''; window.location.assign('../../index.html'+q);};
+
+const entries=[['通信','2009-09-17 18:42 を最後に途絶'],['交通','富士山麓周辺で記録停止'],['金融','以降の更新なし'],['監視映像','対象検出なし'],['行政','以降の活動なし']];
+let i=0; const tl=$('#timeline'); function add(){ const row=document.createElement('div'); row.className='row'; row.innerHTML=`<div class="time">${entries[i][0]}</div><div class="entry">${entries[i][1]}</div>`; tl.appendChild(row); }
+$('#next').addEventListener('click',()=>{ if(i<entries.length){ add(); i++; if(i===entries.length){ $('#finalQuestion').classList.remove('hidden'); $('#next').textContent='終了'; } } else { complete('014'); routeHome('佐伯'); } });
+$('#home').addEventListener('click',()=>routeHome('佐伯'));
+add(); i++;
+
 })();
