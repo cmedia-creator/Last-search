@@ -1,72 +1,25 @@
-(() => {
-  "use strict";
+(()=>{
+'use strict';
+const $=(s,root=document)=>root.querySelector(s);
+const $$=(s,root=document)=>Array.from(root.querySelectorAll(s));
+const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+const store=(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}};
+const read=(k,fallback=null)=>{try{const v=localStorage.getItem(k);if(v===null)return fallback;try{return JSON.parse(v)}catch{return v}}catch{return fallback}};
+const complete=(id)=>store(`ls_case_${id}_complete`,'true');
+const routeHome=(prefill='')=>{if(prefill){store('ls_next_query',prefill);store('ls_last_query',prefill);} const q=prefill?`?prefill=${encodeURIComponent(prefill)}`:''; window.location.assign('../../index.html'+q);};
 
-  const checkButton = document.getElementById("checkButton");
-  const sourceBox = document.getElementById("sourceBox");
-  const message = document.getElementById("message");
-  const lifeStatus = document.getElementById("lifeStatus");
-  const lastSeen = document.getElementById("lastSeen");
-  const deathScreen = document.getElementById("deathScreen");
+const items=[
+  {t:'記録 01',b:'検索結果は正常です。\nリンク1：記録の断片\nリンク2：削除済み掲示板のミラー'},
+  {t:'記録 02',b:'追跡対象：久我あきら\n最終更新：数秒前\n状態：取得中'},
+  {t:'記録 03',b:'Z Search へのアクセスを再確認しています。\n閲覧を続けると結果が更新される場合があります。'}
+];
+const log=$('#log'), next=$('#next'), back=$('#back'), clock=$('#clock'), overlay=$('#overlay');
+let idx=0; let mins=26;
+function addItem(){ if(idx>=items.length) return; const c=document.createElement('article'); c.className='card'; c.innerHTML=`<h3>${items[idx].t}</h3><p>${items[idx].b.replace(/\n/g,'<br>')}</p>`; log.appendChild(c); idx++; mins++; clock.textContent=`00:${String(mins).padStart(2,'0')}`; if(mins>=29){ trigger(); } }
+let done=false;
+async function trigger(){ if(done) return; done=true; overlay.classList.remove('hidden'); complete('002'); store('ls_kuga_status','00:29'); await sleep(7000); routeHome('久我あきら'); }
+next.addEventListener('click',()=>{ addItem(); if(idx>=items.length) next.disabled=true; });
+back.addEventListener('click',()=> trigger());
+addItem();
 
-  const sources = [
-    document.getElementById("src1"),
-    document.getElementById("src2"),
-    document.getElementById("src3"),
-    document.getElementById("src4")
-  ];
-
-  let started = false;
-
-  function setSource(index, text) {
-    sources[index].textContent = text;
-  }
-
-  function finishCase() {
-    // 新正史上は「実死亡」ではない。
-    // LAST SEARCH側が、利用可能な情報から死亡と推定した記録。
-    localStorage.setItem("ls_case_002_complete", "true");
-    localStorage.setItem("ls_kuga_status_display", "dead");
-    localStorage.setItem("ls_kuga_status_basis", "inferred");
-    localStorage.setItem("ls_kuga_status_time", "00:29");
-
-    // 死亡表示を7秒維持してからTOPへ。
-    window.setTimeout(() => {
-      window.location.href = "../../index.html";
-    }, 7000);
-  }
-
-  function beginCheck() {
-    if (started) return;
-    started = true;
-
-    checkButton.disabled = true;
-    checkButton.textContent = "更新中";
-    sourceBox.hidden = false;
-    lifeStatus.textContent = "照合中";
-    lifeStatus.classList.remove("alive");
-    lifeStatus.classList.add("pending");
-    message.textContent = "複数の記録を照合しています。";
-
-    window.setTimeout(() => setSource(0, "更新なし"), 900);
-    window.setTimeout(() => setSource(1, "更新なし"), 1700);
-    window.setTimeout(() => setSource(2, "更新なし"), 2500);
-    window.setTimeout(() => setSource(3, "確認不能"), 3300);
-
-    window.setTimeout(() => {
-      message.textContent = "状態を更新しています。";
-    }, 4100);
-
-    window.setTimeout(() => {
-      lastSeen.textContent = "00:29";
-      lifeStatus.textContent = "更新";
-    }, 5100);
-
-    window.setTimeout(() => {
-      document.getElementById("panel").hidden = true;
-      deathScreen.hidden = false;
-      finishCase();
-    }, 6200);
-  }
-
-  checkButton.addEventListener("click", beginCheck);
 })();
