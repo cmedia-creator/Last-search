@@ -6,63 +6,10 @@
 <meta name="theme-color" content="#F4F4F1">
 <title>CASE 004 | LAST SEARCH</title>
 <link rel="stylesheet" href="./case.css">
-<style>
-  .person-layout{
-    display:grid;
-    grid-template-columns:minmax(220px, 0.9fr) minmax(0, 1.1fr);
-    gap:18px;
-    align-items:start;
-  }
-  .person-photo{
-    margin:0;
-    border:1px solid var(--border, #D8D8D4);
-    border-radius:14px;
-    overflow:hidden;
-    background:#111;
-  }
-  .person-photo img{
-    display:block;
-    width:100%;
-    aspect-ratio:4/5;
-    object-fit:cover;
-    object-position:center;
-  }
-  .person-photo figcaption{
-    padding:10px 12px;
-    background:#FAFAF8;
-    color:var(--sub, #6E6E69);
-    font-size:.8rem;
-    letter-spacing:.04em;
-    border-top:1px solid var(--border, #D8D8D4);
-  }
-  .record-title{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:10px;
-  }
-  .record-title .badge{
-    flex:0 0 auto;
-  }
-  .session-warning{
-    margin-top:12px;
-    padding:12px 14px;
-    border:1px solid var(--border, #D8D8D4);
-    border-radius:12px;
-    background:#FAFAF8;
-    color:var(--sub, #6E6E69);
-    font-size:.9rem;
-  }
-  @media (max-width:640px){
-    .person-layout{grid-template-columns:1fr}
-    .person-photo img{aspect-ratio:16/11;object-position:center 30%}
-  }
-</style>
 </head>
 <body>
 <main class="page">
-  <section class="panel">
+  <section class="panel" id="personPanel">
     <header class="head">
       <div class="brand">LAST SEARCH</div>
       <div class="case-no">CASE 004</div>
@@ -83,58 +30,70 @@
           <figcaption>記録画像 / 撮影時期不明</figcaption>
         </figure>
 
-        <div>
-          <div class="doc">
-            <div class="kv">
-              <strong>氏名</strong>
-              <span>久我あきら</span>
-            </div>
-            <div class="kv">
-              <strong>年齢</strong>
-              <span>31</span>
-            </div>
-            <div class="kv">
-              <strong>職業</strong>
-              <span>個人開発者</span>
-            </div>
-            <div class="kv">
-              <strong>関連語</strong>
-              <span>Z Search / 佐伯 / おごたか</span>
-            </div>
-            <div class="kv">
-              <strong>状態</strong>
-              <span>照合中</span>
-            </div>
-            <div class="kv">
-              <strong>最終確認</strong>
-              <span id="lastCheck">取得中</span>
-            </div>
-            <div class="kv">
-              <strong>現在のセッション</strong>
-              <span id="sessionState">確認中</span>
-            </div>
-          </div>
-
-          <div class="session-warning">
-            この人物記録と、現在の閲覧セッションを照合しています。
-          </div>
+        <div class="doc record-doc">
+          <div class="kv"><strong>氏名</strong><span>久我あきら</span></div>
+          <div class="kv"><strong>年齢</strong><span>31</span></div>
+          <div class="kv"><strong>職業</strong><span>個人開発者</span></div>
+          <div class="kv"><strong>関連語</strong><span>Z Search / 佐伯 / おごたか</span></div>
+          <div class="kv"><strong>状態</strong><span id="recordStatus">現在の閲覧者と照合中</span></div>
         </div>
       </div>
 
-      <div class="actions">
-        <button id="scan" class="primary" type="button">再照合</button>
-        <button id="home" class="secondary" type="button">検索画面へ戻る</button>
-      </div>
-    </div>
-  </section>
+      <section id="analysisPanel" class="analysis-panel hidden" aria-live="polite">
+        <div class="analysis-head">
+          <span id="analysisLabel">行動パターンを照合しています</span>
+          <strong id="percent">0%</strong>
+        </div>
+        <div class="progress"><span id="progressBar"></span></div>
+        <div id="analysisLog" class="analysis-log"></div>
+      </section>
 
-  <section id="match" class="overlay hidden" aria-live="assertive">
-    <div class="message">
-      <h2>現在のセッション：一致</h2>
-      <p class="muted">照合対象はログイン中の利用者です。</p>
+      <section id="firstResult" class="result-card hidden">
+        <p class="result-label">判定</p>
+        <h2>行動パターン類似</h2>
+        <div class="match-rate"><span>一致率</span><strong>78%</strong></div>
+      </section>
+
+      <section id="researchNotice" class="notice hidden">
+        一致率が基準に達しないため、追加リサーチを開始します。
+      </section>
     </div>
   </section>
 </main>
+
+<div id="permissionModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="permissionTitle">
+  <div class="modal-card">
+    <p class="modal-eyebrow">LAST SEARCH / PERMISSION</p>
+    <h2 id="permissionTitle">ブラウザの検索履歴（365日分）を確認します</h2>
+    <p class="modal-copy">人物照合の精度向上に使用します。</p>
+    <div id="permissionMessage" class="permission-message hidden"></div>
+    <div id="permissionActions" class="modal-actions">
+      <button id="allowBtn" class="primary" type="button">許可する</button>
+      <button id="denyBtn" class="secondary" type="button">許可しない</button>
+    </div>
+  </div>
+</div>
+
+<section id="codeScreen" class="code-screen hidden" aria-live="assertive">
+  <div class="code-topbar">
+    <span>LAST SEARCH / ADDITIONAL RESEARCH</span>
+    <span id="codeCounter">000/100</span>
+  </div>
+  <pre id="codeOutput" class="code-output"></pre>
+  <div id="correctedResult" class="corrected-result hidden">
+    <p>判定：修正しました。</p>
+    <p>一致率 <strong>89%</strong></p>
+  </div>
+</section>
+
+<section id="authenticated" class="authenticated hidden" aria-live="assertive">
+  <div class="auth-card">
+    <div class="auth-mark">✓</div>
+    <p class="auth-small">IDENTITY VERIFIED</p>
+    <h2>認証しました。</h2>
+    <p>久我あきら</p>
+  </div>
+</section>
 
 <script src="./case.js"></script>
 </body>
