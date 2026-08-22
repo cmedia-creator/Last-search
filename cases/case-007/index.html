@@ -1,14 +1,84 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F4F4F1">
-<title>CASE 007 | LAST SEARCH</title>
-<link rel="stylesheet" href="./case.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050505">
+  <title>CASE 007 | Z SEARCH DATABASE</title>
+  <link rel="stylesheet" href="./case.css?v=20260822z1">
 </head>
 <body>
-<main class="page"><section class="panel"><header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 007</div></header><div class="content stack"><p class="eyebrow">SEARCH LOG</p><h1 class="title">保存された検索履歴</h1><div class="badge">対象：不明 / 保存日：2009年9月17日</div><div id="timeline" class="timeline"></div><div class="actions"><button id="append" class="primary">続きを読む</button><button id="home" class="secondary">検索画面へ戻る</button></div></div></section></main>
-<script src="./case.js"></script>
+  <main class="shell" id="shell">
+    <header class="storage-header" id="storageHeader">
+      <div>
+        <div class="eyebrow">DATABASE STORAGE</div>
+        <div class="storage-line">
+          保存先：<strong id="storageName">Z SEARCH</strong>
+        </div>
+      </div>
+      <div class="case-no">CASE 007</div>
+    </header>
+
+    <section class="database">
+      <div class="toolbar">
+        <span>FILES</span>
+        <span id="fileCount">10 files</span>
+      </div>
+
+      <div class="file-list" id="fileList">
+        <button class="file-row" data-file="core_index.sys">
+          <span class="icon">SYS</span><span class="name">core_index.sys</span><span class="meta">SYSTEM</span>
+        </button>
+        <button class="file-row" data-file="crawler_map.cfg">
+          <span class="icon">CFG</span><span class="name">crawler_map.cfg</span><span class="meta">CONFIG</span>
+        </button>
+        <button class="file-row" data-file="archive_probe.mod">
+          <span class="icon">MOD</span><span class="name">archive_probe.mod</span><span class="meta">MODULE</span>
+        </button>
+        <button class="file-row" data-file="orphan_route.tbl">
+          <span class="icon">TBL</span><span class="name">orphan_route.tbl</span><span class="meta">TABLE</span>
+        </button>
+        <button class="file-row" data-file="deep_query.bin">
+          <span class="icon">BIN</span><span class="name">deep_query.bin</span><span class="meta">BINARY</span>
+        </button>
+        <button class="file-row" data-file="lost_page.idx">
+          <span class="icon">IDX</span><span class="name">lost_page.idx</span><span class="meta">INDEX</span>
+        </button>
+        <button class="file-row" data-file="legacy_scan.dll">
+          <span class="icon">DLL</span><span class="name">legacy_scan.dll</span><span class="meta">LIBRARY</span>
+        </button>
+        <button class="file-row" data-file="reverse_rank.dat">
+          <span class="icon">DAT</span><span class="name">reverse_rank.dat</span><span class="meta">DATA</span>
+        </button>
+        <button class="file-row" data-file="zsearch_runtime.log">
+          <span class="icon">LOG</span><span class="name">zsearch_runtime.log</span><span class="meta">LOG</span>
+        </button>
+        <button class="file-row readme-row" data-file="README">
+          <span class="icon">TXT</span><span class="name">README</span><span class="meta">DOCUMENT</span>
+        </button>
+      </div>
+    </section>
+
+    <div class="post-actions hidden" id="postActions">
+      <button type="button" id="homeBtn">検索画面へ戻る</button>
+    </div>
+  </main>
+
+  <section class="viewer hidden" id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+    <div class="viewer-panel">
+      <header class="viewer-head">
+        <div>
+          <div class="viewer-kicker">Z SEARCH / FILE VIEWER</div>
+          <h1 id="viewerTitle">FILE</h1>
+        </div>
+        <button type="button" class="close-btn" id="closeViewer" aria-label="ファイルを閉じる">×</button>
+      </header>
+      <div class="viewer-body" id="viewerBody"></div>
+    </div>
+  </section>
+
+  <div class="glitch-layer hidden" id="glitchLayer" aria-hidden="true"></div>
+
+  <script src="./case.js?v=20260822z1"></script>
 </body>
 </html>
