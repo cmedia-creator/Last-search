@@ -3,87 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f4f4f1">
+<meta name="theme-color" content="#F4F4F1">
 <title>CASE 012 | LAST SEARCH</title>
 <link rel="stylesheet" href="./case.css">
-
-<style>
-.secret-record-link{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:44px;
-  padding:0 22px;
-  margin-top:8px;
-  border:1px solid currentColor;
-  border-radius:8px;
-  color:inherit;
-  text-decoration:none;
-  font:inherit;
-}
-.secret-record-link:active{transform:translateY(1px)}
-</style>
 </head>
 <body>
-<main class="page">
-<section class="panel" id="panel">
-<header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 012</div></header>
-<div class="content">
-<p class="eyebrow">LAST KNOWN LOCATION / 31 PERSONS</p>
-<h1>見つからない場所</h1>
-<p class="intro">31名の最後の位置を重ねています。</p>
-
-<div class="map" id="map">
-  <div class="roads r1"></div><div class="roads r2"></div><div class="roads r3"></div>
-  <div id="points"></div>
-  <div class="target"></div>
-  <div class="map-label">位置情報</div>
-</div>
-
-<div id="countBox" class="count-box">
-  <span>確認できる人物</span><strong id="count">31</strong>
-</div>
-
-<div id="searchStage" class="search-stage" hidden>
-  <div class="search-logo">LAST SEARCH</div>
-  <div id="searchRows"></div>
-</div>
-
-<div id="oneResult" class="one-result" hidden>
-  <span>検索結果</span><strong>1件</strong>
-</div>
-
-<div id="finalMessage" class="final-message" hidden>ここには来ないでください。</div>
-
-<p id="message" class="message">位置情報を確認しています。</p>
-<button id="openResult" class="primary" hidden>1件の結果を開く</button>
-<button id="finish" class="primary" hidden>検索を終了する</button>
-</div>
-</section>
-</main>
-
-<div id="ending" class="ending" hidden>
- <div class="ending-inner">
-  <div class="ending-brand">LAST SEARCH</div>
-
-  <p id="end1">検索可能な記録は、ここまでです。</p>
-
-  <div id="end2" hidden>
-    <p>これより先の記録は<br>通常の検索結果には表示されません。</p>
-    <p><strong>SECRET RECORD：確認</strong></p>
-    <p>閲覧しますか？</p>
-  </div>
-
-  <div id="end3" hidden>
-    <a
-      href="https://note.com/ogotaka/n/n0c838e4fec79"
-      class="secret-record-link"
-      target="_blank"
-      rel="noopener noreferrer"
-    >非公開記録へ</a>
-  </div>
- </div>
-</div>
+<main class="page"><section class="panel"><header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 012</div></header><div class="content stack"><p class="eyebrow">REQUEST</p><h1 class="title">探してください</h1><div class="list"><div class="doc"><h3>断片資料 A</h3><p>2009年9月17日 / 富士山麓 / 一家の足取り途絶</p></div><div class="doc"><h3>断片資料 B</h3><p>以降の通信記録なし / 遺体確認なし / 状況不明</p></div></div><div class="searchRow"><input id="query" type="text" placeholder="何を？"><button id="send" class="primary">検索</button></div><div id="response" class="card hidden"></div><div class="actions"><button id="home" class="secondary">検索画面へ戻る</button></div></div></section></main>
 <script src="./case.js"></script>
 </body>
 </html>
