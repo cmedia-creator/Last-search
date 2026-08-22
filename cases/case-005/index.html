@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>CASE 005 | LAST SEARCH</title>
-  <link rel="stylesheet" href="./case.css?v=20260822c">
+  <link rel="stylesheet" href="./case.css?v=20260822d">
 </head>
 <body>
 <main class="page article-mode" id="articleMode">
@@ -74,14 +74,6 @@
       </div>
     </div>
 
-    <div class="choice-wrap hidden" id="choiceWrap">
-      <p class="choice-title">調査を続けますか。</p>
-      <div class="actions">
-        <button type="button" class="choice-btn yes" id="yesBtn">YES</button>
-        <button type="button" class="choice-btn no" id="noBtn">NO</button>
-      </div>
-    </div>
-
     <div class="warning-wrap hidden" id="warningWrap">
       <p class="warning-title">アクセスを検知されました</p>
       <p class="warning-text"><span id="countNum">5</span>秒後にセッションを中断します。</p>
@@ -89,6 +81,18 @@
   </div>
 </section>
 
-<script src="./case.js?v=20260822c"></script>
+
+<div class="choice-modal hidden" id="choiceModal" role="dialog" aria-modal="true" aria-labelledby="choiceTitle">
+  <div class="choice-dialog">
+    <p class="choice-kicker">LAST SEARCH</p>
+    <h2 id="choiceTitle">調査を続けますか。</h2>
+    <div class="choice-actions">
+      <button type="button" class="choice-btn yes" id="yesBtn">YES</button>
+      <button type="button" class="choice-btn no" id="noBtn">NO</button>
+    </div>
+  </div>
+</div>
+
+<script src="./case.js?v=20260822d"></script>
 </body>
 </html>

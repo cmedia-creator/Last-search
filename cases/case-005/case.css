@@ -85,3 +85,51 @@ p{line-height:1.9;margin:0 0 18px}
   .flash-card{max-height:31vh}
   .flash-card img{max-height:24vh}
 }
+
+
+/* FIX 2026-08-22d: YES/NO is now a true fixed modal, independent of terminal height */
+.choice-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(3px);
+}
+.choice-dialog{
+  width:min(460px,100%);
+  background:#0b0b0b;
+  color:#f2f2f2;
+  border:1px solid #666;
+  border-radius:16px;
+  padding:28px 22px 22px;
+  box-shadow:0 28px 90px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.04);
+  text-align:center;
+}
+.choice-kicker{
+  margin:0 0 8px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.14em;
+  color:#9f9f9f;
+  font-size:.78rem;
+}
+.choice-dialog h2{
+  margin:0 0 22px;
+  font-size:1.25rem;
+}
+.choice-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.choice-modal .choice-btn{
+  width:100%;
+  min-height:52px;
+  font-size:1rem;
+}
+@media(max-width:520px){
+  .choice-actions{grid-template-columns:1fr}
+}

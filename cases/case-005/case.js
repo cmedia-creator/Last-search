@@ -12,7 +12,7 @@ const hackOverlay=$('#hackOverlay');
 const terminalPanel=$('.terminal-panel');
 const terminalBody=$('#terminalBody');
 const familyFlash=$('#familyFlash');
-const choiceWrap=$('#choiceWrap');
+const choiceModal=$('#choiceModal');
 const warningWrap=$('#warningWrap');
 const countNum=$('#countNum');
 const saCard=$('#saCard');
@@ -47,7 +47,7 @@ io.observe(articleEnd);
 
 async function startHackSequence(){
   hackOverlay.classList.remove('hidden');
-  appendLine('おごたかが、不正アクセスを試みる。','warn');
+  appendLine('アクセス開始','info');
   await sleep(900);
 
   appendLine('小形高市住民基本台帳 → アクセス開始','info');
@@ -85,7 +85,8 @@ async function startHackSequence(){
   await sleep(700);
 
   // 必ずユーザーの見える範囲に選択肢を出す
-  showAndFocus(choiceWrap);
+  choiceModal.classList.remove('hidden');
+  yesBtn.focus();
 }
 
 async function handleChoice(){
@@ -93,7 +94,7 @@ async function handleChoice(){
   choiceLocked=true;
   yesBtn.disabled=true;
   noBtn.disabled=true;
-  choiceWrap.classList.add('hidden');
+  choiceModal.classList.add('hidden');
 
   appendLine('アクセスを検知されました','warn');
   warningWrap.classList.remove('hidden');
