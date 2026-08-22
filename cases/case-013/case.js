@@ -1,19 +1,57 @@
 (()=>{
 'use strict';
 const $=(s,root=document)=>root.querySelector(s);
-const $$=(s,root=document)=>Array.from(root.querySelectorAll(s));
-const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
 const store=(k,v)=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}};
-const read=(k,fallback=null)=>{try{const v=localStorage.getItem(k);if(v===null)return fallback;try{return JSON.parse(v)}catch{return v}}catch{return fallback}};
 const complete=(id)=>store(`ls_case_${id}_complete`,'true');
-const routeHome=(prefill='')=>{if(prefill){store('ls_next_query',prefill);store('ls_last_query',prefill);} const q=prefill?`?prefill=${encodeURIComponent(prefill)}`:''; window.location.assign('../../index.html'+q);};
+const routeHome=(prefill='')=>{
+  if(prefill){store('ls_next_query',prefill);store('ls_last_query',prefill);}
+  const q=prefill?`?prefill=${encodeURIComponent(prefill)}`:'';
+  window.location.assign('../../index.html'+q);
+};
 
-const data=[
-  ['電車内広告','探してください'],['駅の電光掲示板','探してください'],['家電量販店のテレビ','探してください'],['店舗サイネージ','探してください'],['スマートフォン通知','探してください'],['街頭ビジョン','探してください']
-]; let i=0; const wrap=$('#systems');
-function add(){ const card=document.createElement('div'); card.className='card'; card.innerHTML=`<div class="tag">${data[i][0]}</div><div class="screenThumb" style="margin-top:10px">${data[i][1]}</div>`; wrap.appendChild(card); }
-$('#next').addEventListener('click',()=>{ if(i<data.length){ add(); i++; if(i===data.length) $('#next').textContent='終了'; } else { complete('013'); routeHome('空白'); } });
-$('#home').addEventListener('click',()=>routeHome('空白'));
-add(); i++;
+const records=[
+  {label:'電車内広告', origin:'車内デジタル広告設備', img:'./img/train.webp', alt:'電車内広告に表示された「探してください」'},
+  {label:'駅の電光掲示板', origin:'駅構内案内表示設備', img:'./img/station.webp', alt:'駅の電光掲示板に表示された「探してください」'},
+  {label:'家電量販店のテレビ', origin:'店頭展示テレビ群', img:'./img/electronics.webp', alt:'家電量販店のテレビに表示された「探してください」'},
+  {label:'店舗サイネージ', origin:'店舗入口デジタルサイネージ', img:'./img/store.webp', alt:'店舗サイネージに表示された「探してください」'},
+  {label:'スマートフォン通知', origin:'個人端末通知画面', img:'./img/phone.webp', alt:'スマートフォンに届いた「探してください」という通知'},
+  {label:'街頭ビジョン', origin:'街頭大型映像設備', img:'./img/city.webp', alt:'街頭ビジョンに表示された「探してください」'}
+];
 
+let index=0;
+const image=$('#evidenceImage');
+const source=$('#source');
+const origin=$('#origin');
+const counter=$('#counter');
+const next=$('#next');
+const finalNote=$('#finalNote');
+
+function render(){
+  const r=records[index];
+  image.src=r.img;
+  image.alt=r.alt;
+  source.textContent=r.label;
+  origin.textContent=r.origin;
+  counter.textContent=`記録 ${index+1} / ${records.length}`;
+  finalNote.classList.toggle('hidden',index!==records.length-1);
+  next.textContent=index===records.length-1?'終了':'別の記録を見る';
+}
+
+next.addEventListener('click',()=>{
+  if(index<records.length-1){
+    index++;
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+    return;
+  }
+  complete('013');
+  routeHome('空白');
+});
+
+$('#home').addEventListener('click',()=>{
+  complete('013');
+  routeHome('空白');
+});
+
+render();
 })();

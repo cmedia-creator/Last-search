@@ -8,7 +8,44 @@
 <link rel="stylesheet" href="./case.css">
 </head>
 <body>
-<main class="page"><section class="panel"><header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 013</div></header><div class="content stack"><p class="eyebrow">SYSTEM WIDE</p><h1 class="title">どこにでもいる</h1><div id="systems" class="mini-grid"></div><div class="actions"><button id="next" class="primary">別の記録を見る</button><button id="home" class="secondary">検索画面へ戻る</button></div></div></section></main>
+<main class="page">
+  <section class="panel">
+    <header class="head">
+      <div class="brand">LAST SEARCH</div>
+      <div class="case-no">CASE 013</div>
+    </header>
+    <div class="content stack">
+      <p class="eyebrow">SYSTEM WIDE</p>
+      <h1 class="title">どこにでもいる</h1>
+      <p class="lead">同一内容を表示した記録が、複数のシステムから取得されています。</p>
+
+      <div class="record-meta">
+        <span class="badge" id="counter">記録 1 / 6</span>
+        <span class="badge" id="source">電車内広告</span>
+      </div>
+
+      <figure class="evidence">
+        <img id="evidenceImage" src="./img/train.webp" alt="電車内広告に表示された『探してください』">
+      </figure>
+
+      <div class="doc" id="detail">
+        <div class="kv"><strong>取得元</strong><span id="origin">車内デジタル広告設備</span></div>
+        <div class="kv"><strong>表示内容</strong><span>探してください</span></div>
+        <div class="kv"><strong>関連性</strong><span>不明</span></div>
+      </div>
+
+      <div id="finalNote" class="note hidden">
+        取得元はすべて異なります。<br>
+        共通する配信元・アカウント・管理システムは確認できませんでした。
+      </div>
+
+      <div class="actions">
+        <button id="next" class="primary" type="button">別の記録を見る</button>
+        <button id="home" class="secondary" type="button">検索画面へ戻る</button>
+      </div>
+    </div>
+  </section>
+</main>
 <script src="./case.js"></script>
 </body>
 </html>
