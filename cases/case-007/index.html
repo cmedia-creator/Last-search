@@ -3,49 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f4f4f1">
+<meta name="theme-color" content="#F4F4F1">
 <title>CASE 007 | LAST SEARCH</title>
 <link rel="stylesheet" href="./case.css">
 </head>
 <body>
-<main class="page">
-  <section class="panel" id="panel" aria-live="polite">
-    <header class="head">
-      <div class="brand">LAST SEARCH</div>
-      <div class="case-no">CASE 007</div>
-    </header>
-
-    <div class="content">
-      <p class="eyebrow">2009.09.17 / UNKNOWN RECORD</p>
-      <h1>未分類データ</h1>
-
-      <div class="scan-box" id="scanBox">
-        <div class="scan-label">対象を確認しています</div>
-        <div class="scan-line"></div>
-        <div class="checks" id="checks"></div>
-      </div>
-
-      <div id="nameBox" class="name-box" hidden>
-        <span>仮の名前</span>
-        <strong id="ogotaka"></strong>
-      </div>
-
-      <div id="freeze" class="freeze" hidden>
-        <div class="freeze-text">応答がありません</div>
-      </div>
-
-      <div id="connection" class="connection" hidden>
-        <p class="connection-title">接続されました</p>
-        <div><span>接続元</span><b>不明</b></div>
-        <div><span>状態</span><b id="state">接続中</b></div>
-      </div>
-
-      <p id="message" class="message">記録を読み込んでいます。</p>
-      <button id="continueButton" class="primary" type="button" hidden>続ける</button>
-    </div>
-  </section>
-</main>
-
+<main class="page"><section class="panel"><header class="head"><div class="brand">LAST SEARCH</div><div class="case-no">CASE 007</div></header><div class="content stack"><p class="eyebrow">SEARCH LOG</p><h1 class="title">保存された検索履歴</h1><div class="badge">対象：不明 / 保存日：2009年9月17日</div><div id="timeline" class="timeline"></div><div class="actions"><button id="append" class="primary">続きを読む</button><button id="home" class="secondary">検索画面へ戻る</button></div></div></section></main>
 <script src="./case.js"></script>
 </body>
 </html>
