@@ -129,19 +129,21 @@
     'use strict';
 
     /* =========================================================
-       LAST SEARCH FREE ROUTER
+       LAST SEARCH FREE ROUTER / CASE014 END VERSION
        ---------------------------------------------------------
-       採用ルール
        ・初回検索 → CASE001確定
-       ・通常抽選 → 未閲覧70% / 既読25% / 特殊5%
+       ・通常抽選 → 未閲覧80% / 既読15% / 特殊5%
        ・既読2連続 → 次回未閲覧100%
        ・直近2CASEは通常抽選から除外
-       ・Phase 1: unique 0〜2 → CASE001〜006相当
-       ・Phase 2: unique 3〜6 → CASE001〜010相当
-       ・Phase 3: unique 7〜   → CASE001〜014相当
-       ・CASE015解放 → unique 10以上 + 011/012/014閲覧
-       ・CASE015通常出現率 → 15 → 25 → 40 → 60 → 100%
-       ・CASE015クリア後は通常抽選から外し、「佐伯」で再訪可能
+       ・Phase 1: unique 0〜2 → CASE002 / 004 / 005 / 006
+       ・Phase 2: unique 3〜6 → CASE002 / 004〜010
+       ・Phase 3: unique 7〜   → CASE002 / 004〜013
+       ・CASE003は特殊枠のみ
+       ・CASE014は無料版END。通常抽選には入れない
+       ・END解放 → unique 10以上 + 006/007/008/010/012閲覧
+       ・CASE014出現率 → 20 → 35 → 55 → 80 → 100%
+       ・CASE014クリア後はEND再抽選なし
+       ・CASE015は廃止
        ========================================================= */
 
     const $ = (selector) => document.querySelector(selector);
@@ -176,18 +178,19 @@
       return value === true || value === 'true' || value === 1 || value === '1';
     }
 
-    const isComplete = (id) => isTrue(STORE.get(`ls_case_${String(id).padStart(3, '0')}_complete`));
+    const isComplete = (id) =>
+      isTrue(STORE.get(`ls_case_${String(id).padStart(3, '0')}_complete`));
 
-    function completedFreeCases() {
+    function completedStoryCases() {
       const ids = [];
-      for (let id = 1; id <= 14; id++) {
+      for (let id = 1; id <= 13; id++) {
         if (isComplete(id)) ids.push(id);
       }
       return ids;
     }
 
     function uniqueCount() {
-      return completedFreeCases().length;
+      return completedStoryCases().length;
     }
 
     function currentPhase() {
@@ -197,38 +200,13 @@
       return 3;
     }
 
-    /*
-      CASE003は「検索を経ずに記録へ触れた」違和感を担うため、
-      通常70/25枠から外し、5%の特殊枠でのみ出現させる。
-      CASE001は初回専用色が強いため、クリア後の通常再抽選から外す。
-    */
     const PHASE_POOL = {
-      1: [1, 2, 4, 5, 6],
-      2: [1, 2, 4, 5, 6, 7, 8, 9, 10],
-      3: [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+      1: [2, 4, 5, 6],
+      2: [2, 4, 5, 6, 7, 8, 9, 10],
+      3: [2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
     };
 
-    const SPECIAL_POOL = {
-      1: [3, 6, 5],
-      2: [3, 8, 10, 9],
-      3: [3, 13, 14, 11, 12]
-    };
-
-    const KEYWORD_ROUTES = [
-      { test: q => q === '久我あきら' || q === '久我', caseId: 4 },
-      { test: q => q === '2009年9月17日' || q === '2009/9/17' || q === '2009-09-17', caseId: 5 },
-      { test: q => q === '距離', caseId: 6 },
-      { test: q => q === '検索履歴', caseId: 7 },
-      { test: q => q === '権限' || q === '権限がありません', caseId: 8 },
-      { test: q => q === 'おごたか', caseId: 8 },
-      { test: q => q === '五人目' || q === '5人目', caseId: 9 },
-      { test: q => q === '接続元', caseId: 10 },
-      { test: q => q === '見つけましたか', caseId: 11 },
-      { test: q => q === '探してください', caseId: 12 },
-      { test: q => q === 'どこにでもいる', caseId: 13 },
-      { test: q => q === '空白', caseId: 14 },
-      { test: q => q.includes('富士樹海') || q.includes('青木ヶ原'), caseId: 14 }
-    ];
+    const SPECIAL_CASE = 3;
 
     function normalizeQuery(value) {
       return value
@@ -237,8 +215,17 @@
         .replace(/　/g, ' ');
     }
 
+    function compactQuery(value) {
+      return normalizeQuery(value)
+        .toLowerCase()
+        .replace(/\s+/g, '');
+    }
+
     function endUnlocked() {
-      return uniqueCount() >= 10 && isComplete(11) && isComplete(12) && isComplete(14);
+      if (isTrue(STORE.get('ls_free_complete')) || isComplete(14)) return false;
+
+      const required = [6, 7, 8, 10, 12];
+      return uniqueCount() >= 10 && required.every(isComplete);
     }
 
     function randomItem(items) {
@@ -280,93 +267,145 @@
       }
     }
 
-    function chooseSpecial(phase) {
-      let candidates = filterRecent(SPECIAL_POOL[phase].slice());
-
-      // 特殊枠でも、できれば未閲覧を優先する。
-      const unseen = unseenFrom(candidates);
-      if (unseen.length) return randomItem(unseen);
-      return randomItem(candidates);
+    function chooseSpecial() {
+      if (isComplete(SPECIAL_CASE)) return null;
+      if (recentCases().includes(SPECIAL_CASE)) return null;
+      return SPECIAL_CASE;
     }
 
     function chooseNormalCase() {
       const phase = currentPhase();
-      let base = PHASE_POOL[phase].slice();
-
-      // CASE001は初回完了後、通常再抽選から外す。
-      if (isComplete(1)) base = base.filter(id => id !== 1);
-
-      base = filterRecent(base);
+      const base = filterRecent(PHASE_POOL[phase].slice());
 
       const unseen = unseenFrom(base);
       const seen = seenFrom(base);
       const seenStreak = Number(STORE.get('ls_seen_route_streak', 0)) || 0;
 
-      // 既読が2回続いたら、次は未閲覧を確定。
       if (seenStreak >= 2 && unseen.length) {
         return randomItem(unseen);
       }
 
       const roll = Math.random();
 
-      // 未閲覧 70%
-      if (roll < 0.70) {
+      if (roll < 0.80) {
         if (unseen.length) return randomItem(unseen);
         if (seen.length) return randomItem(seen);
       }
 
-      // 既読 25%
       if (roll < 0.95) {
         if (seen.length) return randomItem(seen);
         if (unseen.length) return randomItem(unseen);
       }
 
-      // 特殊 5%
-      const special = chooseSpecial(phase);
+      const special = chooseSpecial();
       if (special !== null) return special;
 
-      return randomItem(unseen.length ? unseen : seen);
+      if (unseen.length) return randomItem(unseen);
+      return randomItem(seen);
     }
 
-    function case15Chance() {
-      const misses = Number(STORE.get('ls_case15_miss_count', 0)) || 0;
-      const table = [0.15, 0.25, 0.40, 0.60, 1.00];
+    function case14Chance() {
+      const misses = Number(STORE.get('ls_case14_miss_count', 0)) || 0;
+      const table = [0.20, 0.35, 0.55, 0.80, 1.00];
       return table[Math.min(misses, table.length - 1)];
     }
 
-    function maybeRouteCase15() {
-      if (!endUnlocked() || isComplete(15)) return null;
+    function maybeRouteCase14() {
+      if (!endUnlocked()) return null;
 
-      const chance = case15Chance();
+      const chance = case14Chance();
+
       if (Math.random() < chance) {
-        STORE.set('ls_case15_miss_count', 0);
-        return 15;
+        STORE.set('ls_case14_miss_count', 0);
+        return 14;
       }
 
-      const misses = Number(STORE.get('ls_case15_miss_count', 0)) || 0;
-      STORE.set('ls_case15_miss_count', misses + 1);
+      const misses = Number(STORE.get('ls_case14_miss_count', 0)) || 0;
+      STORE.set('ls_case14_miss_count', misses + 1);
       return null;
     }
 
     function keywordCase(query) {
-      // CASE015だけは解放条件あり。
-      if (query === '佐伯') {
-        if (endUnlocked() || isComplete(15)) return 15;
-        // まだ終盤条件を満たしていない段階では、佐伯という語を
-        // 「向こう側との接触」に寄せる。
-        return 11;
+      const compact = compactQuery(query);
+
+      if (query === '久我あきら' || query === '久我') return 4;
+
+      if (
+        query === '実体' ||
+        query === '実体とはなんですか' ||
+        query === '見えていますか'
+      ) return 2;
+
+      if (
+        query === '2009年9月17日' ||
+        query === '2009/9/17' ||
+        query === '2009-09-17' ||
+        query === '一家失踪' ||
+        query === '一家失踪事件'
+      ) return 5;
+
+      if (query === '距離' || query === '久我を探す') return 6;
+
+      if (
+        query === '検索履歴' ||
+        compact === 'zsearch' ||
+        compact === 'zサーチ'
+      ) return 7;
+
+      if (compact === 'おごたか' || compact === 'ogotaka') {
+        if (!isComplete(8)) return 8;
+        if (!isComplete(10)) return 10;
+        return 12;
       }
 
-      for (const route of KEYWORD_ROUTES) {
-        if (route.test(query)) return route.caseId;
-      }
+      if (
+        query === '権限' ||
+        query === '権限がありません' ||
+        query === '警察データベース'
+      ) return 8;
+
+      if (
+        query === '五人目' ||
+        query === '5人目' ||
+        query === '家族写真'
+      ) return 9;
+
+      if (
+        query === '接続元' ||
+        query === '公安' ||
+        query === '逆探知'
+      ) return 10;
+
+      if (
+        query === '見つけましたか' ||
+        query === '佐伯' ||
+        query === '佐伯十三'
+      ) return 11;
+
+      if (
+        query === '探してください' ||
+        query.includes('富士樹海') ||
+        query.includes('青木ヶ原') ||
+        query === '樹海'
+      ) return 12;
+
+      if (
+        query === 'どこにでもいる' ||
+        query === '探してください 広告' ||
+        query === 'サイバー攻撃'
+      ) return 13;
+
       return null;
     }
 
     function goToCase(id, query, mode) {
       STORE.set('ls_last_query', query);
       STORE.set('ls_last_route_mode', mode);
-      STORE.set('ls_search_count', (Number(STORE.get('ls_search_count', 0)) || 0) + 1);
+      STORE.set(
+        'ls_search_count',
+        (Number(STORE.get('ls_search_count', 0)) || 0) + 1
+      );
+
       markSelectionType(id);
       pushRecent(id);
 
@@ -380,24 +419,20 @@
     }
 
     function resolveRoute(query) {
-      // 1. 最初の検索は必ずCASE001。
       if (!isComplete(1)) {
         return { caseId: 1, mode: 'first' };
       }
 
-      // 2. 明示キーワードは確定ルート。
       const fixed = keywordCase(query);
       if (fixed !== null) {
         return { caseId: fixed, mode: 'keyword' };
       }
 
-      // 3. 無料版エンド解放後は段階確率でCASE015判定。
-      const ending = maybeRouteCase15();
+      const ending = maybeRouteCase14();
       if (ending !== null) {
         return { caseId: ending, mode: 'ending' };
       }
 
-      // 4. 通常は進行度に応じた未閲覧優遇抽選。
       return { caseId: chooseNormalCase(), mode: 'random' };
     }
 
@@ -424,6 +459,7 @@
       if (button.disabled) return;
 
       const query = normalizeQuery(input.value);
+
       if (!query) {
         input.focus();
         return;
@@ -431,6 +467,7 @@
 
       const route = resolveRoute(query);
       if (!route || !route.caseId) return;
+
       goToCase(route.caseId, query, route.mode);
     });
 
@@ -438,5 +475,6 @@
     applyPrefill();
   })();
   </script>
+
 </body>
 </html>
