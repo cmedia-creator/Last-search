@@ -31,6 +31,8 @@ const protectMessage=$('#protectMessage');
 const blockStatus=$('#blockStatus');
 const traceTitle=$('#traceTitle');
 const codeField=$('#codeField');
+const sessionEnd=$('#sessionEnd');
+const sessionCountdown=$('#sessionCountdown');
 
 let promptStep=0;
 let locked=false;
@@ -192,6 +194,15 @@ async function runTrace(){
   codeField.textContent=errorLines.join('\n');
 
   await sleep(2500);
+
+  sessionEnd.classList.remove('hidden');
+
+  for(let n=15;n>=1;n--){
+    sessionCountdown.textContent=String(n);
+    await sleep(1000);
+  }
+
+  sessionCountdown.textContent='0';
 
   setComplete();
   goTop();

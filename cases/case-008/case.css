@@ -322,3 +322,23 @@ button{cursor:pointer}
   .screen{padding-left:12px;padding-right:12px}
   .record-card{padding:15px}
 }
+
+
+.session-end{
+  flex:0 0 auto;
+  margin-top:14px;
+  padding:16px 14px;
+  border:1px solid #3a2424;
+  background:#100707;
+  color:#d7a1a1;
+  text-align:center;
+}
+.session-end-title{
+  font-size:1rem;
+  font-weight:700;
+  margin-bottom:6px;
+}
+.session-end-sub{
+  color:#a86f6f;
+  font:.82rem ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
