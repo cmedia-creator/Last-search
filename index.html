@@ -172,7 +172,11 @@
       }
     };
 
-    const isComplete = (id) => STORE.get(`ls_case_${String(id).padStart(3, '0')}_complete`) === 'true';
+    function isTrue(value) {
+      return value === true || value === 'true' || value === 1 || value === '1';
+    }
+
+    const isComplete = (id) => isTrue(STORE.get(`ls_case_${String(id).padStart(3, '0')}_complete`));
 
     function completedFreeCases() {
       const ids = [];
@@ -410,7 +414,7 @@
     }
 
     function updateLoginState() {
-      if (STORE.get('ls_logged_in') === 'true') {
+      if (isTrue(STORE.get('ls_logged_in'))) {
         loginState.hidden = false;
       }
     }
